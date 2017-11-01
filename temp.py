@@ -26,7 +26,7 @@ class AlexGaze(nn.Module):
     def __init__(self):
         super(AlexGaze, self).__init__()
         self.features = nn.Sequential(
-            *list(alex.features.children())[:-3]
+            *list(alex2.features.children())[:-3]
         )
 
         self.relu = nn.ReLU()
@@ -37,5 +37,6 @@ class AlexGaze(nn.Module):
         return x
 
 salmodel = AlexSal()
-x = Variable(torch.randn(1, 3, 224, 224))
-# print(salmodel(x))
+gazemodel = AlexGaze()
+x = Variable(torch.randn(1, 3, 227, 227))
+print(gazemodel(x))
