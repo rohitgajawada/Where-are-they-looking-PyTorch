@@ -29,6 +29,9 @@ def accuracy(output, target, opt):
     x = x#[0]
     return x*1.0 / len(output)
 
+def AUCaccuracy(output, target, opt):
+    pass
+
 def precision(output, target, topk=(1,)):
     """Computes the precision@k for the specified values of k"""
     maxk = max(topk)

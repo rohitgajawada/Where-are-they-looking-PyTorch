@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch.autograd import Variable
 import torchvision.models as models
 
-places_alex = torch.load('../../whole_alexnet_places365.pth.tar')
+places_alex = torch.load('../whole_alexnet_places365.pth.tar')
 imagenet_alex = models.alexnet(pretrained=True)
 #LRN present in previous models but not here
 #try out batchnorm and dropout
@@ -71,12 +71,10 @@ class Net(nn.Module):
         return output
 
 
-salmodel = AlexSal()
-gazemodel = AlexGaze()
+model = Net()
 xi = Variable(torch.randn(5, 3, 227, 227))
 xh = Variable(torch.randn(5, 3, 227, 227))
 xp = torch.zeros(5, 13, 13)
 xp[0][4][4] = 1
 
-print(salmodel(xi).size())
-print(gazemodel(xh, xp).size())
+print(model(xi, xh, xp))

@@ -29,7 +29,7 @@ def main():
 
     cudnn.benchmark = True
 
-    dataloader = ld.LoadGazeFollow(opt)
+    dataloader = ld.GazeDataset(opt)
     train_loader = dataloader.train_loader
     val_loader = dataloader.val_loader
 

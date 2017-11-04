@@ -35,17 +35,18 @@ class Trainer():
             self.data_time.update(time.time() - end)
 
             outputs = self.model(inputs)
+            #TODO: add get max prob coordinates
+
             loss = self.criterion(outputs, targets)
             acc = accuracy(outputs.data.max(1)[1], targets.data, opt)
 
             loss.backward()
             self.optimizer.step()
 
-            inputs_size = inputs.size(0)
-            self.losses.update(loss.data[0], inputs_size)
-
             #TODO:To be changed to AUC
+            inputs_size = inputs.size(0)
             self.acc.update(acc, inputs_size)
+            self.losses.update(loss.data[0], inputs_size)
 
             # measure elapsed time
             self.batch_time.update(time.time() - end)
@@ -100,16 +101,15 @@ class Validator():
 
             self.data_time.update(time.time() - end)
             outputs = self.model(inputs)
+            #TODO: add get max prob coordinates
 
             loss = self.criterion(outputs, targets)
             acc = accuracy(outputs.data.max(1)[1], targets.data, opt)
-            self.losses.update(loss.data[0], inputs[0].size(0))
-            inputs_size = inputs.size(0)
 
             #TODO:To be changed to AUC
-            acc = accuracy(outputs.data.max(1)[1], targets.data, opt)
-
+            inputs_size = inputs.size(0)
             self.acc.update(acc, inputs_size)
+            self.losses.update(loss.data[0], inputs_size)
 
             # measure elapsed time
             self.batch_time.update(time.time() - end)

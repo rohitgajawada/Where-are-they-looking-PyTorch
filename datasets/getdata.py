@@ -56,8 +56,8 @@ class GazeDataset(Dataset):
 
         return sample
 
-Train_Ann = sio.loadmat('data/train_annotations.mat')
-Test_Ann = sio.loadmat('data/test_annotations.mat')
+Train_Ann = sio.loadmat('../data/train_annotations.mat')
+Test_Ann = sio.loadmat('../data/test_annotations.mat')
 
 train_gaze = GazeDataset(Train_Ann)
 
