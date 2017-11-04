@@ -63,19 +63,79 @@ class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
         self.salpath = AlexSal()
+        self.smax = nn.Softmax()
         self.gazepath = AlexGaze()
+        self.fc_0_m1 = nn.Linear(169, 25)
+        self.fc_0_1 = nn.Linear(169, 25)
+        self.fc_m1_0 = nn.Linear(169, 25)
+        self.fc_1_0 = nn.Linear(169, 25)
+        self.fc_0_0 = nn.Linear(169, 25)
 
     def forward(self, xi, xh, xp):
         outxi = self.salpath(xi)
         outxh = self.gazepath(xh, xp)
         output = outxi * outxh
-        return output.view(-1, 169)
+        output = output.view(-1, 169)
+
+        #softmax and reshape
+        hm = Variable(torch.zeros(output.size(0), 15, 15)).cuda()
+        count_hm = Variable(torch.zeros(output.size(0), 15, 15)).cuda()
+
+        f_0_m1 = self.smax(self.fc_0_m1(output)).view(-1, 5, 5)
+        f_0_1 = self.smax(self.fc_0_1(output)).view(-1, 5, 5)
+        f_m1_0 = self.smax(self.fc_m1_0(output)).view(-1, 5, 5)
+        f_1_0 = self.smax(self.fc_1_0(output)).view(-1, 5, 5)
+        f_0_0 = self.smax(self.fc_0_0(output)).view(-1, 5, 5)
+
+        #risky
+        f_cell = []
+        f_cell.extend([f_0_m1, f_0_1, f_m1_0, f_1_0, f_0_0])
+        v_x = [0, 1, -1, 0, 0];
+        v_y = [0, 0, 0, -1, 1];
+        #nan errors
+        for k in range(5):
+            dx, dy = v_x[k], v_y[k]
+            f = f_cell[k]
+            for x in range(5):
+                for y in range(5):
+
+                    i_x = 3*x - dx
+                    i_x = max(i_x, 0)
+                    if x == 0:
+                        i_x = 0
+
+                    i_y = 3*y - dy
+                    i_y = max(i_y, 0)
+                    if y == 0:
+                        i_y = 0
+
+                    f_x = 3*x + 2 - dx
+                    f_x = min(14, f_x)
+                    if x == 4:
+                        f_x = 14
+
+                    f_y = 3*y + 2 - dy
+                    f_y = min(14, f_y)
+                    if y == 4:
+                        f_y = 14
+
+                    # print(hm[:, i_x:f_x + 1, i_y:f_y + 1].size())
+
+                    a = f[:, x, y].contiguous()
+                    a = a.view(output.size(0), 1, 1)
+
+                    hm[:, i_x: f_x+1, i_y: f_y+1] =  hm[:, i_x: f_x+1, i_y: f_y+1] + a
+                    count_hm[:, i_x: f_x+1, i_y: f_y+1] = count_hm[:, i_x: f_x+1, i_y: f_y+1] + 1
+
+        hm_base = hm.div(count_hm)
+        return hm_base.view(-1, 225)
 
 
-model = Net()
-xi = Variable(torch.randn(5, 3, 227, 227))
-xh = Variable(torch.randn(5, 3, 227, 227))
+model = Net().cuda()
+xi = Variable(torch.randn(5, 3, 227, 227)).cuda()
+xh = Variable(torch.randn(5, 3, 227, 227)).cuda()
 xp = torch.zeros(5, 13, 13)
 xp[0][4][4] = 1
+xp = Variable(xp).cuda()
 
 print(model(xi, xh, xp))
