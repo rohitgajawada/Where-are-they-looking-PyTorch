@@ -5,7 +5,7 @@ TODO:
 Add Dataloaders
 ->Add Transforms
 ->Get mean and variance params
-Add Model
+
 Add AUC Score
 
 Not sure whether each ground truth label is separate image or average of them all

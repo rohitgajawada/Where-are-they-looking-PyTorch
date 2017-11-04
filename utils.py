@@ -23,12 +23,6 @@ class AverageMeter():
         self.count += n
         self.avg = self.sum / self.count
 
-def accuracy(output, target, opt):
-    x = (output == target)
-    x = sum(x)
-    x = x#[0]
-    return x*1.0 / len(output)
-
 def AUCaccuracy(output, target, opt):
     pass
 
