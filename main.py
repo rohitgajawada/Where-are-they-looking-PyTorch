@@ -4,7 +4,7 @@ import opts
 import train
 import utils
 import models.__init__ as init
-import datasets.load_data as ld
+import datasets.getdata as ld
 
 parser = opts.myargparser()
 
