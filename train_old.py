@@ -1,5 +1,6 @@
 from torch.autograd import Variable
 from utils import AverageMeter
+# from utils import AUCaccuracy as accuracy
 from copy import deepcopy
 import time
 
@@ -11,12 +12,14 @@ class Trainer():
         self.batch_time = AverageMeter()
         self.data_time = AverageMeter()
         self.losses = AverageMeter()
+        # self.acc = AverageMeter()
 
     def train(self, trainloader, epoch, opt):
         self.data_time.reset()
         self.batch_time.reset()
         self.model.train()
         self.losses.reset()
+        # self.acc.reset()
 
         end = time.time()
         for i, data in enumerate(trainloader, 0):
@@ -32,13 +35,17 @@ class Trainer():
             self.data_time.update(time.time() - end)
 
             outputs = self.model(inputs)
+            #TODO: add get max prob coordinates
 
             loss = self.criterion(outputs, targets)
+            # acc = accuracy(outputs.data.max(1)[1], targets.data, opt)
 
             loss.backward()
             self.optimizer.step()
 
+            #TODO:To be changed to AUC
             inputs_size = inputs.size(0)
+            # self.acc.update(acc, inputs_size)
             self.losses.update(loss.data[0], inputs_size)
 
             # measure elapsed time
@@ -49,16 +56,19 @@ class Trainer():
                 print('Epoch: [{0}][{1}/{2}]\t'
                       'Time {batch_time.avg:.3f} ({batch_time.sum:.3f})\t'
                       'Data {data_time.avg:.3f} ({data_time.sum:.3f})\t'
-                      'Loss {loss.avg:.3f}\t'.format(
+                      'Loss {loss.avg:.3f}\t'
+                      'Accuracy {acc.avg:.4f}\t'.format(
                        epoch, i, len(trainloader), batch_time=self.batch_time,
-                       data_time= self.data_time, loss=self.losses))
+                       data_time= self.data_time, loss=self.losses, acc=self.acc))
 
         print('Train: [{0}]\t'
               'Time {batch_time.sum:.3f}\t'
               'Data {data_time.sum:.3f}\t'
-              'Loss {loss.avg:.3f}\t'.format(
+              'Loss {loss.avg:.3f}\t'
+              'Accuracy {acc.avg:.4f}\t'.format(
                epoch, batch_time=self.batch_time,
-               data_time= self.data_time, loss=self.losses))
+               data_time= self.data_time, loss=self.losses,
+               acc=self.acc))
 
 
 class Validator():
@@ -70,11 +80,13 @@ class Validator():
         self.batch_time = AverageMeter()
         self.data_time = AverageMeter()
         self.losses = AverageMeter()
+        self.acc = AverageMeter()
 
     def validate(self, valloader, epoch, opt):
 
         self.model.eval()
         self.losses.reset()
+        self.acc.reset()
         self.data_time.reset()
         self.batch_time.reset()
         end = time.time()
@@ -89,10 +101,14 @@ class Validator():
 
             self.data_time.update(time.time() - end)
             outputs = self.model(inputs)
+            #TODO: add get max prob coordinates
 
             loss = self.criterion(outputs, targets)
+            acc = accuracy(outputs.data.max(1)[1], targets.data, opt)
 
+            #TODO:To be changed to AUC
             inputs_size = inputs.size(0)
+            self.acc.update(acc, inputs_size)
             self.losses.update(loss.data[0], inputs_size)
 
             # measure elapsed time
@@ -103,15 +119,21 @@ class Validator():
                 print('Epoch: [{0}][{1}/{2}]\t'
                       'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                       'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
-                      'Loss {loss.val:.4f} ({loss.avg:.4f})\t'.format(
+                      'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
+                      'Accuracy {acc.val:.4f} ({acc.avg:.4f})\t'.format(
                        epoch, i, len(valloader), batch_time=self.batch_time,
-                       data_time= self.data_time, loss=self.losses))
+                       data_time= self.data_time, loss=self.losses,
+                       acc=self.acc))
+
+        finalacc = self.acc.avg
 
         print('Val: [{0}]\t'
               'Time {batch_time.sum:.3f}\t'
               'Data {data_time.sum:.3f}\t'
-              'Loss {loss.avg:.3f}\t'.format(
+              'Loss {loss.avg:.3f}\t'
+              'Accuracy {acc:.4f}\t'.format(
                epoch, batch_time=self.batch_time,
-               data_time= self.data_time, loss=self.losses))
+               data_time= self.data_time, loss=self.losses,
+               acc=finalacc))
 
-        return self.losses.avg
+        return self.top1.avg

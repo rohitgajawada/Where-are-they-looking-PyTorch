@@ -58,6 +58,7 @@ class AlexGaze(nn.Module):
         x = x.view(-1, 13, 13)
         return x
 
+
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
@@ -68,7 +69,7 @@ class Net(nn.Module):
         outxi = self.salpath(xi)
         outxh = self.gazepath(xh, xp)
         output = outxi * outxh
-        return output
+        return output.view(-1, 169)
 
 
 model = Net()

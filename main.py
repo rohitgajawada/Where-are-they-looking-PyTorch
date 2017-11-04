@@ -9,9 +9,9 @@ import datasets.getdata as ld
 parser = opts.myargparser()
 
 def main():
-    global opt, best_prec1
+    global opt, best_err1
     opt = parser.parse_args()
-    best_prec1 = 0
+    best_err1 = 0
     print(opt)
 
     model = init.load_model(opt)
@@ -23,7 +23,7 @@ def main():
 
     if opt.resume:
         if os.path.isfile(opt.resume):
-            model, optimizer, opt, best_prec1 = init.resumer(opt, model, optimizer)
+            model, optimizer, opt, best_err1 = init.resumer(opt, model, optimizer)
         else:
             print("=> no checkpoint found at '{}'".format(opt.resume))
 
@@ -40,12 +40,12 @@ def main():
         if opt.testOnly == False:
             trainer.train(train_loader, epoch, opt)
 
-        acc = validator.validate(val_loader, epoch, opt)
-        best_prec1 = max(acc, best_prec1)
-        if best_prec1 == acc:
-            init.save_checkpoint(opt, model, optimizer, best_prec1, epoch)
+        err = validator.validate(val_loader, epoch, opt)
+        best_err1 = min(err, best_err1)
+        if best_err1 == err:
+            init.save_checkpoint(opt, model, optimizer, best_err1, epoch)
 
-        print('Best accuracy: [{0:.3f}]\t'.format(best_prec1))
+        print('Best error: [{0:.3f}]\t'.format(best_err1))
 
 
 if __name__ == '__main__':
