@@ -3,16 +3,16 @@ import torch.nn as nn
 from torch.autograd import Variable
 import torchvision.models as models
 
-places_alex = torch.load('../whole_alexnet_places365.pth.tar')
-imagenet_alex = models.alexnet(pretrained=True)
+# places_alex = torch.load('../whole_alexnet_places365.pth.tar')
+# imagenet_alex = models.alexnet(pretrained=True)
 #LRN present in previous models but not here
 #try out batchnorm and dropout
 
 class AlexSal(nn.Module):
-    def __init__(self):
+    def __init__(self, opt):
         super(AlexSal, self).__init__()
         self.features = nn.Sequential(
-            *list(places_alex.features.children())[:-2]
+            *list(torch.load(opt.placesmodelpath).features.children())[:-2]
         )
 
         self.relu = nn.ReLU()
@@ -26,10 +26,10 @@ class AlexSal(nn.Module):
         return x
 
 class AlexGaze(nn.Module):
-    def __init__(self):
+    def __init__(self, opt):
         super(AlexGaze, self).__init__()
         self.features = nn.Sequential(
-            *list(imagenet_alex.features.children())
+            *list(models.alexnet(pretrained=True).features.children())
         )
 
         self.relu = nn.ReLU()
@@ -60,11 +60,12 @@ class AlexGaze(nn.Module):
 
 
 class Net(nn.Module):
-    def __init__(self):
+    def __init__(self, opt):
         super(Net, self).__init__()
-        self.salpath = AlexSal()
+        self.salpath = AlexSal(opt)
+        self.gazepath = AlexGaze(opt)
+
         self.smax = nn.Softmax()
-        self.gazepath = AlexGaze()
         self.fc_0_m1 = nn.Linear(169, 25)
         self.fc_0_1 = nn.Linear(169, 25)
         self.fc_m1_0 = nn.Linear(169, 25)
@@ -131,11 +132,11 @@ class Net(nn.Module):
         return hm_base.view(-1, 225)
 
 
-model = Net().cuda()
-xi = Variable(torch.randn(5, 3, 227, 227)).cuda()
-xh = Variable(torch.randn(5, 3, 227, 227)).cuda()
-xp = torch.zeros(5, 13, 13)
-xp[0][4][4] = 1
-xp = Variable(xp).cuda()
-
-print(model(xi, xh, xp))
+# model = Net().cuda()
+# xi = Variable(torch.randn(5, 3, 227, 227)).cuda()
+# xh = Variable(torch.randn(5, 3, 227, 227)).cuda()
+# xp = torch.zeros(5, 13, 13)
+# xp[0][4][4] = 1
+# xp = Variable(xp).cuda()
+#
+# print(model(xi, xh, xp))

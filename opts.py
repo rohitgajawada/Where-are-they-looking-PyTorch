@@ -7,13 +7,14 @@ def myargparser():
 
     #data stuff
     parser.add_argument('--dataset', default='gazefollow', type=str, help='chosen dataset')
-    parser.add_argument('--data_dir', required=True, type=str, help='chosen data directory')
+    parser.add_argument('--data_dir', default='../data/', type=str, help='chosen data directory')
+    parser.add_argument('--placesmodelpath', default='../whole_alexnet_places365.pth.tar', type=str, help='chosen data directory')
     parser.add_argument('--verbose', action='store_true')
     parser.add_argument('--workers', default=4, type=int, help='number of data loading workers (default: 4)')
     #default stuff
-    parser.add_argument('--epochs', required=True, type=int, help='number of total epochs to run')
-    parser.add_argument('--batch-size', required=True, type=int, help='mini-batch size (default: 128)')
-    parser.add_argument('--testbatchsize', required=True, type=int, help='input batch size for testing (default: 1000)')
+    parser.add_argument('--epochs', default=10, type=int, help='number of total epochs to run')
+    parser.add_argument('--batch-size', default=32, type=int, help='mini-batch size (default: 128)')
+    parser.add_argument('--testbatchsize', default=32, type=int, help='input batch size for testing (default: 1000)')
     parser.add_argument('--printfreq', default=200, type=int, help='print frequency (default: 10)')
     parser.add_argument('--learningratescheduler', default='decayschedular', type=str, help='if lr rate scheduler should be used')
 
@@ -23,9 +24,9 @@ def myargparser():
     parser.add_argument('--criterion', default='mse', help='Criterion')
     parser.add_argument('--optimType', default='adam', choices=optim_choices, type=str, help='Optimizers. Options:'+str(optim_choices))
 
-    parser.add_argument('--maxlr', default=0.001, required=True, type=float, help='initial learning rate')
+    parser.add_argument('--maxlr', default=0.001, type=float, help='initial learning rate')
     parser.add_argument('--lr', type=float, help='initial learning rate')
-    parser.add_argument('--minlr', default=0.0005, required=True, type=float, help='initial learning rate')
+    parser.add_argument('--minlr', default=0.0005, type=float, help='initial learning rate')
 
     parser.add_argument('--nesterov', action='store_true', help='nesterov momentum')
     parser.add_argument('--momentum', default=0.9, type=float, help='momentum (Default: 0.9)')

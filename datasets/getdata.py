@@ -12,18 +12,26 @@ import scipy.io as sio
 
 class GazeDataset(Dataset):
 
-    def __init__(self, Data, transform=None):
+    def __init__(self, Data, type, path):
 
-        data_bbox = Data['train_bbox'][0]
-        data_eyes = Data['train_eyes'][0]
-        data_gaze = Data['train_gaze'][0]
-        data_meta = Data['train_meta'][0]
-        data_path = Data['train_path']
+        if type == 'train':
+            data_bbox = Data['train_bbox'][0]
+            data_eyes = Data['train_eyes'][0]
+            data_gaze = Data['train_gaze'][0]
+            data_meta = Data['train_meta'][0]
+            data_path = Data['train_path']
+
+        if type == 'test':
+            data_bbox = Data['test_bbox'][0]
+            data_eyes = Data['test_eyes'][0]
+            data_gaze = Data['test_gaze'][0]
+            data_meta = Data['test_meta'][0]
+            data_path = Data['test_path']
 
         for i in range(data_path.shape[0]):
             data_path[i] = data_path[i][0]
         data_path = data_path.flatten()
-        data_path = 'data/' + data_path
+        data_path = path + data_path
 
         for i in range(data_bbox.shape[0]):
             data_bbox[i] = data_bbox[i].flatten()
@@ -38,7 +46,6 @@ class GazeDataset(Dataset):
         self.bbox_list = data_bbox
         self.eyes_list = data_eyes
         self.gaze_list = data_gaze
-        self.transform = transform
 
     def __len__(self):
         return len(self.img_path_list)
@@ -46,40 +53,46 @@ class GazeDataset(Dataset):
     def __getitem__(self, idx):
         img_name = self.img_path_list[idx]
         img = io.imread(img_name)
-        gaze = self.gaze_list[idx]
-        bbox = self.bbox_list[idx]
-        eyes = self.eyes_list[idx]
-        sample = {'image':img, 'gaze':gaze, 'bbox':bbox, 'eyes':eyes}
+        s = img.shape
+        bbox_corr = self.bbox_list[idx]
 
-        if self.transform:
-            sample = self.transform(sample)
+        bbox = img[ int(bbox_corr[1]*s[0]):int(bbox_corr[1]*s[0]+bbox_corr[3]*s[0]), int(bbox_corr[0]*s[1]):int(bbox_corr[0]*s[1]+bbox_corr[2]*s[1])]
+        bbox = transform.resize(bbox,(227, 227))
+
+        img = transform.resize(img,(227,227))
+        gaze = self.gaze_list[idx]
+        eyes = self.eyes_list[idx]
+
+        eyes_loc_size = 13
+        gaze_label_size = 15
+
+        eyes_loc = np.zeros((eyes_loc_size,eyes_loc_size))
+        eyes_loc[int(eyes_loc_size*eyes[1])][int(eyes_loc_size*eyes[0])] = 1
+
+        gaze_label = np.zeros(gaze_label_size*gaze_label_size)
+        gaze_label[int(np.floor(gaze_label_size*gaze_label_size*gaze[0] + gaze_label_size*gaze[1]))] = 1
+        img = img.transpose((2, 0, 1))
+        img = torch.from_numpy(img)
+        bbox = bbox.transpose((2, 0, 1))
+        bbox = torch.from_numpy(bbox)
+        eyes_loc = torch.from_numpy(eyes_loc)
+        gaze_label = torch.from_numpy(gaze_label)
+
+        sample = (img, bbox,eyes_loc, gaze_label)
 
         return sample
 
-Train_Ann = sio.loadmat('../data/train_annotations.mat')
-Test_Ann = sio.loadmat('../data/test_annotations.mat')
+class GazeFollow():
 
-train_gaze = GazeDataset(Train_Ann)
+    def __init__(self, opt):
 
-for i in range(len(train_gaze)):
-    if i <= 10:
-        sample = train_gaze[i]
-        print(i, sample['image'].shape)
-        I = sample['image']
-        s = sample['image'].shape
-        bbox = sample['bbox']
-        print(bbox)
-        eyes = sample['eyes']
-        gaze = sample['gaze']
-        fig,ax = plt.subplots(1)
-        ax.imshow(I)
+        Train_Ann = sio.loadmat(opt.data_dir + 'train_annotations.mat')
+        Test_Ann = sio.loadmat(opt.data_dir + 'test_annotations.mat')
 
-        rect = patches.Rectangle((bbox[0]*s[1], bbox[1]*s[0]), bbox[2]*s[1], bbox[3]*s[0],linewidth=1,edgecolor='r',facecolor='none')
+        self.train_gaze = GazeDataset(Train_Ann, 'train', opt.data_dir)
+        print(self.train_gaze[1])
+        self.train_loader = torch.utils.data.DataLoader(self.train_gaze, batch_size=opt.batch_size, shuffle=True, num_workers=opt.workers)
 
-        # rect = patches.Rectangle((eyes[0]*s[1], eyes[1]*s[0]),5,5 ,linewidth=1,edgecolor='r',facecolor='none')
-
-        ax.plot((eyes[0]*s[1], gaze[0]*s[1]),(eyes[1]*s[0], gaze[1]*s[0]))
-        ax.add_patch(rect)
-        plt.show()
-    else:
-        break
+        self.val_gaze = GazeDataset(Test_Ann, 'test', opt.data_dir)
+        self.val_loader = torch.utils.data.DataLoader(self.val_gaze,
+        batch_size=opt.testbatchsize, shuffle=True, num_workers=opt.workers)

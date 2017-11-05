@@ -50,7 +50,7 @@ def load_model(opt):
         model = torch.load(opt.pretrained_file)
     else:
         if opt.model_def == 'gazenet':
-            model = gazenet.Net()
+            model = gazenet.Net(opt)
             if opt.cuda:
                 model = model.cuda()
     return model
