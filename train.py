@@ -22,23 +22,26 @@ class Trainer():
         for i, data in enumerate(trainloader, 0):
 
             self.optimizer.zero_grad()
+
             if opt.cuda:
-                inputs, targets = data
-                inputs = inputs.cuda(async=True)
+                xh, xi, xp, targets = data
+                xh = xh.cuda(async=True)
+                xi = xi.cuda(async=True)
+                xp = xp.cuda(async=True)
                 targets = targets.cuda(async=True)
 
-            inputs, targets = Variable(inputs), Variable(targets)
+            xh, xi, xp, targets = Variable(xh), Variable(xi), Variable(xp), Variable(targets)
 
             self.data_time.update(time.time() - end)
 
-            outputs = self.model(inputs)
+            outputs = self.model(xh, xi, xp)
 
             loss = self.criterion(outputs, targets)
 
             loss.backward()
             self.optimizer.step()
 
-            inputs_size = inputs.size(0)
+            inputs_size = xh.size(0)
             self.losses.update(loss.data[0], inputs_size)
 
             # measure elapsed time
@@ -81,18 +84,20 @@ class Validator():
 
         for i, data in enumerate(valloader, 0):
             if opt.cuda:
-                inputs, targets = data
-                inputs = inputs.cuda(async=True)
+                xh, xi, xp, targets = data
+                xh = xh.cuda(async=True)
+                xi = xi.cuda(async=True)
+                xp = xp.cuda(async=True)
                 targets = targets.cuda(async=True)
 
-            inputs, targets = Variable(inputs), Variable(targets)
+            xh, xi, xp, targets = Variable(xh), Variable(xi), Variable(xp), Variable(targets)
 
             self.data_time.update(time.time() - end)
-            outputs = self.model(inputs)
+            outputs = self.model(xh, xi, xp)
 
             loss = self.criterion(outputs, targets)
 
-            inputs_size = inputs.size(0)
+            inputs_size = xh.size(0)
             self.losses.update(loss.data[0], inputs_size)
 
             # measure elapsed time

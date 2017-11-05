@@ -72,11 +72,11 @@ class GazeDataset(Dataset):
         gaze_label = np.zeros(gaze_label_size*gaze_label_size)
         gaze_label[int(np.floor(gaze_label_size*gaze_label_size*gaze[0] + gaze_label_size*gaze[1]))] = 1
         img = img.transpose((2, 0, 1))
-        img = torch.from_numpy(img)
+        img = torch.from_numpy(img).contiguous()
         bbox = bbox.transpose((2, 0, 1))
-        bbox = torch.from_numpy(bbox)
-        eyes_loc = torch.from_numpy(eyes_loc)
-        gaze_label = torch.from_numpy(gaze_label)
+        bbox = torch.from_numpy(bbox).contiguous()
+        eyes_loc = torch.from_numpy(eyes_loc).contiguous()
+        gaze_label = torch.from_numpy(gaze_label).contiguous()
 
         sample = (img, bbox,eyes_loc, gaze_label)
 
