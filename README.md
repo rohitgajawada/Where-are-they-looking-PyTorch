@@ -2,10 +2,10 @@
 Where are they looking? - Attention modelling + Deep Learning
 
 TODO:
-Add Dataloaders
-->Add Transforms
-->Get mean and variance params
+Fix Dataloaders bugs
 
 Add AUC Score
+
+Try training model and getting it to learn
 
 Not sure whether each ground truth label is separate image or average of them all
