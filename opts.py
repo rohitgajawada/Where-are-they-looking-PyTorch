@@ -9,13 +9,13 @@ def myargparser():
     parser.add_argument('--dataset', default='gazefollow', type=str, help='chosen dataset')
     parser.add_argument('--data_dir', default='../data/', type=str, help='chosen data directory')
     parser.add_argument('--placesmodelpath', default='../whole_alexnet_places365.pth.tar', type=str, help='chosen data directory')
-    parser.add_argument('--verbose', action='store_true')
-    parser.add_argument('--workers', default=4, type=int, help='number of data loading workers (default: 4)')
+    parser.add_argument('--verbose', default=True)
+    parser.add_argument('--workers', default=6, type=int, help='number of data loading workers (default: 4)')
     #default stuff
-    parser.add_argument('--epochs', default=10, type=int, help='number of total epochs to run')
-    parser.add_argument('--batch-size', default=32, type=int, help='mini-batch size (default: 128)')
-    parser.add_argument('--testbatchsize', default=32, type=int, help='input batch size for testing (default: 1000)')
-    parser.add_argument('--printfreq', default=200, type=int, help='print frequency (default: 10)')
+    parser.add_argument('--epochs', default=50, type=int, help='number of total epochs to run')
+    parser.add_argument('--batch-size', default=64, type=int, help='mini-batch size (default: 128)')
+    parser.add_argument('--testbatchsize', default=64, type=int, help='input batch size for testing (default: 1000)')
+    parser.add_argument('--printfreq', default=25, type=int, help='print frequency (default: 10)')
     parser.add_argument('--learningratescheduler', default='decayschedular', type=str, help='if lr rate scheduler should be used')
 
     #optimizer/criterion stuff

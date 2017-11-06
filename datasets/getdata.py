@@ -55,8 +55,11 @@ class GazeDataset(Dataset):
         img = io.imread(img_name)
         s = img.shape
         bbox_corr = self.bbox_list[idx]
-
-        bbox = img[ int(bbox_corr[1]*s[0]):int(bbox_corr[1]*s[0]+bbox_corr[3]*s[0]), int(bbox_corr[0]*s[1]):int(bbox_corr[0]*s[1]+bbox_corr[2]*s[1])]
+        bbox_corr[bbox_corr < 0] = 0.0
+        bbox = np.copy(img[ int(bbox_corr[1]*s[0]):int(np.ceil(bbox_corr[1]*s[0]+bbox_corr[3]*s[0])), int(bbox_corr[0]*s[1]):int(np.ceil(bbox_corr[0]*s[1]+bbox_corr[2]*s[1]))])
+        # print("row: ",int(bbox_corr[1]*s[0])," ", int(np.ceil(bbox_corr[1]*s[0]+bbox_corr[3]*s[0])))
+        # print("col: ",int(bbox_corr[0]*s[1])," ", int(np.ceil(bbox_corr[0]*s[1]+bbox_corr[2]*s[1])))
+        # print("img shape: ",s ,"corr: ",bbox_corr," shape: ",bbox.shape)
         bbox = transform.resize(bbox,(227, 227))
 
         img = transform.resize(img,(227,227))
@@ -64,21 +67,36 @@ class GazeDataset(Dataset):
         eyes = self.eyes_list[idx]
 
         eyes_loc_size = 13
-        gaze_label_size = 15
+        gaze_label_size = 14
 
         eyes_loc = np.zeros((eyes_loc_size,eyes_loc_size))
         eyes_loc[int(eyes_loc_size*eyes[1])][int(eyes_loc_size*eyes[0])] = 1
 
-        gaze_label = np.zeros(gaze_label_size*gaze_label_size)
+        gaze_label = np.zeros((gaze_label_size+1)*(gaze_label_size+1))
         gaze_label[int(np.floor(gaze_label_size*gaze_label_size*gaze[0] + gaze_label_size*gaze[1]))] = 1
+
+        if len(img.shape) == 2:
+            # print("org ",img.shape)
+            img = np.stack((img,)*3, axis=-1)
+            # print("org ",img.shape)
+            # print("\n")
+
+        # print(img.shape," ",len(img.shape))
         img = img.transpose((2, 0, 1))
         img = torch.from_numpy(img).contiguous()
+
+        if len(bbox.shape) == 2:
+            # print(bbox.shape)
+            bbox = np.stack((bbox,)*3, axis=-1)
+            # print(bbox.shape)
+            # print("\n")
         bbox = bbox.transpose((2, 0, 1))
         bbox = torch.from_numpy(bbox).contiguous()
+
         eyes_loc = torch.from_numpy(eyes_loc).contiguous()
         gaze_label = torch.from_numpy(gaze_label).contiguous()
 
-        sample = (img, bbox,eyes_loc, gaze_label)
+        sample = (img.float(), bbox.float(), eyes_loc.float(), gaze_label.float())
 
         return sample
 
@@ -90,7 +108,6 @@ class GazeFollow():
         Test_Ann = sio.loadmat(opt.data_dir + 'test_annotations.mat')
 
         self.train_gaze = GazeDataset(Train_Ann, 'train', opt.data_dir)
-        print(self.train_gaze[1])
         self.train_loader = torch.utils.data.DataLoader(self.train_gaze, batch_size=opt.batch_size, shuffle=True, num_workers=opt.workers)
 
         self.val_gaze = GazeDataset(Test_Ann, 'test', opt.data_dir)
