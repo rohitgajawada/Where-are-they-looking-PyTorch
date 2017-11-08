@@ -5,6 +5,8 @@ import copy
 import random
 import math
 from PIL import Image
+import matplotlib
+import matplotlib.pyplot as plt
 
 class AverageMeter():
     """Computes and stores the average and current value"""
@@ -23,8 +25,24 @@ class AverageMeter():
         self.count += n
         self.avg = self.sum / self.count
 
-def visualize_gaze(img, eye_coord, pred_coord):
-    pass
+def visualize_gaze(images, eye_coords, pred_coords):
+
+    img = images[0]
+    eye = eye_coords[0].view(1, 169)
+    pred = pred_coords[0].view(1, 225)
+
+    ind = pred.max(1)[1]
+    step = 1 / 30.0
+    x = ((float(ind/ 15)) / 15.0) + step
+    y = ((float(ind % 15)) / 15.0) + step
+
+    e = eye.max(1)[1]
+    ex = ((float(e/ 13)) / 15.0) + step
+    ey = ((float(e % 13)) / 15.0) + step
+
+    plt.imshow(img)
+    plt.show()
+    print(x, y, ex, ey)
 
 def AUCaccuracy(output, target, opt):
     pass

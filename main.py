@@ -30,6 +30,7 @@ def main():
     cudnn.benchmark = True
 
     dataloader = ld.GazeFollow(opt)
+
     train_loader = dataloader.train_loader
     val_loader = dataloader.val_loader
 

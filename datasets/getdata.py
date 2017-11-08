@@ -60,7 +60,7 @@ class GazeDataset(Dataset):
 
         bbox = transform.resize(bbox,(227, 227))
 
-        img = transform.resize(img,(227,227))
+        img = transform.resize(img,(227, 227))
         gaze = self.gaze_list[idx]
         eyes = self.eyes_list[idx]
 
@@ -100,6 +100,7 @@ class GazeFollow():
         Test_Ann = sio.loadmat(opt.data_dir + 'test_annotations.mat')
 
         self.train_gaze = GazeDataset(Train_Ann, 'train', opt.data_dir)
+        self.x = self.train_gaze[1]
         self.train_loader = torch.utils.data.DataLoader(self.train_gaze, batch_size=opt.batch_size, shuffle=True, num_workers=opt.workers)
 
         self.val_gaze = GazeDataset(Test_Ann, 'test', opt.data_dir)
