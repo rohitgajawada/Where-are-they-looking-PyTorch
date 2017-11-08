@@ -53,6 +53,7 @@ class AlexGaze(nn.Module):
         x = self.relu(self.fc3(x))
         x = self.sig(self.fc4(x))
         x = x.view(-1, 13, 13)
+        x = self.finalconv(x)
         return x
 
 
