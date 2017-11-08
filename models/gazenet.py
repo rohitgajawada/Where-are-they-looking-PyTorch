@@ -6,7 +6,6 @@ import torchvision.models as models
 # places_alex = torch.load('../whole_alexnet_places365.pth.tar')
 # imagenet_alex = models.alexnet(pretrained=True)
 #LRN present in previous models but not here
-#try out batchnorm and dropout
 
 class AlexSal(nn.Module):
     def __init__(self, opt):
@@ -16,11 +15,10 @@ class AlexSal(nn.Module):
         )
 
         self.relu = nn.ReLU()
-        self.bn5 = nn.BatchNorm2d(256)
         self.conv6 = nn.Conv2d(256, 1, kernel_size=(1, 1), stride=(1, 1))
 
     def forward(self, x):
-        x = self.bn5(self.relu(self.features(x)))
+        x = self.relu(self.features(x))
         x = self.relu(self.conv6(x))
         x = x.squeeze(1)
         return x
@@ -33,7 +31,6 @@ class AlexGaze(nn.Module):
         )
 
         self.relu = nn.ReLU()
-        self.bn5 = nn.BatchNorm2d(256)
 
         self.fc1 = nn.Linear(9216, 500)
         self.fc2 = nn.Linear(669, 400)
@@ -44,7 +41,7 @@ class AlexGaze(nn.Module):
         self.finalconv = nn.Conv2d(1, 1, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
 
     def forward(self, x, egrid):
-        x = self.bn5(self.features(x))
+        x = self.features(x)
         x = x.view(-1, 9216)
         x = self.relu(self.fc1(x))
 

@@ -79,20 +79,3 @@ def get_mean_and_std(dataloader):
     mean.div_(len_dataset)
     std.div_(len_dataset)
     return mean, std
-
-def weights_init(model, opt):
-    '''Perform weight initializations.'''
-    for m in model.modules():
-        if isinstance(m, nn.Conv2d):
-            c  = math.sqrt(2.0 / (m.kernel_size[0] * m.kernel_size[1] * m.out_channels))
-            m.weight.data = torch.randn(m.weight.data.size()).cuda() * c #*0.1
-            if m.bias is not None:
-                init.constant(m.bias, 0)
-        elif isinstance(m, nn.BatchNorm2d):
-            if m.affine == True:
-                init.constant(m.weight, 1)
-                init.constant(m.bias, 0)
-        elif isinstance(m, nn.Linear):
-            c =  math.sqrt(2.0 / m.weight.data.size(1));
-            if m.bias is not None:
-                init.constant(m.bias, 0)
