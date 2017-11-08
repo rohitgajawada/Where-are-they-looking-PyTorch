@@ -2,6 +2,7 @@ from torch.autograd import Variable
 from utils import AverageMeter
 from copy import deepcopy
 import time
+import models.__init__ as init
 
 class Trainer():
     def __init__(self, model, criterion, optimizer, opt):
@@ -36,7 +37,7 @@ class Trainer():
 
             outputs = self.model(xh, xi, xp)
 
-            loss = self.criterion(outputs, targets)
+            loss = self.criterion(outputs, targets.max(1)[1])
 
             loss.backward()
             self.optimizer.step()
@@ -47,6 +48,9 @@ class Trainer():
             # measure elapsed time
             self.batch_time.update(time.time() - end)
             end = time.time()
+
+            if i % 300 == 0:
+                init.save_checkpoint(opt, self.model, self.optimizer, self.losses.avg, epoch)
 
             if i % opt.printfreq == 0 and opt.verbose == True:
                 print('Epoch: [{0}][{1}/{2}]\t'
@@ -95,7 +99,7 @@ class Validator():
             self.data_time.update(time.time() - end)
             outputs = self.model(xh, xi, xp)
 
-            loss = self.criterion(outputs, targets)
+            loss = self.criterion(outputs, targets.max(1)[1])
 
             inputs_size = xh.size(0)
             self.losses.update(loss.data[0], inputs_size)

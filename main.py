@@ -11,7 +11,7 @@ parser = opts.myargparser()
 def main():
     global opt, best_err1
     opt = parser.parse_args()
-    best_err1 = 0
+    best_err1 = 1000000
     print(opt)
 
     model = init.load_model(opt)
