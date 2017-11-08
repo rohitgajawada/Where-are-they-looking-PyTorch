@@ -23,39 +23,11 @@ class AverageMeter():
         self.count += n
         self.avg = self.sum / self.count
 
-def AUCaccuracy(output, target, opt):
+def visualize_gaze(img, eye_coord, pred_coord):
     pass
 
-def precision(output, target, topk=(1,)):
-    """Computes the precision@k for the specified values of k"""
-    maxk = max(topk)
-    batch_size = target.size(0)
-
-    _, pred = output.topk(maxk, 1, True, True)
-    pred = pred.t()
-    correct = pred.eq(target.view(1, -1).expand_as(pred))
-
-    res = []
-    for k in topk:
-        correct_k = correct[:k].view(-1).float().sum(0)
-        res.append(correct_k.mul_(100.0 / batch_size))
-    return res
-
-class Invert(object):
-    def __call__(self, img):
-        img = 1.0 - img
-        return img
-
-class RandomRotate(object):
-    def __init__(self, rrange):
-        self.rrange = rrange
-
-    def __call__(self, img):
-        size = img.size
-        angle = random.randint(-self.rrange, self.rrange)
-        img = img.rotate(angle, resample=Image.BICUBIC)
-        img = img.resize(size, Image.ANTIALIAS)
-        return img
+def AUCaccuracy(output, target, opt):
+    pass
 
 def adjust_learning_rate(opt, optimizer, epoch):
     epoch = copy.deepcopy(epoch)

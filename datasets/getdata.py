@@ -5,7 +5,7 @@ import pandas as pd
 from skimage import io, transform
 import numpy as np
 import matplotlib.pyplot as plt
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset
 from torchvision import transforms, utils
 import matplotlib.patches as patches
 import scipy.io as sio
@@ -56,10 +56,8 @@ class GazeDataset(Dataset):
         s = img.shape
         bbox_corr = self.bbox_list[idx]
         bbox_corr[bbox_corr < 0] = 0.0
-        bbox = np.copy(img[ int(bbox_corr[1]*s[0]):int(np.ceil(bbox_corr[1]*s[0]+bbox_corr[3]*s[0])), int(bbox_corr[0]*s[1]):int(np.ceil(bbox_corr[0]*s[1]+bbox_corr[2]*s[1]))])
-        # print("row: ",int(bbox_corr[1]*s[0])," ", int(np.ceil(bbox_corr[1]*s[0]+bbox_corr[3]*s[0])))
-        # print("col: ",int(bbox_corr[0]*s[1])," ", int(np.ceil(bbox_corr[0]*s[1]+bbox_corr[2]*s[1])))
-        # print("img shape: ",s ,"corr: ",bbox_corr," shape: ",bbox.shape)
+        bbox = np.copy(img[ int(bbox_corr[1] * s[0]): int(np.ceil( bbox_corr[1] * s[0] + bbox_corr[3] * s[0])), int(bbox_corr[0] * s[1]): int(np.ceil(bbox_corr[0] * s[1] + bbox_corr[2] * s[1]))])
+
         bbox = transform.resize(bbox,(227, 227))
 
         img = transform.resize(img,(227,227))
@@ -69,27 +67,21 @@ class GazeDataset(Dataset):
         eyes_loc_size = 13
         gaze_label_size = 14
 
-        eyes_loc = np.zeros((eyes_loc_size,eyes_loc_size))
-        eyes_loc[int(eyes_loc_size*eyes[1])][int(eyes_loc_size*eyes[0])] = 1
+        eyes_loc = np.zeros((eyes_loc_size, eyes_loc_size))
+        eyes_loc[int(eyes_loc_size * eyes[1])][int(eyes_loc_size * eyes[0])] = 1
 
-        gaze_label = np.zeros((gaze_label_size+1)*(gaze_label_size+1))
-        gaze_label[int(np.floor(gaze_label_size*gaze_label_size*gaze[0] + gaze_label_size*gaze[1]))] = 1
+        gaze_label = np.zeros((gaze_label_size + 1) * (gaze_label_size + 1))
+        gaze_label[int(np.floor(gaze_label_size * gaze_label_size * gaze[0] + gaze_label_size*gaze[1]))] = 1
 
         if len(img.shape) == 2:
-            # print("org ",img.shape)
             img = np.stack((img,)*3, axis=-1)
-            # print("org ",img.shape)
-            # print("\n")
 
-        # print(img.shape," ",len(img.shape))
         img = img.transpose((2, 0, 1))
         img = torch.from_numpy(img).contiguous()
 
         if len(bbox.shape) == 2:
-            # print(bbox.shape)
-            bbox = np.stack((bbox,)*3, axis=-1)
-            # print(bbox.shape)
-            # print("\n")
+            bbox = np.stack((bbox,) * 3, axis=-1)
+
         bbox = bbox.transpose((2, 0, 1))
         bbox = torch.from_numpy(bbox).contiguous()
 
