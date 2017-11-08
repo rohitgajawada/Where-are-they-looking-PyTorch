@@ -25,7 +25,7 @@ class Trainer():
             self.optimizer.zero_grad()
 
             if opt.cuda:
-                xh, xi, xp, targets = data
+                xh, xi, xp, targets, eyes, names = data
                 xh = xh.cuda(async=True)
                 xi = xi.cuda(async=True)
                 xp = xp.cuda(async=True)
@@ -48,9 +48,6 @@ class Trainer():
             # measure elapsed time
             self.batch_time.update(time.time() - end)
             end = time.time()
-
-            if i % 300 == 0:
-                init.save_checkpoint(opt, self.model, self.optimizer, self.losses.avg, epoch)
 
             if i % opt.printfreq == 0 and opt.verbose == True:
                 print('Epoch: [{0}][{1}/{2}]\t'
@@ -88,7 +85,7 @@ class Validator():
 
         for i, data in enumerate(valloader, 0):
             if opt.cuda:
-                xh, xi, xp, targets = data
+                xh, xi, xp, targets, eyes, names = data
                 xh = xh.cuda(async=True)
                 xi = xi.cuda(async=True)
                 xp = xp.cuda(async=True)

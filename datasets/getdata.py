@@ -53,6 +53,7 @@ class GazeDataset(Dataset):
     def __getitem__(self, idx):
         img_name = self.img_path_list[idx]
         img = io.imread(img_name)
+
         s = img.shape
         bbox_corr = self.bbox_list[idx]
         bbox_corr[bbox_corr < 0] = 0.0
@@ -65,13 +66,14 @@ class GazeDataset(Dataset):
         eyes = self.eyes_list[idx]
 
         eyes_loc_size = 13
-        gaze_label_size = 14
+        gaze_label_size = 15
 
         eyes_loc = np.zeros((eyes_loc_size, eyes_loc_size))
-        eyes_loc[int(eyes_loc_size * eyes[1])][int(eyes_loc_size * eyes[0])] = 1
+        eyes_loc[int(np.floor(eyes_loc_size * eyes[1]))][int(np.floor(eyes_loc_size * eyes[0]))] = 1
 
-        gaze_label = np.zeros((gaze_label_size + 1) * (gaze_label_size + 1))
-        gaze_label[int(np.floor(gaze_label_size * gaze_label_size * gaze[0] + gaze_label_size*gaze[1]))] = 1
+        gaze_label = np.zeros((gaze_label_size,gaze_label_size))
+
+        gaze_label[int(np.floor(gaze_label_size * gaze[1]))][int(np.floor(gaze_label_size * gaze[0]))] = 1
 
         if len(img.shape) == 2:
             img = np.stack((img,)*3, axis=-1)
@@ -87,8 +89,9 @@ class GazeDataset(Dataset):
 
         eyes_loc = torch.from_numpy(eyes_loc).contiguous()
         gaze_label = torch.from_numpy(gaze_label).contiguous()
-
-        sample = (img.float(), bbox.float(), eyes_loc.float(), gaze_label.float())
+        gaze_label = gaze_label.view(1, 225)
+        
+        sample = (img.float(), bbox.float(), eyes_loc.float(), gaze_label.float(), eyes, idx)
 
         return sample
 

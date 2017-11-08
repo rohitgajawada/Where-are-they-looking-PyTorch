@@ -14,7 +14,7 @@ def myargparser():
     #default stuff
     parser.add_argument('--epochs', default=50, type=int, help='number of total epochs to run')
     parser.add_argument('--batch-size', default=128, type=int, help='mini-batch size (default: 128)')
-    parser.add_argument('--testbatchsize', default=128, type=int, help='input batch size for testing (default: 1000)')
+    parser.add_argument('--testbatchsize', default=64, type=int, help='input batch size for testing (default: 1000)')
     parser.add_argument('--printfreq', default=50, type=int, help='print frequency (default: 10)')
     parser.add_argument('--learningratescheduler', default='decayschedular', type=str, help='if lr rate scheduler should be used')
 

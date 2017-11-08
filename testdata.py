@@ -16,28 +16,30 @@ opt = parser.parse_args()
 
 dataloader = ld.GazeFollow(opt)
 
-images, xis, eye_coords, pred_coords = next(iter(dataloader.val_loader))
+images, xis, eye_coords, pred_coords, eyes, names = next(iter(dataloader.val_loader))
 
-# utils.visualize_gaze(xhs, xps, labels)
+for i in range(64):
+    name = names[i]
 
-img = images[0]
-eye = eye_coords[0].view(1, 169)
-pred = pred_coords[0].view(1, 225)
+    img = images[i]
+    ey = eyes[i]
+    eye = eye_coords[i].view(1, 169)
+    pred = pred_coords[i].view(1, 225)
 
-ind = pred.max(1)[1]
-step = 1 / 30.0
-y = ((float(ind[0]/ 15)) / 15.0) + step
-x = ((float(ind[0] % 15)) / 15.0) + step
+    ind = pred.max(1)[1]
+    step = 1 / 30.0
+    y = ((float(ind[0]/ 15)) / 15.0) + step
+    x = ((float(ind[0] % 15)) / 15.0) + step
 
-e = eye.max(1)[1]
-ey = ((float(e[0]/ 13)) / 15.0) + step
-ex = ((float(e[0] % 13)) / 15.0) + step
-
-print(e, ind)
-
-to_pil = torchvision.transforms.ToPILImage()
-im = to_pil(img)
-print(x * 227, y * 227, ex * 227, ey * 227)
-plt.plot([x, ex],[y, ey])
-plt.imshow(im)
-plt.show()
+    to_pil = torchvision.transforms.ToPILImage()
+    im = to_pil(img)
+    eye_np = eyes[i].cpu().numpy()
+    print(name)
+    print(eye_np)
+    print(x * 227, y * 227)
+    plt.subplot(131)
+    plt.plot([x* 227, eye_np[0]* 227],[y* 227, eye_np[1]* 227])
+    plt.imshow(im)
+    plt.subplot(132)
+    plt.imshow(eye_coords[i].cpu().numpy())
+    plt.show()
