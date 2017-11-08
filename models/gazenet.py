@@ -76,12 +76,12 @@ class Net(nn.Module):
     def forward(self, xi, xh, xp):
         outxi = self.salpath(xi)
         outxh = self.gazepath(xh, xp)
-        print(outxi.size())
-        print(outxh.size())
+        #print(outxi.size())
+        #print(outxh.size())
         output = outxi * outxh
-        print(output.size())
+        #print(output.size())
         output = output.view(-1, 169)
-        print(output.size())
+        #print(output.size())
 
         #softmax and reshape
         hm = Variable(torch.zeros(output.size(0), 15, 15)).cuda()
@@ -137,14 +137,14 @@ class Net(nn.Module):
         return hm_base.view(-1, 225)
 
 
-import opts
-parser = opts.myargparser()
-opt = parser.parse_args()
-model = Net(opt).cuda()
-xi = Variable(torch.randn(16, 3, 227, 227)).cuda()
-xh = Variable(torch.randn(16, 3, 227, 227)).cuda()
-xp = torch.zeros(16, 13, 13)
-xp[0][4][4] = 1
-xp = Variable(xp).cuda()
+#import opts
+#parser = opts.myargparser()
+#opt = parser.parse_args()
+#model = Net(opt).cuda()
+#xi = Variable(torch.randn(16, 3, 227, 227)).cuda()
+#xh = Variable(torch.randn(16, 3, 227, 227)).cuda()
+#xp = torch.zeros(16, 13, 13)
+#xp[0][4][4] = 1
+#xp = Variable(xp).cuda()
 
-print(model(xi, xh, xp))
+#print(model(xi, xh, xp))
