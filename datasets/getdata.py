@@ -67,6 +67,10 @@ class GazeDataset(Dataset):
         gaze = self.gaze_list[idx]
         eyes = self.eyes_list[idx]
 
+        eyes2 = (eyes - bbox_corr[:2])/bbox_corr[2:]
+
+        bbox = getCropped(bbox, eyes2)
+
         eyes_loc_size = 13
         gaze_label_size = 15
 
@@ -93,7 +97,7 @@ class GazeDataset(Dataset):
         gaze_label = torch.from_numpy(gaze_label).contiguous()
         gaze_label = gaze_label.view(1, 225)
 
-        sample = (img.float(), bbox.float(), eyes_loc.float(), gaze_label.float(), eyes, idx)
+        sample = (img.float(), bbox.float(), eyes_loc.float(), gaze_label.float(), eyes, idx, eyes2)
 
         return sample
 

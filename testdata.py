@@ -16,13 +16,14 @@ opt = parser.parse_args()
 
 dataloader = ld.GazeFollow(opt)
 
-images, xis, eye_coords, pred_coords, eyes, names = next(iter(dataloader.val_loader))
+images, xis, eye_coords, pred_coords, eyes, names, eyes2 = next(iter(dataloader.val_loader))
 
 for i in range(64):
     name = names[i]
 
+    img2 = xis[i]
     img = images[i]
-    ey = eyes[i]
+    ey = eyes2[i]
     eye = eye_coords[i].view(1, 169)
     pred = pred_coords[i].view(1, 225)
 
@@ -33,13 +34,18 @@ for i in range(64):
 
     to_pil = torchvision.transforms.ToPILImage()
     im = to_pil(img)
+    im2 = to_pil(img2)
     eye_np = eyes[i].cpu().numpy()
+    eye_np2 = eyes2[i].cpu().numpy()
     print(name)
     print(eye_np)
     print(x * 227, y * 227)
     plt.subplot(131)
     plt.plot([x* 227, eye_np[0]* 227],[y* 227, eye_np[1]* 227])
     plt.imshow(im)
+    plt.subplot(133)
+    plt.plot([0, eye_np2[0]*227], [0, eye_np2[1]*227])
+    plt.imshow(im2)
     plt.subplot(132)
     plt.imshow(eye_coords[i].cpu().numpy())
     plt.show()
