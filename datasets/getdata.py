@@ -12,7 +12,7 @@ import scipy.io as sio
 
 class GazeDataset(Dataset):
 
-    def __init__(self, Data, type, path):
+    def __init__(self, Data, type, path, imagenet_mean, places_mean):
 
         if type == 'train':
             data_bbox = Data['train_bbox'][0]
@@ -46,6 +46,8 @@ class GazeDataset(Dataset):
         self.bbox_list = data_bbox
         self.eyes_list = data_eyes
         self.gaze_list = data_gaze
+        self.imagenet_mean = imagenet_mean
+        self.places_mean = places_mean
 
     def __len__(self):
         return len(self.img_path_list)
@@ -90,7 +92,7 @@ class GazeDataset(Dataset):
         eyes_loc = torch.from_numpy(eyes_loc).contiguous()
         gaze_label = torch.from_numpy(gaze_label).contiguous()
         gaze_label = gaze_label.view(1, 225)
-        
+
         sample = (img.float(), bbox.float(), eyes_loc.float(), gaze_label.float(), eyes, idx)
 
         return sample
@@ -102,10 +104,13 @@ class GazeFollow():
         Train_Ann = sio.loadmat(opt.data_dir + 'train_annotations.mat')
         Test_Ann = sio.loadmat(opt.data_dir + 'test_annotations.mat')
 
-        self.train_gaze = GazeDataset(Train_Ann, 'train', opt.data_dir)
+        imagenet_mean = sio.loadmat(opt.data_dir + 'imagenet_mean_resize.mat')
+        places_mean = sio.loadmat(opt.data_dir + 'places_mean_resize.mat')
+
+        self.train_gaze = GazeDataset(Train_Ann, 'train', opt.data_dir, imagenet_mean, places_mean)
         self.x = self.train_gaze[1]
         self.train_loader = torch.utils.data.DataLoader(self.train_gaze, batch_size=opt.batch_size, shuffle=True, num_workers=opt.workers)
 
-        self.val_gaze = GazeDataset(Test_Ann, 'test', opt.data_dir)
+        self.val_gaze = GazeDataset(Test_Ann, 'test', opt.data_dir, imagenet_mean, places_mean)
         self.val_loader = torch.utils.data.DataLoader(self.val_gaze,
         batch_size=opt.testbatchsize, shuffle=True, num_workers=opt.workers)
