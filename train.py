@@ -37,6 +37,10 @@ class Trainer():
 
             outputs = self.model(xh, xi, xp)
 
+            # print(outputs[0])
+            # print(targets)
+            # print(sum(targets == 1))
+            # print(targets.max(1)[1].size())
             loss = self.criterion(outputs, targets.max(1)[1])
 
             loss.backward()

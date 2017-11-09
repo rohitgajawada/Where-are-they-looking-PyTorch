@@ -17,9 +17,6 @@ def setup(model, opt):
     elif opt.optimType == 'adam':
         optimizer = optim.Adam(model.parameters(), lr = opt.maxlr, weight_decay = opt.weightDecay)
 
-    if opt.weight_init:
-        utils.weights_init(model, opt)
-
     return model, criterion, optimizer
 
 def save_checkpoint(opt, model, optimizer, best_acc, epoch):
