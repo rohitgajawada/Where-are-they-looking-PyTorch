@@ -53,10 +53,8 @@ class AlexGaze(nn.Module):
         x = self.relu(self.fc3(x))
         x = self.sig(self.fc4(x))
         x = x.view(-1, 1, 13, 13)
-        # print(x.size())
         x = self.finalconv(x)
         x = x.squeeze(1)
-        # print(x.size())
         return x
 
 
@@ -76,14 +74,9 @@ class Net(nn.Module):
     def forward(self, xi, xh, xp):
         outxi = self.salpath(xi)
         outxh = self.gazepath(xh, xp)
-        #print(outxi.size())
-        #print(outxh.size())
         output = outxi * outxh
-        #print(output.size())
         output = output.view(-1, 169)
-        #print(output.size())
 
-        #softmax and reshape
         hm = Variable(torch.zeros(output.size(0), 15, 15)).cuda()
         count_hm = Variable(torch.zeros(output.size(0), 15, 15)).cuda()
 
@@ -98,7 +91,6 @@ class Net(nn.Module):
         f_cell.extend([f_0_m1, f_0_1, f_m1_0, f_1_0, f_0_0])
         v_x = [0, 1, -1, 0, 0];
         v_y = [0, 0, 0, -1, 1];
-        #nan errors
         for k in range(5):
             dx, dy = v_x[k], v_y[k]
             f = f_cell[k]
@@ -126,7 +118,6 @@ class Net(nn.Module):
                         f_y = 14
 
                     # print(hm[:, i_x:f_x + 1, i_y:f_y + 1].size())
-
                     a = f[:, x, y].contiguous()
                     a = a.view(output.size(0), 1, 1)
 

@@ -10,6 +10,10 @@ from torchvision import transforms, utils
 import matplotlib.patches as patches
 import scipy.io as sio
 
+def crop_image():
+    pass
+
+
 class GazeDataset(Dataset):
 
     def __init__(self, Data, type, path):
@@ -42,6 +46,11 @@ class GazeDataset(Dataset):
         for i in range(data_gaze.shape[0]):
             data_gaze[i] = data_gaze[i].flatten()
 
+        self.imagenet_mean = sio.loadmat(path + 'imagenet_mean_resize.mat')
+        self.imagenet_mean = self.imagenet_mean['image_mean']
+        self.places_mean = sio.loadmat(path + 'places_mean_resize.mat')
+        self.places_mean = self.places_mean['image_mean']
+
         self.img_path_list = data_path
         self.bbox_list = data_bbox
         self.eyes_list = data_eyes
@@ -60,8 +69,14 @@ class GazeDataset(Dataset):
         bbox = np.copy(img[ int(bbox_corr[1] * s[0]): int(np.ceil( bbox_corr[1] * s[0] + bbox_corr[3] * s[0])), int(bbox_corr[0] * s[1]): int(np.ceil(bbox_corr[0] * s[1] + bbox_corr[2] * s[1]))])
 
         bbox = transform.resize(bbox,(227, 227))
-
         img = transform.resize(img,(227, 227))
+
+        # plt.imshow(img)
+        # plt.show()
+        # plt.imshow(img + self.places_mean)
+        # plt.show()
+        # exit()
+
         gaze = self.gaze_list[idx]
         eyes = self.eyes_list[idx]
 
@@ -78,11 +93,16 @@ class GazeDataset(Dataset):
         if len(img.shape) == 2:
             img = np.stack((img,)*3, axis=-1)
 
-        img = img.transpose((2, 0, 1))
-        img = torch.from_numpy(img).contiguous()
-
         if len(bbox.shape) == 2:
             bbox = np.stack((bbox,) * 3, axis=-1)
+
+        # bbox = bbox - self.imagenet_mean
+        # img = img - self.places_mean
+        # bbox = bbox[:,:,[2, 1, 0]]
+        # img = img[:,:,[2, 1, 0]]
+
+        img = img.transpose((2, 0, 1))
+        img = torch.from_numpy(img).contiguous()
 
         bbox = bbox.transpose((2, 0, 1))
         bbox = torch.from_numpy(bbox).contiguous()
@@ -91,7 +111,7 @@ class GazeDataset(Dataset):
         gaze_label = torch.from_numpy(gaze_label).contiguous()
         gaze_label = gaze_label.view(225)
 
-        sample = (img.float(), bbox.float(), eyes_loc.float(), gaze_label.float(), eyes, idx)
+        sample = (img.float(), bbox.float(), eyes_loc.float(), gaze_label.float(), eyes, img_name)
 
         return sample
 

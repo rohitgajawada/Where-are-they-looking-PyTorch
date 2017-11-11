@@ -8,6 +8,8 @@ import datasets.getdata as ld
 import matplotlib
 import matplotlib.pyplot as plt
 import torchvision
+import scipy.io as sio
+import torch
 
 parser = opts.myargparser()
 
@@ -18,10 +20,15 @@ dataloader = ld.GazeFollow(opt)
 
 images, xis, eye_coords, pred_coords, eyes, names = next(iter(dataloader.val_loader))
 
+imagenet_mean = sio.loadmat('imagenet_mean_resize.mat')
+imagenet_mean = imagenet_mean['image_mean']
+places_mean = sio.loadmat('places_mean_resize.mat')
+places_mean = places_mean['image_mean']
+
 for i in range(64):
     name = names[i]
 
-    img = images[i]
+    img = xis[i]
     ey = eyes[i]
     eye = eye_coords[i].view(1, 169)
     pred = pred_coords[i].view(1, 225)
@@ -39,7 +46,7 @@ for i in range(64):
     print(x * 227, y * 227)
     plt.subplot(131)
     plt.plot([x* 227, eye_np[0]* 227],[y* 227, eye_np[1]* 227])
-    plt.imshow(im)
+    plt.imshow(img)
     plt.subplot(132)
     plt.imshow(eye_coords[i].cpu().numpy())
     plt.show()

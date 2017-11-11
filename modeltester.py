@@ -15,7 +15,8 @@ import matplotlib
 parser = opts.myargparser()
 opt = parser.parse_args()
 
-checkpoint = torch.load('../models/gazenet_gazefollow_best.pth.tar')
+checkpoint = torch.load('../adamodels/gazenet_gazefollow_best.pth.tar')
+print("Loading pretrained model: ")
 start_epoch = checkpoint['epoch']
 best_err = checkpoint['best_prec1']
 
@@ -47,7 +48,12 @@ for i in range(64):
     print(name)
     print(eye_np * 227)
     print(x * 227, y * 227)
+    print(pred_coords[i] * 227)
 
+
+    plt.subplot(131)
     plt.plot([x* 227, eye_np[0]* 227],[y* 227, eye_np[1]* 227])
     plt.imshow(im)
+    plt.subplot(132)
+    plt.imshow(eye_coords[i].data.cpu().numpy())
     plt.show()
