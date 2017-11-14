@@ -161,6 +161,8 @@ class GazeDataset(Dataset):
 
         bbox = getCropped(bbox, eyes2)
         bbox = np.ascontiguousarray(bbox)
+        bbox = transform.resize(bbox,(227, 227))
+
         # print(bbox.shape)
 
         eyes_loc_size = 13

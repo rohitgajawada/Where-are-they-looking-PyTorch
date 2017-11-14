@@ -90,7 +90,7 @@ class Validator():
                 xh = xh.cuda(async=True)
                 xi = xi.cuda(async=True)
                 xp = xp.cuda(async=True)
-                targets = targets.cuda(async=True)
+                targets = targets.cuda(async=True).squeeze()
 
             xh, xi, xp, targets = Variable(xh), Variable(xi), Variable(xp), Variable(targets)
 
