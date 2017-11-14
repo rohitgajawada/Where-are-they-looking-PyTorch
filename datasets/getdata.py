@@ -70,12 +70,12 @@ def getCropped(img, e):
     x = np.ascontiguousarray(x)
 
     try:
-        x = transform.resize(bbox,(227, 227))
+        x = transform.resize(x,(227, 227))
         return x
     except:
         print('begins')
-        print(bbox)
-        print(bbox.shape)
+        print(x)
+        print(x.shape)
         print('ends')
         return img
 
