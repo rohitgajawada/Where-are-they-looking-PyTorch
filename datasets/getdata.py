@@ -69,7 +69,16 @@ def getCropped(img, e):
     x = img[int(bottom_y): int(top_y + 1), int(bottom_x): int(top_x + 1), :]
     x = np.ascontiguousarray(x)
 
-    return x
+    try:
+        x = transform.resize(bbox,(227, 227))
+        return x
+    except:
+        print('begins')
+        print(bbox)
+        print(bbox.shape)
+        print('ends')
+        return img
+
 
 class GazeDataset(Dataset):
 
@@ -153,11 +162,6 @@ class GazeDataset(Dataset):
         bbox = getCropped(bbox, eyes2)
         bbox = np.ascontiguousarray(bbox)
         # print(bbox.shape)
-        try:
-            bbox = transform.resize(bbox,(227, 227))
-        except:
-            print(bbox)
-            print(bbox.shape)
 
         eyes_loc_size = 13
         # gaze_label_size = 15
