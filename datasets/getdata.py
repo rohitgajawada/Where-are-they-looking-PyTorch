@@ -61,8 +61,8 @@ def getCropped(img, e):
         delta_t_y = w_y - (top_y - img.shape[0] + 1)
         top_y = img.shape[0] - 1
 
-    print delta_b_x, delta_b_y, delta_t_x, delta_t_y
-    print top_x, top_y, bottom_x, bottom_y
+    # print delta_b_x, delta_b_y, delta_t_x, delta_t_y
+    # print top_x, top_y, bottom_x, bottom_y
 
     topx = top_x
 
@@ -140,10 +140,19 @@ class GazeDataset(Dataset):
 
         eyes2 = (eyes - bbox_corr[:2])/bbox_corr[2:]
 
+        if len(img.shape) == 2:
+            img = np.stack((img,)*3, axis=-1)
+
+        if len(bbox.shape) == 2:
+            bbox = np.stack((bbox,) * 3, axis=-1)
+
         bbox = getCropped(bbox, eyes2)
+        # print(bbox.shape)
+        bbox = transform.resize(bbox,(227, 227))
 
         eyes_loc_size = 13
-        gaze_label_size = 15
+        # gaze_label_size = 15
+        gaze_label_size = 13
 
         eyes_loc = np.zeros((eyes_loc_size, eyes_loc_size))
         eyes_loc[int(np.floor(eyes_loc_size * eyes[1]))][int(np.floor(eyes_loc_size * eyes[0]))] = 1
@@ -152,11 +161,6 @@ class GazeDataset(Dataset):
 
         gaze_label[int(np.floor(gaze_label_size * gaze[1]))][int(np.floor(gaze_label_size * gaze[0]))] = 1
 
-        if len(img.shape) == 2:
-            img = np.stack((img,)*3, axis=-1)
-
-        if len(bbox.shape) == 2:
-            bbox = np.stack((bbox,) * 3, axis=-1)
 
         # bbox = bbox - self.imagenet_mean
         # img = img - self.places_mean
@@ -171,7 +175,8 @@ class GazeDataset(Dataset):
 
         eyes_loc = torch.from_numpy(eyes_loc).contiguous()
         gaze_label = torch.from_numpy(gaze_label).contiguous()
-        gaze_label = gaze_label.view(1, 225)
+        # gaze_label = gaze_label.view(1, 225)
+        gaze_label = gaze_label.view(1, 169)
 
         sample = (img.float(), bbox.float(), eyes_loc.float(), gaze_label.float(), eyes, idx, eyes2)
 

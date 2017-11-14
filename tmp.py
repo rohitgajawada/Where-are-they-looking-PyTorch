@@ -53,15 +53,13 @@ if top_y > img.shape[0] - 1:
     delta_t_y = w_y - (top_y - img.shape[0] + 1)
     top_y = img.shape[0] - 1
 
-print delta_b_x, delta_b_y, delta_t_x, delta_t_y
-print top_x, top_y, bottom_x, bottom_y
+# print delta_b_x, delta_b_y, delta_t_x, delta_t_y
+# print top_x, top_y, bottom_x, bottom_y
 
 topx = top_x
 
 x = img[int(bottom_y): int(top_y + 1), int(bottom_x): int(top_x + 1), :]
 
-# im_face = im_face[:,:,[1, 0, 2]]
-# imgplot = plt.imshow(x)
-# plt.show()
-
-return x
+im_face = im_face[:,:,[1, 0, 2]]
+imgplot = plt.imshow(x)
+plt.show()

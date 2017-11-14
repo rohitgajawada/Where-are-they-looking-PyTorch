@@ -24,9 +24,9 @@ def myargparser():
     parser.add_argument('--criterion', default='crossentropy', help='Criterion')
     parser.add_argument('--optimType', default='adam', choices=optim_choices, type=str, help='Optimizers. Options:'+str(optim_choices))
 
-    parser.add_argument('--maxlr', default=0.00001, type=float, help='initial learning rate')
+    parser.add_argument('--maxlr', default=0.001, type=float, help='initial learning rate')
     parser.add_argument('--lr', type=float, help='initial learning rate')
-    parser.add_argument('--minlr', default=0.000001, type=float, help='initial learning rate')
+    parser.add_argument('--minlr', default=0.0001, type=float, help='initial learning rate')
 
     parser.add_argument('--nesterov', action='store_true', help='nesterov momentum')
     parser.add_argument('--momentum', default=0.9, type=float, help='momentum (Default: 0.9)')

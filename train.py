@@ -25,17 +25,19 @@ class Trainer():
             self.optimizer.zero_grad()
 
             if opt.cuda:
-                xh, xi, xp, targets, eyes, names = data
+                xh, xi, xp, targets, eyes, names, eyes2 = data
                 xh = xh.cuda(async=True)
                 xi = xi.cuda(async=True)
                 xp = xp.cuda(async=True)
-                targets = targets.cuda(async=True)
+                targets = targets.cuda(async=True).squeeze()
 
             xh, xi, xp, targets = Variable(xh), Variable(xi), Variable(xp), Variable(targets)
 
             self.data_time.update(time.time() - end)
 
             outputs = self.model(xh, xi, xp)
+            # print(outputs)
+            # print(targets)
             loss = self.criterion(outputs, targets.max(1)[1])
 
             loss.backward()
@@ -84,7 +86,7 @@ class Validator():
 
         for i, data in enumerate(valloader, 0):
             if opt.cuda:
-                xh, xi, xp, targets, eyes, names = data
+                xh, xi, xp, targets, eyes, names, eyes2 = data
                 xh = xh.cuda(async=True)
                 xi = xi.cuda(async=True)
                 xp = xp.cuda(async=True)

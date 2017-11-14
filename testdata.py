@@ -20,10 +20,10 @@ dataloader = ld.GazeFollow(opt)
 
 images, xis, eye_coords, pred_coords, eyes, names, eyes2 = next(iter(dataloader.val_loader))
 
-imagenet_mean = sio.loadmat('imagenet_mean_resize.mat')
-imagenet_mean = imagenet_mean['image_mean']
-places_mean = sio.loadmat('places_mean_resize.mat')
-places_mean = places_mean['image_mean']
+# imagenet_mean = sio.loadmat('imagenet_mean_resize.mat')
+# imagenet_mean = imagenet_mean['image_mean']
+# places_mean = sio.loadmat('places_mean_resize.mat')
+# places_mean = places_mean['image_mean']
 
 for i in range(64):
     name = names[i]
