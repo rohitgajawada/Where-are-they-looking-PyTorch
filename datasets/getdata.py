@@ -67,6 +67,7 @@ def getCropped(img, e):
     topx = top_x
 
     x = img[int(bottom_y): int(top_y + 1), int(bottom_x): int(top_x + 1), :]
+    x = np.ascontiguousarray(x)
 
     return x
 
