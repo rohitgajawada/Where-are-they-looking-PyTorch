@@ -147,6 +147,7 @@ class GazeDataset(Dataset):
             bbox = np.stack((bbox,) * 3, axis=-1)
 
         bbox = getCropped(bbox, eyes2)
+        bbox = np.ascontiguousarray(bbox)
         # print(bbox.shape)
         bbox = transform.resize(bbox,(227, 227))
 
