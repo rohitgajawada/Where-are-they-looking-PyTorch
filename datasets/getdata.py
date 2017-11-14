@@ -127,7 +127,10 @@ class GazeDataset(Dataset):
         bbox_corr[bbox_corr < 0] = 0.0
         bbox = np.copy(img[ int(bbox_corr[1] * s[0]): int(np.ceil( bbox_corr[1] * s[0] + bbox_corr[3] * s[0])), int(bbox_corr[0] * s[1]): int(np.ceil(bbox_corr[0] * s[1] + bbox_corr[2] * s[1]))])
 
+        bbox = np.ascontiguousarray(bbox)
         bbox = transform.resize(bbox,(227, 227))
+
+        img = np.ascontiguousarray(img)
         img = transform.resize(img,(227, 227))
 
         # plt.imshow(img)
@@ -150,7 +153,11 @@ class GazeDataset(Dataset):
         bbox = getCropped(bbox, eyes2)
         bbox = np.ascontiguousarray(bbox)
         # print(bbox.shape)
-        bbox = transform.resize(bbox,(227, 227))
+        try:
+            bbox = transform.resize(bbox,(227, 227))
+        except:
+            print bbox
+            print bbox.shape
 
         eyes_loc_size = 13
         # gaze_label_size = 15
