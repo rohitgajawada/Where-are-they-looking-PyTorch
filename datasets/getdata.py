@@ -156,8 +156,8 @@ class GazeDataset(Dataset):
         try:
             bbox = transform.resize(bbox,(227, 227))
         except:
-            print bbox
-            print bbox.shape
+            print(bbox)
+            print(bbox.shape)
 
         eyes_loc_size = 13
         # gaze_label_size = 15
