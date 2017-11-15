@@ -12,19 +12,19 @@ def myargparser():
     parser.add_argument('--verbose', default=True)
     parser.add_argument('--workers', default=6, type=int, help='number of data loading workers (default: 4)')
     #default stuff
-    parser.add_argument('--epochs', default=50, type=int, help='number of total epochs to run')
-    parser.add_argument('--batch-size', default=64, type=int, help='mini-batch size (default: 128)')
+    parser.add_argument('--epochs', default=200, type=int, help='number of total epochs to run')
+    parser.add_argument('--batch-size', default=128, type=int, help='mini-batch size (default: 128)')
     parser.add_argument('--testbatchsize', default=128, type=int, help='input batch size for testing (default: 1000)')
     parser.add_argument('--printfreq', default=50, type=int, help='print frequency (default: 10)')
     parser.add_argument('--learningratescheduler', default='decayschedular', type=str, help='if lr rate scheduler should be used')
 
     #optimizer/criterion stuff
-    parser.add_argument('--decayinterval', default=5, type=int, help='decays by a power of decay_var in these epochs')
+    parser.add_argument('--decayinterval', default=10, type=int, help='decays by a power of decay_var in these epochs')
     parser.add_argument('--decaylevel', default=1.15, type=int, help='decays by a power of decaylevel')
     parser.add_argument('--criterion', default='crossentropy', help='Criterion')
     parser.add_argument('--optimType', default='adam', choices=optim_choices, type=str, help='Optimizers. Options:'+str(optim_choices))
 
-    parser.add_argument('--maxlr', default=0.001, type=float, help='initial learning rate')
+    parser.add_argument('--maxlr', default=0.0005, type=float, help='initial learning rate')
     parser.add_argument('--lr', type=float, help='initial learning rate')
     parser.add_argument('--minlr', default=0.0001, type=float, help='initial learning rate')
 

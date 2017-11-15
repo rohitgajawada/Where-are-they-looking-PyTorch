@@ -27,7 +27,8 @@ def save_checkpoint(opt, model, optimizer, best_acc, epoch):
         'best_prec1': best_acc,
         'optimizer' : optimizer.state_dict(),
     }
-    filename = "savedmodels/" + opt.model_def + '_' + opt.dataset + '_best' + ".pth.tar"
+    epochnum = str(epoch)
+    filename = "savedmodels/" + opt.model_def + '_' + opt.dataset + '_' + epochnum + 'epoch.pth.tar'
     torch.save(state, filename)
 
 def resumer(opt, model, optimizer):
