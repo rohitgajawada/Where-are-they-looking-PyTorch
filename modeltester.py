@@ -16,7 +16,7 @@ import matplotlib
 parser = opts.myargparser()
 opt = parser.parse_args()
 
-checkpoint = torch.load('../adamodels/gazenet_gazefollow_best.pth.tar')
+checkpoint = torch.load('./gazenet_gazefollow_18epoch.pth.tar')
 print("Loading pretrained model: ")
 start_epoch = checkpoint['epoch']
 best_err = checkpoint['best_prec1']
@@ -26,9 +26,9 @@ model.load_state_dict(checkpoint['state_dict'])
 
 dataloader = ld.GazeFollow(opt)
 
-images, xis, eye_coords, pred_coords, eyes, names = next(iter(dataloader.val_loader))
+images, xis, eye_coords, pred_coords, eyes, names, eyes2 = next(iter(dataloader.val_loader))
 
-images, xis, eye_coords, pred_coords, eyes, eyes2 = Variable(images.cuda()), Variable(xis.cuda()), Variable(eye_coords.cuda()), Variable(pred_coords.cuda()), eyes
+images, xis, eye_coords, pred_coords = Variable(images.cuda()), Variable(xis.cuda()), Variable(eye_coords.cuda()), Variable(pred_coords.cuda())
 
 outputs = model(images, xis, eye_coords)
 
@@ -40,8 +40,8 @@ untr2 = transforms.Compose([
 for i in range(64):
 
     name = names[i]
-    img = untr(images[i])
-    img2 = untr(xis[i])
+    img = untr(images[i].data.contiguous().cpu())
+    img2 = untr(xis[i].data.contiguous().cpu())
 
     img = untr2(img)
     img2 = untr2(img2)
@@ -72,5 +72,5 @@ for i in range(64):
     plt.plot([0, eye_np2[0]*227], [0, eye_np2[1]*227])
     plt.imshow(im2)
     plt.subplot(132)
-    plt.imshow(eye_coords[i].cpu().numpy())
+    plt.imshow(eye_coords[i].data.cpu().numpy())
     plt.show()
