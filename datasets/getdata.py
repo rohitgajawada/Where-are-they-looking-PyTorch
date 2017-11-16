@@ -7,16 +7,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 from torch.utils.data import Dataset
-from torchvision import transforms, utils
+from torchvision import transforms
 import matplotlib.patches as patches
 import scipy.io as sio
 from skimage import io, transform
 
 def getCropped(img, e):
-    # img = io.imread('../data/test/00000000/00000116.jpg')
-
-    # e = [0.37636364, 0.45393939]
-    # coordinates of the eyes
 
     alpha = 0.3
     w_x = int(math.floor(alpha * img.shape[1]))
@@ -61,10 +57,6 @@ def getCropped(img, e):
         delta_t_y = w_y - (top_y - img.shape[0] + 1)
         top_y = img.shape[0] - 1
 
-    # print delta_b_x, delta_b_y, delta_t_x, delta_t_y
-    # print top_x, top_y, bottom_x, bottom_y
-
-    topx = top_x
 
     x = img[int(bottom_y): int(top_y + 1), int(bottom_x): int(top_x + 1), :]
     x = np.ascontiguousarray(x)
@@ -82,7 +74,7 @@ def getCropped(img, e):
 
 class GazeDataset(Dataset):
 
-    def __init__(self, Data, type, path, imagenet_mean, places_mean):
+    def __init__(self, Data, type, path):
 
         if type == 'train':
             data_bbox = Data['train_bbox'][0]
@@ -112,17 +104,10 @@ class GazeDataset(Dataset):
         for i in range(data_gaze.shape[0]):
             data_gaze[i] = data_gaze[i].flatten()
 
-        self.imagenet_mean = sio.loadmat(path + 'imagenet_mean_resize.mat')
-        self.imagenet_mean = self.imagenet_mean['image_mean']
-        self.places_mean = sio.loadmat(path + 'places_mean_resize.mat')
-        self.places_mean = self.places_mean['image_mean']
-
         self.img_path_list = data_path
         self.bbox_list = data_bbox
         self.eyes_list = data_eyes
         self.gaze_list = data_gaze
-        self.imagenet_mean = imagenet_mean
-        self.places_mean = places_mean
 
     def __len__(self):
         return len(self.img_path_list)
@@ -163,8 +148,6 @@ class GazeDataset(Dataset):
         bbox = np.ascontiguousarray(bbox)
         bbox = transform.resize(bbox,(227, 227))
 
-        # print(bbox.shape)
-
         eyes_loc_size = 13
         # gaze_label_size = 15
         gaze_label_size = 13
@@ -176,17 +159,18 @@ class GazeDataset(Dataset):
 
         gaze_label[int(np.floor(gaze_label_size * gaze[1]))][int(np.floor(gaze_label_size * gaze[0]))] = 1
 
-
-        # bbox = bbox - self.imagenet_mean
-        # img = img - self.places_mean
-        # bbox = bbox[:,:,[2, 1, 0]]
-        # img = img[:,:,[2, 1, 0]]
-
         img = img.transpose((2, 0, 1))
         img = torch.from_numpy(img).contiguous()
 
         bbox = bbox.transpose((2, 0, 1))
         bbox = torch.from_numpy(bbox).contiguous()
+
+        normtransform = transforms.Compose([
+				transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+			])
+
+        img = normtransform(img)
+        bbox = normtransform(bbox)
 
         eyes_loc = torch.from_numpy(eyes_loc).contiguous()
         gaze_label = torch.from_numpy(gaze_label).contiguous()
@@ -204,13 +188,10 @@ class GazeFollow():
         Train_Ann = sio.loadmat(opt.data_dir + 'train_annotations.mat')
         Test_Ann = sio.loadmat(opt.data_dir + 'test_annotations.mat')
 
-        imagenet_mean = sio.loadmat(opt.data_dir + 'imagenet_mean_resize.mat')
-        places_mean = sio.loadmat(opt.data_dir + 'places_mean_resize.mat')
-
-        self.train_gaze = GazeDataset(Train_Ann, 'train', opt.data_dir, imagenet_mean, places_mean)
+        self.train_gaze = GazeDataset(Train_Ann, 'train', opt.data_dir)
         self.x = self.train_gaze[1]
         self.train_loader = torch.utils.data.DataLoader(self.train_gaze, batch_size=opt.batch_size, shuffle=True, num_workers=opt.workers)
 
-        self.val_gaze = GazeDataset(Test_Ann, 'test', opt.data_dir, imagenet_mean, places_mean)
+        self.val_gaze = GazeDataset(Test_Ann, 'test', opt.data_dir)
         self.val_loader = torch.utils.data.DataLoader(self.val_gaze,
         batch_size=opt.testbatchsize, shuffle=True, num_workers=opt.workers)
