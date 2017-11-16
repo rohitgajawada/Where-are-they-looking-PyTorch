@@ -43,7 +43,7 @@ def main():
 
         err = validator.validate(val_loader, epoch, opt)
         best_err1 = min(err, best_err1)
-        if epoch % 2 == 0 and epoch > 0:
+        if epoch % 3 == 0 and epoch > 0:
             init.save_checkpoint(opt, model, optimizer, best_err1, epoch)
 
         print('Best error: [{0:.3f}]\t'.format(best_err1))

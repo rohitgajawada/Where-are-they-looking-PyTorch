@@ -17,7 +17,7 @@ parser = opts.myargparser()
 global opt
 opt = parser.parse_args()
 dataloader = ld.GazeFollow(opt)
-images, xis, eye_coords, pred_coords, eyes, names, eyes2 = next(iter(dataloader.val_loader))
+images, xis, eye_coords, pred_coords, eyes, names, eyes2, gaze2 = next(iter(dataloader.val_loader))
 
 untr = transforms.Compose([
         transforms.Normalize([0, 0, 0], [1/(0.229), 1/(0.224), 1/(0.225)])])
