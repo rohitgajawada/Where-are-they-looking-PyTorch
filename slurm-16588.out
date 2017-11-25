@@ -1,0 +1,2955 @@
+/home/rohit.gajawada/.local/lib/python2.7/site-packages/skimage/transform/_warps.py:84: UserWarning: The default mode, 'constant', will be changed to 'reflect' in skimage 0.15.
+  warn("The default mode, 'constant', will be changed to 'reflect' in "
+Namespace(batch_size=128, cachemode=True, criterion='crossentropy', cuda=True, data_dir='../data/', dataset='gazefollow', decayinterval=10, decaylevel=1.15, epochs=200, inpsize=227, learningratescheduler='decayschedular', lr=None, manualSeed=123, maxlr=0.001, minlr=0.0001, model_def='gazenet', momentum=0.9, nesterov=False, optimType='adam', placesmodelpath='../whole_alexnet_places365.pth.tar', pretrained=False, pretrained_file='', printfreq=50, resume='', start_epoch=0, store='', testOnly=False, testbatchsize=128, verbose=True, weightDecay=0, weight_init=True, workers=6)
+Net (
+  (salpath): AlexSal (
+    (features): Sequential (
+      (0): Conv2d(3, 64, kernel_size=(11, 11), stride=(4, 4), padding=(2, 2))
+      (1): ReLU (inplace)
+      (2): MaxPool2d (size=(3, 3), stride=(2, 2), dilation=(1, 1))
+      (3): Conv2d(64, 192, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+      (4): ReLU (inplace)
+      (5): MaxPool2d (size=(3, 3), stride=(2, 2), dilation=(1, 1))
+      (6): Conv2d(192, 384, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (7): ReLU (inplace)
+      (8): Conv2d(384, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (9): ReLU (inplace)
+      (10): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (relu): ReLU ()
+    (conv6): Conv2d(256, 1, kernel_size=(1, 1), stride=(1, 1))
+  )
+  (gazepath): AlexGaze (
+    (features): Sequential (
+      (0): Conv2d(3, 64, kernel_size=(11, 11), stride=(4, 4), padding=(2, 2))
+      (1): ReLU (inplace)
+      (2): MaxPool2d (size=(3, 3), stride=(2, 2), dilation=(1, 1))
+      (3): Conv2d(64, 192, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+      (4): ReLU (inplace)
+      (5): MaxPool2d (size=(3, 3), stride=(2, 2), dilation=(1, 1))
+      (6): Conv2d(192, 384, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (7): ReLU (inplace)
+      (8): Conv2d(384, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (9): ReLU (inplace)
+      (10): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (11): ReLU (inplace)
+      (12): MaxPool2d (size=(3, 3), stride=(2, 2), dilation=(1, 1))
+    )
+    (relu): ReLU ()
+    (fc1): Linear (9216 -> 500)
+    (fc2): Linear (669 -> 400)
+    (fc3): Linear (400 -> 200)
+    (fc4): Linear (200 -> 169)
+    (sig): Sigmoid ()
+    (finalconv): Conv2d(1, 1, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  )
+  (smax): Softmax ()
+  (fc_0_m1): Linear (169 -> 25)
+  (fc_0_1): Linear (169 -> 25)
+  (fc_m1_0): Linear (169 -> 25)
+  (fc_1_0): Linear (169 -> 25)
+  (fc_0_0): Linear (169 -> 25)
+)
+('Starting epoch number:', 1, 'Learning rate:', 0.001)
+Epoch: [0][0/981]	Time 12.153 (12.153)	Data 8.929 (8.929)	Loss 5.133	
+Epoch: [0][50/981]	Time 1.385 (70.649)	Data 1.241 (63.274)	Loss 4.697	
+Epoch: [0][100/981]	Time 1.291 (130.355)	Data 1.177 (118.852)	Loss 4.628	
+Epoch: [0][150/981]	Time 1.307 (197.331)	Data 1.203 (181.690)	Loss 4.590	
+Epoch: [0][200/981]	Time 1.287 (258.602)	Data 1.188 (238.792)	Loss 4.564	
+Epoch: [0][250/981]	Time 1.275 (320.127)	Data 1.180 (296.166)	Loss 4.540	
+Epoch: [0][300/981]	Time 1.275 (383.790)	Data 1.182 (355.668)	Loss 4.522	
+Epoch: [0][350/981]	Time 1.285 (451.125)	Data 1.193 (418.859)	Loss 4.510	
+Epoch: [0][400/981]	Time 1.281 (513.793)	Data 1.190 (477.387)	Loss 4.498	
+Epoch: [0][450/981]	Time 1.273 (574.253)	Data 1.183 (533.707)	Loss 4.487	
+Epoch: [0][500/981]	Time 1.277 (639.843)	Data 1.188 (595.132)	Loss 4.477	
+Epoch: [0][550/981]	Time 1.271 (700.124)	Data 1.182 (651.267)	Loss 4.469	
+Epoch: [0][600/981]	Time 1.264 (759.659)	Data 1.176 (706.659)	Loss 4.462	
+Epoch: [0][650/981]	Time 1.259 (819.621)	Data 1.171 (762.495)	Loss 4.453	
+Epoch: [0][700/981]	Time 1.252 (877.360)	Data 1.164 (816.092)	Loss 4.444	
+Epoch: [0][750/981]	Time 1.249 (938.124)	Data 1.162 (872.724)	Loss 4.438	
+Epoch: [0][800/981]	Time 1.247 (998.609)	Data 1.160 (929.073)	Loss 4.433	
+Epoch: [0][850/981]	Time 1.241 (1055.834)	Data 1.154 (982.148)	Loss 4.428	
+Epoch: [0][900/981]	Time 1.236 (1113.535)	Data 1.150 (1035.726)	Loss 4.422	
+Epoch: [0][950/981]	Time 1.230 (1170.114)	Data 1.144 (1088.164)	Loss 4.416	
+Train: [0]	Time 1205.514	Data 1120.579	Loss 4.414	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [0][0/38]	Time 8.047 (8.047)	Data 8.017 (8.017)	Loss 4.9458 (4.9458)	
+Val: [0]	Time 42.288	Data 41.112	Loss 4.875	
+Best error: [4.875]	
+('Starting epoch number:', 2, 'Learning rate:', 0.001)
+Epoch: [1][0/981]	Time 7.568 (7.568)	Data 7.483 (7.483)	Loss 4.207	
+Epoch: [1][50/981]	Time 1.219 (62.175)	Data 1.136 (57.945)	Loss 4.272	
+Epoch: [1][100/981]	Time 1.148 (115.955)	Data 1.065 (107.577)	Loss 4.283	
+Epoch: [1][150/981]	Time 1.122 (169.468)	Data 1.039 (156.950)	Loss 4.275	
+Epoch: [1][200/981]	Time 1.111 (223.233)	Data 1.028 (206.576)	Loss 4.270	
+Epoch: [1][250/981]	Time 1.094 (274.642)	Data 1.011 (253.856)	Loss 4.276	
+Epoch: [1][300/981]	Time 1.092 (328.615)	Data 1.009 (303.704)	Loss 4.276	
+Epoch: [1][350/981]	Time 1.087 (381.509)	Data 1.004 (352.452)	Loss 4.276	
+Epoch: [1][400/981]	Time 1.086 (435.417)	Data 1.003 (402.220)	Loss 4.272	
+Epoch: [1][450/981]	Time 1.078 (486.263)	Data 0.995 (448.928)	Loss 4.272	
+Epoch: [1][500/981]	Time 1.074 (538.239)	Data 0.992 (496.765)	Loss 4.272	
+Epoch: [1][550/981]	Time 1.070 (589.322)	Data 0.987 (543.692)	Loss 4.272	
+Epoch: [1][600/981]	Time 1.069 (642.699)	Data 0.987 (592.930)	Loss 4.272	
+Epoch: [1][650/981]	Time 1.067 (694.773)	Data 0.984 (640.862)	Loss 4.270	
+Epoch: [1][700/981]	Time 1.066 (746.996)	Data 0.983 (688.935)	Loss 4.267	
+Epoch: [1][750/981]	Time 1.062 (797.710)	Data 0.979 (735.517)	Loss 4.266	
+Epoch: [1][800/981]	Time 1.061 (850.173)	Data 0.979 (783.820)	Loss 4.265	
+Epoch: [1][850/981]	Time 1.059 (901.510)	Data 0.976 (830.986)	Loss 4.264	
+Epoch: [1][900/981]	Time 1.058 (953.622)	Data 0.976 (878.942)	Loss 4.263	
+Epoch: [1][950/981]	Time 1.055 (1003.700)	Data 0.973 (924.882)	Loss 4.264	
+Train: [1]	Time 1034.276	Data 952.974	Loss 4.263	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [1][0/38]	Time 6.947 (6.947)	Data 6.914 (6.914)	Loss 4.8696 (4.8696)	
+Val: [1]	Time 36.799	Data 35.734	Loss 4.819	
+Best error: [4.819]	
+('Starting epoch number:', 3, 'Learning rate:', 0.001)
+Epoch: [2][0/981]	Time 8.155 (8.155)	Data 8.070 (8.070)	Loss 4.142	
+Epoch: [2][50/981]	Time 1.238 (63.137)	Data 1.155 (58.888)	Loss 4.173	
+Epoch: [2][100/981]	Time 1.167 (117.914)	Data 1.084 (109.513)	Loss 4.191	
+Epoch: [2][150/981]	Time 1.141 (172.228)	Data 1.058 (159.686)	Loss 4.190	
+Epoch: [2][200/981]	Time 1.122 (225.578)	Data 1.039 (208.898)	Loss 4.199	
+Epoch: [2][250/981]	Time 1.110 (278.602)	Data 1.027 (257.777)	Loss 4.197	
+Epoch: [2][300/981]	Time 1.096 (329.938)	Data 1.013 (304.955)	Loss 4.192	
+Epoch: [2][350/981]	Time 1.089 (382.392)	Data 1.006 (353.265)	Loss 4.189	
+Epoch: [2][400/981]	Time 1.081 (433.618)	Data 0.998 (400.328)	Loss 4.184	
+Epoch: [2][450/981]	Time 1.075 (484.893)	Data 0.992 (447.460)	Loss 4.187	
+Epoch: [2][500/981]	Time 1.069 (535.724)	Data 0.986 (494.131)	Loss 4.189	
+Epoch: [2][550/981]	Time 1.064 (586.275)	Data 0.981 (540.525)	Loss 4.189	
+Epoch: [2][600/981]	Time 1.060 (637.191)	Data 0.977 (587.285)	Loss 4.188	
+Epoch: [2][650/981]	Time 1.061 (690.843)	Data 0.978 (636.811)	Loss 4.190	
+Epoch: [2][700/981]	Time 1.058 (741.695)	Data 0.975 (683.528)	Loss 4.191	
+Epoch: [2][750/981]	Time 1.056 (793.154)	Data 0.973 (730.856)	Loss 4.192	
+Epoch: [2][800/981]	Time 1.056 (845.783)	Data 0.973 (779.340)	Loss 4.189	
+Epoch: [2][850/981]	Time 1.054 (897.222)	Data 0.971 (826.636)	Loss 4.190	
+Epoch: [2][900/981]	Time 1.053 (949.082)	Data 0.970 (874.332)	Loss 4.191	
+Epoch: [2][950/981]	Time 1.052 (1000.264)	Data 0.969 (921.386)	Loss 4.192	
+Train: [2]	Time 1030.378	Data 949.008	Loss 4.192	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [2][0/38]	Time 6.334 (6.334)	Data 6.304 (6.304)	Loss 4.7814 (4.7814)	
+Val: [2]	Time 38.431	Data 37.311	Loss 4.846	
+Best error: [4.819]	
+('Starting epoch number:', 4, 'Learning rate:', 0.001)
+Epoch: [3][0/981]	Time 7.550 (7.550)	Data 7.460 (7.460)	Loss 4.223	
+Epoch: [3][50/981]	Time 1.242 (63.335)	Data 1.159 (59.089)	Loss 4.107	
+Epoch: [3][100/981]	Time 1.168 (117.946)	Data 1.085 (109.564)	Loss 4.107	
+Epoch: [3][150/981]	Time 1.158 (174.869)	Data 1.075 (162.348)	Loss 4.110	
+Epoch: [3][200/981]	Time 1.146 (230.282)	Data 1.063 (213.623)	Loss 4.115	
+Epoch: [3][250/981]	Time 1.137 (285.397)	Data 1.054 (264.592)	Loss 4.117	
+Epoch: [3][300/981]	Time 1.123 (337.913)	Data 1.040 (312.983)	Loss 4.120	
+Epoch: [3][350/981]	Time 1.116 (391.593)	Data 1.033 (362.519)	Loss 4.125	
+Epoch: [3][400/981]	Time 1.108 (444.475)	Data 1.026 (411.278)	Loss 4.127	
+Epoch: [3][450/981]	Time 1.103 (497.459)	Data 1.020 (460.126)	Loss 4.127	
+Epoch: [3][500/981]	Time 1.097 (549.400)	Data 1.014 (507.908)	Loss 4.129	
+Epoch: [3][550/981]	Time 1.089 (600.275)	Data 1.007 (554.660)	Loss 4.126	
+Epoch: [3][600/981]	Time 1.089 (654.321)	Data 1.006 (604.542)	Loss 4.128	
+Epoch: [3][650/981]	Time 1.085 (706.196)	Data 1.002 (652.277)	Loss 4.126	
+Epoch: [3][700/981]	Time 1.080 (757.331)	Data 0.998 (699.275)	Loss 4.127	
+Epoch: [3][750/981]	Time 1.080 (811.067)	Data 0.997 (748.880)	Loss 4.125	
+Epoch: [3][800/981]	Time 1.074 (860.451)	Data 0.991 (794.121)	Loss 4.127	
+Epoch: [3][850/981]	Time 1.074 (914.158)	Data 0.991 (843.677)	Loss 4.129	
+Epoch: [3][900/981]	Time 1.072 (966.282)	Data 0.990 (891.649)	Loss 4.128	
+Epoch: [3][950/981]	Time 1.071 (1018.102)	Data 0.988 (939.330)	Loss 4.129	
+Train: [3]	Time 1047.717	Data 966.462	Loss 4.129	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [3][0/38]	Time 6.435 (6.435)	Data 6.402 (6.402)	Loss 4.8220 (4.8220)	
+Val: [3]	Time 39.137	Data 38.062	Loss 4.943	
+Best error: [4.819]	
+('Starting epoch number:', 5, 'Learning rate:', 0.001)
+Epoch: [4][0/981]	Time 7.128 (7.128)	Data 7.044 (7.044)	Loss 3.880	
+Epoch: [4][50/981]	Time 1.202 (61.323)	Data 1.119 (57.086)	Loss 4.039	
+Epoch: [4][100/981]	Time 1.166 (117.816)	Data 1.084 (109.438)	Loss 4.053	
+Epoch: [4][150/981]	Time 1.150 (173.627)	Data 1.067 (161.109)	Loss 4.051	
+Epoch: [4][200/981]	Time 1.134 (227.905)	Data 1.051 (211.251)	Loss 4.058	
+Epoch: [4][250/981]	Time 1.125 (282.369)	Data 1.042 (261.560)	Loss 4.061	
+Epoch: [4][300/981]	Time 1.117 (336.156)	Data 1.034 (311.199)	Loss 4.061	
+Epoch: [4][350/981]	Time 1.106 (388.282)	Data 1.023 (359.172)	Loss 4.063	
+Epoch: [4][400/981]	Time 1.103 (442.106)	Data 1.020 (408.854)	Loss 4.068	
+Epoch: [4][450/981]	Time 1.102 (496.790)	Data 1.019 (459.395)	Loss 4.067	
+Epoch: [4][500/981]	Time 1.106 (554.077)	Data 1.023 (512.545)	Loss 4.068	
+Epoch: [4][550/981]	Time 1.103 (607.754)	Data 1.020 (562.096)	Loss 4.067	
+Epoch: [4][600/981]	Time 1.102 (662.390)	Data 1.019 (612.594)	Loss 4.067	
+Epoch: [4][650/981]	Time 1.098 (714.538)	Data 1.015 (660.598)	Loss 4.066	
+Epoch: [4][700/981]	Time 1.095 (767.552)	Data 1.012 (709.461)	Loss 4.068	
+Epoch: [4][750/981]	Time 1.090 (818.571)	Data 1.007 (756.345)	Loss 4.069	
+Epoch: [4][800/981]	Time 1.088 (871.129)	Data 1.005 (804.764)	Loss 4.071	
+Epoch: [4][850/981]	Time 1.084 (922.148)	Data 1.001 (851.640)	Loss 4.071	
+Epoch: [4][900/981]	Time 1.086 (978.473)	Data 1.003 (903.813)	Loss 4.072	
+Epoch: [4][950/981]	Time 1.084 (1030.418)	Data 1.001 (951.610)	Loss 4.073	
+Train: [4]	Time 1060.831	Data 979.553	Loss 4.074	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [4][0/38]	Time 6.645 (6.645)	Data 6.614 (6.614)	Loss 4.7963 (4.7963)	
+Val: [4]	Time 40.695	Data 39.618	Loss 4.802	
+Best error: [4.802]	
+('Starting epoch number:', 6, 'Learning rate:', 0.001)
+Epoch: [5][0/981]	Time 7.128 (7.128)	Data 7.035 (7.035)	Loss 3.831	
+Epoch: [5][50/981]	Time 1.109 (56.551)	Data 1.026 (52.321)	Loss 3.958	
+Epoch: [5][100/981]	Time 1.084 (109.457)	Data 1.001 (101.082)	Loss 3.983	
+Epoch: [5][150/981]	Time 1.073 (161.968)	Data 0.990 (149.463)	Loss 3.993	
+Epoch: [5][200/981]	Time 1.060 (213.116)	Data 0.977 (196.466)	Loss 3.996	
+Epoch: [5][250/981]	Time 1.057 (265.235)	Data 0.974 (244.434)	Loss 3.997	
+Epoch: [5][300/981]	Time 1.057 (318.162)	Data 0.974 (293.231)	Loss 4.007	
+Epoch: [5][350/981]	Time 1.056 (370.784)	Data 0.974 (341.713)	Loss 4.012	
+Epoch: [5][400/981]	Time 1.053 (422.408)	Data 0.971 (389.195)	Loss 4.009	
+Epoch: [5][450/981]	Time 1.052 (474.337)	Data 0.969 (436.980)	Loss 4.013	
+Epoch: [5][500/981]	Time 1.053 (527.776)	Data 0.971 (486.264)	Loss 4.013	
+Epoch: [5][550/981]	Time 1.048 (577.523)	Data 0.965 (531.882)	Loss 4.014	
+Epoch: [5][600/981]	Time 1.047 (629.539)	Data 0.965 (579.755)	Loss 4.013	
+Epoch: [5][650/981]	Time 1.043 (678.875)	Data 0.960 (624.934)	Loss 4.016	
+Epoch: [5][700/981]	Time 1.043 (731.440)	Data 0.961 (673.357)	Loss 4.016	
+Epoch: [5][750/981]	Time 1.041 (782.049)	Data 0.958 (719.821)	Loss 4.018	
+Epoch: [5][800/981]	Time 1.040 (832.765)	Data 0.957 (766.388)	Loss 4.019	
+Epoch: [5][850/981]	Time 1.038 (883.261)	Data 0.955 (812.736)	Loss 4.019	
+Epoch: [5][900/981]	Time 1.041 (937.601)	Data 0.958 (862.953)	Loss 4.020	
+Epoch: [5][950/981]	Time 1.042 (990.583)	Data 0.959 (911.791)	Loss 4.021	
+Train: [5]	Time 1020.343	Data 939.070	Loss 4.022	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [5][0/38]	Time 6.805 (6.805)	Data 6.772 (6.772)	Loss 4.8477 (4.8477)	
+Val: [5]	Time 40.808	Data 39.721	Loss 4.950	
+Best error: [4.802]	
+('Starting epoch number:', 7, 'Learning rate:', 0.001)
+Epoch: [6][0/981]	Time 7.990 (7.990)	Data 7.906 (7.906)	Loss 3.631	
+Epoch: [6][50/981]	Time 1.212 (61.831)	Data 1.129 (57.594)	Loss 3.919	
+Epoch: [6][100/981]	Time 1.129 (114.009)	Data 1.046 (105.622)	Loss 3.922	
+Epoch: [6][150/981]	Time 1.126 (170.024)	Data 1.043 (157.501)	Loss 3.931	
+Epoch: [6][200/981]	Time 1.113 (223.756)	Data 1.030 (207.084)	Loss 3.938	
+Epoch: [6][250/981]	Time 1.109 (278.266)	Data 1.026 (257.448)	Loss 3.940	
+Epoch: [6][300/981]	Time 1.110 (334.036)	Data 1.027 (309.074)	Loss 3.938	
+Epoch: [6][350/981]	Time 1.100 (386.145)	Data 1.017 (357.034)	Loss 3.941	
+Epoch: [6][400/981]	Time 1.097 (440.067)	Data 1.015 (406.815)	Loss 3.944	
+Epoch: [6][450/981]	Time 1.095 (493.795)	Data 1.012 (456.401)	Loss 3.948	
+Epoch: [6][500/981]	Time 1.088 (545.092)	Data 1.005 (503.543)	Loss 3.951	
+Epoch: [6][550/981]	Time 1.079 (594.469)	Data 0.996 (548.756)	Loss 3.953	
+Epoch: [6][600/981]	Time 1.079 (648.271)	Data 0.996 (598.406)	Loss 3.956	
+Epoch: [6][650/981]	Time 1.076 (700.216)	Data 0.993 (646.195)	Loss 3.955	
+Epoch: [6][700/981]	Time 1.071 (750.543)	Data 0.988 (692.390)	Loss 3.956	
+Epoch: [6][750/981]	Time 1.066 (800.787)	Data 0.983 (738.497)	Loss 3.959	
+Epoch: [6][800/981]	Time 1.065 (853.088)	Data 0.982 (786.658)	Loss 3.961	
+Epoch: [6][850/981]	Time 1.066 (906.956)	Data 0.983 (836.376)	Loss 3.962	
+Epoch: [6][900/981]	Time 1.063 (958.149)	Data 0.980 (883.424)	Loss 3.962	
+Epoch: [6][950/981]	Time 1.063 (1010.992)	Data 0.980 (932.125)	Loss 3.962	
+Train: [6]	Time 1041.796	Data 960.459	Loss 3.963	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [6][0/38]	Time 7.019 (7.019)	Data 6.987 (6.987)	Loss 4.8063 (4.8063)	
+Val: [6]	Time 35.269	Data 34.200	Loss 4.870	
+Best error: [4.802]	
+('Starting epoch number:', 8, 'Learning rate:', 0.001)
+Epoch: [7][0/981]	Time 7.032 (7.032)	Data 6.948 (6.948)	Loss 4.007	
+Epoch: [7][50/981]	Time 1.145 (58.390)	Data 1.062 (54.164)	Loss 3.852	
+Epoch: [7][100/981]	Time 1.101 (111.213)	Data 1.018 (102.828)	Loss 3.852	
+Epoch: [7][150/981]	Time 1.068 (161.286)	Data 0.985 (148.762)	Loss 3.844	
+Epoch: [7][200/981]	Time 1.052 (211.380)	Data 0.969 (194.719)	Loss 3.853	
+Epoch: [7][250/981]	Time 1.040 (261.096)	Data 0.957 (240.297)	Loss 3.856	
+Epoch: [7][300/981]	Time 1.045 (314.659)	Data 0.962 (289.711)	Loss 3.857	
+Epoch: [7][350/981]	Time 1.046 (367.105)	Data 0.963 (338.006)	Loss 3.859	
+Epoch: [7][400/981]	Time 1.044 (418.799)	Data 0.961 (385.555)	Loss 3.867	
+Epoch: [7][450/981]	Time 1.041 (469.626)	Data 0.958 (432.234)	Loss 3.873	
+Epoch: [7][500/981]	Time 1.041 (521.397)	Data 0.958 (479.849)	Loss 3.876	
+Epoch: [7][550/981]	Time 1.037 (571.486)	Data 0.954 (525.818)	Loss 3.877	
+Epoch: [7][600/981]	Time 1.037 (623.461)	Data 0.954 (573.646)	Loss 3.880	
+Epoch: [7][650/981]	Time 1.035 (673.644)	Data 0.952 (619.703)	Loss 3.886	
+Epoch: [7][700/981]	Time 1.039 (728.145)	Data 0.956 (670.051)	Loss 3.888	
+Epoch: [7][750/981]	Time 1.038 (779.444)	Data 0.955 (717.213)	Loss 3.890	
+Epoch: [7][800/981]	Time 1.038 (831.336)	Data 0.955 (764.953)	Loss 3.894	
+Epoch: [7][850/981]	Time 1.036 (881.804)	Data 0.953 (811.277)	Loss 3.895	
+Epoch: [7][900/981]	Time 1.038 (934.790)	Data 0.955 (860.107)	Loss 3.895	
+Epoch: [7][950/981]	Time 1.038 (987.232)	Data 0.955 (908.407)	Loss 3.898	
+Train: [7]	Time 1015.693	Data 934.398	Loss 3.898	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [7][0/38]	Time 6.964 (6.964)	Data 6.931 (6.931)	Loss 5.0929 (5.0929)	
+Val: [7]	Time 39.452	Data 38.392	Loss 5.190	
+Best error: [4.802]	
+('Starting epoch number:', 9, 'Learning rate:', 0.001)
+Epoch: [8][0/981]	Time 7.487 (7.487)	Data 7.403 (7.403)	Loss 3.617	
+Epoch: [8][50/981]	Time 1.196 (60.979)	Data 1.112 (56.708)	Loss 3.767	
+Epoch: [8][100/981]	Time 1.118 (112.908)	Data 1.035 (104.494)	Loss 3.787	
+Epoch: [8][150/981]	Time 1.094 (165.209)	Data 1.011 (152.630)	Loss 3.787	
+Epoch: [8][200/981]	Time 1.081 (217.235)	Data 0.997 (200.497)	Loss 3.793	
+Epoch: [8][250/981]	Time 1.077 (270.275)	Data 0.994 (249.394)	Loss 3.795	
+Epoch: [8][300/981]	Time 1.070 (322.137)	Data 0.987 (297.121)	Loss 3.797	
+Epoch: [8][350/981]	Time 1.073 (376.554)	Data 0.990 (347.391)	Loss 3.799	
+Epoch: [8][400/981]	Time 1.072 (429.945)	Data 0.989 (396.637)	Loss 3.800	
+Epoch: [8][450/981]	Time 1.075 (484.736)	Data 0.992 (447.288)	Loss 3.803	
+Epoch: [8][500/981]	Time 1.070 (536.051)	Data 0.987 (494.458)	Loss 3.806	
+Epoch: [8][550/981]	Time 1.064 (586.248)	Data 0.981 (540.519)	Loss 3.810	
+Epoch: [8][600/981]	Time 1.064 (639.587)	Data 0.981 (589.720)	Loss 3.813	
+Epoch: [8][650/981]	Time 1.059 (689.586)	Data 0.976 (635.559)	Loss 3.813	
+Epoch: [8][700/981]	Time 1.063 (744.823)	Data 0.980 (686.642)	Loss 3.818	
+Epoch: [8][750/981]	Time 1.060 (796.025)	Data 0.977 (733.708)	Loss 3.821	
+Epoch: [8][800/981]	Time 1.058 (847.503)	Data 0.975 (781.029)	Loss 3.822	
+Epoch: [8][850/981]	Time 1.057 (899.378)	Data 0.974 (828.754)	Loss 3.822	
+Epoch: [8][900/981]	Time 1.054 (949.903)	Data 0.971 (875.143)	Loss 3.824	
+Epoch: [8][950/981]	Time 1.054 (1002.525)	Data 0.971 (923.626)	Loss 3.826	
+Train: [8]	Time 1032.035	Data 950.665	Loss 3.826	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [8][0/38]	Time 6.412 (6.412)	Data 6.380 (6.380)	Loss 4.9777 (4.9777)	
+Val: [8]	Time 36.604	Data 35.528	Loss 5.111	
+Best error: [4.802]	
+('Starting epoch number:', 10, 'Learning rate:', 0.001)
+Epoch: [9][0/981]	Time 12.311 (12.311)	Data 12.227 (12.227)	Loss 3.386	
+Epoch: [9][50/981]	Time 1.380 (70.373)	Data 1.297 (66.126)	Loss 3.680	
+Epoch: [9][100/981]	Time 1.226 (123.863)	Data 1.143 (115.487)	Loss 3.696	
+Epoch: [9][150/981]	Time 1.173 (177.127)	Data 1.090 (164.609)	Loss 3.701	
+Epoch: [9][200/981]	Time 1.144 (230.017)	Data 1.061 (213.357)	Loss 3.712	
+Epoch: [9][250/981]	Time 1.142 (286.648)	Data 1.059 (265.838)	Loss 3.714	
+Epoch: [9][300/981]	Time 1.130 (340.100)	Data 1.047 (315.149)	Loss 3.718	
+Epoch: [9][350/981]	Time 1.118 (392.322)	Data 1.035 (363.247)	Loss 3.722	
+Epoch: [9][400/981]	Time 1.118 (448.212)	Data 1.035 (414.996)	Loss 3.729	
+Epoch: [9][450/981]	Time 1.111 (500.984)	Data 1.028 (463.615)	Loss 3.730	
+Epoch: [9][500/981]	Time 1.102 (551.894)	Data 1.019 (510.399)	Loss 3.733	
+Epoch: [9][550/981]	Time 1.099 (605.728)	Data 1.016 (560.080)	Loss 3.733	
+Epoch: [9][600/981]	Time 1.097 (659.081)	Data 1.014 (609.303)	Loss 3.734	
+Epoch: [9][650/981]	Time 1.091 (710.084)	Data 1.008 (656.176)	Loss 3.735	
+Epoch: [9][700/981]	Time 1.087 (761.940)	Data 1.004 (703.880)	Loss 3.737	
+Epoch: [9][750/981]	Time 1.085 (814.627)	Data 1.002 (752.414)	Loss 3.737	
+Epoch: [9][800/981]	Time 1.080 (865.015)	Data 0.997 (798.647)	Loss 3.738	
+Epoch: [9][850/981]	Time 1.078 (917.297)	Data 0.995 (846.801)	Loss 3.740	
+Epoch: [9][900/981]	Time 1.077 (970.509)	Data 0.994 (895.868)	Loss 3.743	
+Epoch: [9][950/981]	Time 1.075 (1022.005)	Data 0.992 (943.228)	Loss 3.746	
+Train: [9]	Time 1051.057	Data 969.778	Loss 3.747	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [9][0/38]	Time 7.504 (7.504)	Data 7.471 (7.471)	Loss 5.5546 (5.5546)	
+Val: [9]	Time 38.063	Data 36.984	Loss 5.117	
+Best error: [4.802]	
+('Starting epoch number:', 11, 'Learning rate:', 0.0008695652173913044)
+Epoch: [10][0/981]	Time 7.427 (7.427)	Data 7.343 (7.343)	Loss 3.598	
+Epoch: [10][50/981]	Time 1.254 (63.959)	Data 1.171 (59.718)	Loss 3.521	
+Epoch: [10][100/981]	Time 1.155 (116.672)	Data 1.072 (108.304)	Loss 3.531	
+Epoch: [10][150/981]	Time 1.130 (170.646)	Data 1.047 (158.120)	Loss 3.545	
+Epoch: [10][200/981]	Time 1.108 (222.744)	Data 1.025 (206.092)	Loss 3.560	
+Epoch: [10][250/981]	Time 1.087 (272.910)	Data 1.004 (252.127)	Loss 3.569	
+Epoch: [10][300/981]	Time 1.079 (324.808)	Data 0.996 (299.882)	Loss 3.580	
+Epoch: [10][350/981]	Time 1.070 (375.679)	Data 0.988 (346.615)	Loss 3.577	
+Epoch: [10][400/981]	Time 1.063 (426.292)	Data 0.980 (393.089)	Loss 3.581	
+Epoch: [10][450/981]	Time 1.059 (477.476)	Data 0.976 (440.136)	Loss 3.582	
+Epoch: [10][500/981]	Time 1.063 (532.478)	Data 0.980 (490.969)	Loss 3.589	
+Epoch: [10][550/981]	Time 1.067 (587.699)	Data 0.984 (542.041)	Loss 3.593	
+Epoch: [10][600/981]	Time 1.065 (640.266)	Data 0.982 (590.470)	Loss 3.595	
+Epoch: [10][650/981]	Time 1.060 (689.847)	Data 0.977 (635.925)	Loss 3.596	
+Epoch: [10][700/981]	Time 1.060 (742.884)	Data 0.977 (684.819)	Loss 3.601	
+Epoch: [10][750/981]	Time 1.057 (793.921)	Data 0.974 (731.708)	Loss 3.605	
+Epoch: [10][800/981]	Time 1.055 (844.667)	Data 0.972 (778.324)	Loss 3.608	
+Epoch: [10][850/981]	Time 1.053 (896.124)	Data 0.970 (825.656)	Loss 3.610	
+Epoch: [10][900/981]	Time 1.052 (947.643)	Data 0.969 (873.035)	Loss 3.612	
+Epoch: [10][950/981]	Time 1.054 (1001.879)	Data 0.971 (923.126)	Loss 3.614	
+Train: [10]	Time 1032.589	Data 951.329	Loss 3.616	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [10][0/38]	Time 6.207 (6.207)	Data 6.176 (6.176)	Loss 5.0092 (5.0092)	
+Val: [10]	Time 39.591	Data 38.512	Loss 5.157	
+Best error: [4.802]	
+('Starting epoch number:', 12, 'Learning rate:', 0.0008695652173913044)
+Epoch: [11][0/981]	Time 6.773 (6.773)	Data 6.689 (6.689)	Loss 3.397	
+Epoch: [11][50/981]	Time 1.099 (56.037)	Data 1.016 (51.816)	Loss 3.429	
+Epoch: [11][100/981]	Time 1.043 (105.301)	Data 0.960 (96.925)	Loss 3.426	
+Epoch: [11][150/981]	Time 1.033 (155.931)	Data 0.950 (143.425)	Loss 3.434	
+Epoch: [11][200/981]	Time 1.033 (207.694)	Data 0.950 (191.017)	Loss 3.440	
+Epoch: [11][250/981]	Time 1.054 (264.451)	Data 0.971 (243.652)	Loss 3.447	
+Epoch: [11][300/981]	Time 1.043 (313.835)	Data 0.960 (288.917)	Loss 3.452	
+Epoch: [11][350/981]	Time 1.040 (365.128)	Data 0.957 (336.070)	Loss 3.461	
+Epoch: [11][400/981]	Time 1.048 (420.231)	Data 0.965 (387.021)	Loss 3.465	
+Epoch: [11][450/981]	Time 1.045 (471.442)	Data 0.963 (434.107)	Loss 3.469	
+Epoch: [11][500/981]	Time 1.055 (528.547)	Data 0.972 (487.051)	Loss 3.473	
+Epoch: [11][550/981]	Time 1.054 (580.980)	Data 0.972 (535.354)	Loss 3.477	
+Epoch: [11][600/981]	Time 1.059 (636.194)	Data 0.976 (586.394)	Loss 3.483	
+Epoch: [11][650/981]	Time 1.055 (686.589)	Data 0.972 (632.649)	Loss 3.489	
+Epoch: [11][700/981]	Time 1.056 (740.183)	Data 0.973 (682.085)	Loss 3.488	
+Epoch: [11][750/981]	Time 1.053 (791.012)	Data 0.970 (728.769)	Loss 3.490	
+Epoch: [11][800/981]	Time 1.049 (840.183)	Data 0.966 (773.793)	Loss 3.496	
+Epoch: [11][850/981]	Time 1.053 (895.928)	Data 0.970 (825.372)	Loss 3.502	
+Epoch: [11][900/981]	Time 1.054 (949.411)	Data 0.971 (874.708)	Loss 3.503	
+Epoch: [11][950/981]	Time 1.061 (1009.033)	Data 0.978 (930.172)	Loss 3.508	
+Train: [11]	Time 1038.522	Data 957.164	Loss 3.508	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [11][0/38]	Time 7.529 (7.529)	Data 7.499 (7.499)	Loss 5.4443 (5.4443)	
+Val: [11]	Time 44.325	Data 43.249	Loss 5.284	
+Best error: [4.802]	
+('Starting epoch number:', 13, 'Learning rate:', 0.0008695652173913044)
+Epoch: [12][0/981]	Time 7.182 (7.182)	Data 7.088 (7.088)	Loss 3.147	
+Epoch: [12][50/981]	Time 1.295 (66.021)	Data 1.211 (61.750)	Loss 3.315	
+Epoch: [12][100/981]	Time 1.184 (119.629)	Data 1.101 (111.202)	Loss 3.316	
+Epoch: [12][150/981]	Time 1.145 (172.839)	Data 1.061 (160.251)	Loss 3.329	
+Epoch: [12][200/981]	Time 1.128 (226.810)	Data 1.045 (210.088)	Loss 3.334	
+Epoch: [12][250/981]	Time 1.111 (278.776)	Data 1.028 (257.920)	Loss 3.339	
+Epoch: [12][300/981]	Time 1.094 (329.221)	Data 1.011 (304.237)	Loss 3.346	
+Epoch: [12][350/981]	Time 1.080 (379.148)	Data 0.997 (350.019)	Loss 3.349	
+Epoch: [12][400/981]	Time 1.074 (430.739)	Data 0.991 (397.458)	Loss 3.355	
+Epoch: [12][450/981]	Time 1.068 (481.654)	Data 0.985 (444.234)	Loss 3.358	
+Epoch: [12][500/981]	Time 1.064 (532.994)	Data 0.981 (491.447)	Loss 3.362	
+Epoch: [12][550/981]	Time 1.059 (583.303)	Data 0.976 (537.626)	Loss 3.366	
+Epoch: [12][600/981]	Time 1.055 (633.790)	Data 0.972 (583.975)	Loss 3.371	
+Epoch: [12][650/981]	Time 1.052 (685.104)	Data 0.970 (631.154)	Loss 3.379	
+Epoch: [12][700/981]	Time 1.052 (737.668)	Data 0.969 (679.577)	Loss 3.383	
+Epoch: [12][750/981]	Time 1.052 (790.382)	Data 0.970 (728.144)	Loss 3.389	
+Epoch: [12][800/981]	Time 1.052 (842.375)	Data 0.969 (776.011)	Loss 3.393	
+Epoch: [12][850/981]	Time 1.049 (892.777)	Data 0.966 (822.277)	Loss 3.397	
+Epoch: [12][900/981]	Time 1.049 (945.593)	Data 0.967 (870.955)	Loss 3.402	
+Epoch: [12][950/981]	Time 1.047 (995.399)	Data 0.964 (916.624)	Loss 3.404	
+Train: [12]	Time 1025.541	Data 944.294	Loss 3.406	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [12][0/38]	Time 6.298 (6.298)	Data 6.268 (6.268)	Loss 5.1485 (5.1485)	
+Val: [12]	Time 36.610	Data 35.514	Loss 5.357	
+Best error: [4.802]	
+('Starting epoch number:', 14, 'Learning rate:', 0.0008695652173913044)
+Epoch: [13][0/981]	Time 7.889 (7.889)	Data 7.788 (7.788)	Loss 3.295	
+Epoch: [13][50/981]	Time 1.100 (56.080)	Data 1.016 (51.838)	Loss 3.171	
+Epoch: [13][100/981]	Time 1.094 (110.490)	Data 1.011 (102.105)	Loss 3.189	
+Epoch: [13][150/981]	Time 1.071 (161.720)	Data 0.988 (149.199)	Loss 3.190	
+Epoch: [13][200/981]	Time 1.059 (212.924)	Data 0.976 (196.238)	Loss 3.198	
+Epoch: [13][250/981]	Time 1.059 (265.795)	Data 0.976 (244.959)	Loss 3.211	
+Epoch: [13][300/981]	Time 1.054 (317.176)	Data 0.971 (292.200)	Loss 3.222	
+Epoch: [13][350/981]	Time 1.049 (368.227)	Data 0.966 (339.112)	Loss 3.238	
+Epoch: [13][400/981]	Time 1.047 (419.859)	Data 0.964 (386.618)	Loss 3.244	
+Epoch: [13][450/981]	Time 1.048 (472.466)	Data 0.965 (435.078)	Loss 3.249	
+Epoch: [13][500/981]	Time 1.047 (524.352)	Data 0.964 (482.811)	Loss 3.254	
+Epoch: [13][550/981]	Time 1.045 (575.816)	Data 0.962 (530.153)	Loss 3.259	
+Epoch: [13][600/981]	Time 1.044 (627.512)	Data 0.961 (577.703)	Loss 3.265	
+Epoch: [13][650/981]	Time 1.047 (681.348)	Data 0.964 (627.411)	Loss 3.272	
+Epoch: [13][700/981]	Time 1.045 (732.343)	Data 0.962 (674.264)	Loss 3.277	
+Epoch: [13][750/981]	Time 1.045 (784.572)	Data 0.962 (722.358)	Loss 3.282	
+Epoch: [13][800/981]	Time 1.044 (836.368)	Data 0.961 (770.000)	Loss 3.286	
+Epoch: [13][850/981]	Time 1.047 (891.032)	Data 0.964 (820.531)	Loss 3.289	
+Epoch: [13][900/981]	Time 1.048 (944.038)	Data 0.965 (869.381)	Loss 3.295	
+Epoch: [13][950/981]	Time 1.050 (998.234)	Data 0.967 (919.420)	Loss 3.298	
+Train: [13]	Time 1029.948	Data 948.663	Loss 3.300	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [13][0/38]	Time 6.030 (6.030)	Data 6.000 (6.000)	Loss 5.6669 (5.6669)	
+Val: [13]	Time 38.781	Data 37.699	Loss 5.474	
+Best error: [4.802]	
+('Starting epoch number:', 15, 'Learning rate:', 0.0008695652173913044)
+Epoch: [14][0/981]	Time 9.017 (9.017)	Data 8.933 (8.933)	Loss 3.140	
+Epoch: [14][50/981]	Time 1.172 (59.751)	Data 1.089 (55.515)	Loss 3.068	
+Epoch: [14][100/981]	Time 1.100 (111.054)	Data 1.016 (102.652)	Loss 3.071	
+Epoch: [14][150/981]	Time 1.100 (166.046)	Data 1.016 (153.488)	Loss 3.077	
+Epoch: [14][200/981]	Time 1.074 (215.840)	Data 0.991 (199.134)	Loss 3.087	
+Epoch: [14][250/981]	Time 1.072 (269.085)	Data 0.989 (248.225)	Loss 3.102	
+Epoch: [14][300/981]	Time 1.082 (325.587)	Data 0.999 (300.580)	Loss 3.113	
+Epoch: [14][350/981]	Time 1.076 (377.576)	Data 0.993 (348.433)	Loss 3.116	
+Epoch: [14][400/981]	Time 1.074 (430.578)	Data 0.991 (397.287)	Loss 3.128	
+Epoch: [14][450/981]	Time 1.076 (485.075)	Data 0.993 (447.632)	Loss 3.136	
+Epoch: [14][500/981]	Time 1.074 (537.851)	Data 0.991 (496.275)	Loss 3.143	
+Epoch: [14][550/981]	Time 1.073 (591.446)	Data 0.990 (545.722)	Loss 3.150	
+Epoch: [14][600/981]	Time 1.072 (644.187)	Data 0.989 (594.321)	Loss 3.154	
+Epoch: [14][650/981]	Time 1.075 (699.952)	Data 0.992 (645.958)	Loss 3.159	
+Epoch: [14][700/981]	Time 1.075 (753.410)	Data 0.992 (695.259)	Loss 3.167	
+Epoch: [14][750/981]	Time 1.075 (807.112)	Data 0.992 (744.822)	Loss 3.172	
+Epoch: [14][800/981]	Time 1.077 (862.582)	Data 0.994 (796.150)	Loss 3.178	
+Epoch: [14][850/981]	Time 1.074 (914.181)	Data 0.991 (843.586)	Loss 3.182	
+Epoch: [14][900/981]	Time 1.073 (966.516)	Data 0.990 (891.789)	Loss 3.187	
+Epoch: [14][950/981]	Time 1.074 (1021.189)	Data 0.991 (942.294)	Loss 3.190	
+Train: [14]	Time 1051.444	Data 970.077	Loss 3.192	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [14][0/38]	Time 7.176 (7.176)	Data 7.146 (7.146)	Loss 5.6863 (5.6863)	
+Val: [14]	Time 38.985	Data 37.911	Loss 5.599	
+Best error: [4.802]	
+('Starting epoch number:', 16, 'Learning rate:', 0.0008695652173913044)
+Epoch: [15][0/981]	Time 7.148 (7.148)	Data 7.064 (7.064)	Loss 2.798	
+Epoch: [15][50/981]	Time 1.191 (60.725)	Data 1.108 (56.498)	Loss 2.951	
+Epoch: [15][100/981]	Time 1.131 (114.208)	Data 1.048 (105.812)	Loss 2.954	
+Epoch: [15][150/981]	Time 1.129 (170.530)	Data 1.046 (157.987)	Loss 2.954	
+Epoch: [15][200/981]	Time 1.111 (223.250)	Data 1.028 (206.558)	Loss 2.975	
+Epoch: [15][250/981]	Time 1.116 (280.129)	Data 1.033 (259.277)	Loss 2.982	
+Epoch: [15][300/981]	Time 1.106 (332.842)	Data 1.023 (307.843)	Loss 2.992	
+Epoch: [15][350/981]	Time 1.101 (386.296)	Data 1.018 (357.160)	Loss 3.006	
+Epoch: [15][400/981]	Time 1.103 (442.206)	Data 1.020 (408.935)	Loss 3.013	
+Epoch: [15][450/981]	Time 1.102 (497.105)	Data 1.019 (459.688)	Loss 3.018	
+Epoch: [15][500/981]	Time 1.101 (551.508)	Data 1.018 (509.948)	Loss 3.027	
+Epoch: [15][550/981]	Time 1.101 (606.426)	Data 1.018 (560.670)	Loss 3.038	
+Epoch: [15][600/981]	Time 1.101 (661.848)	Data 1.018 (611.949)	Loss 3.047	
+Epoch: [15][650/981]	Time 1.101 (716.704)	Data 1.018 (662.662)	Loss 3.054	
+Epoch: [15][700/981]	Time 1.099 (770.494)	Data 1.016 (712.310)	Loss 3.061	
+Epoch: [15][750/981]	Time 1.101 (826.821)	Data 1.018 (764.498)	Loss 3.066	
+Epoch: [15][800/981]	Time 1.101 (882.187)	Data 1.018 (815.726)	Loss 3.071	
+Epoch: [15][850/981]	Time 1.102 (937.465)	Data 1.019 (866.862)	Loss 3.076	
+Epoch: [15][900/981]	Time 1.101 (992.199)	Data 1.018 (917.448)	Loss 3.079	
+Epoch: [15][950/981]	Time 1.100 (1046.047)	Data 1.017 (967.151)	Loss 3.086	
+Train: [15]	Time 1077.783	Data 996.403	Loss 3.089	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [15][0/38]	Time 7.516 (7.516)	Data 7.486 (7.486)	Loss 5.6077 (5.6077)	
+Val: [15]	Time 41.611	Data 40.530	Loss 5.630	
+Best error: [4.802]	
+('Starting epoch number:', 17, 'Learning rate:', 0.0008695652173913044)
+Epoch: [16][0/981]	Time 7.970 (7.970)	Data 7.881 (7.881)	Loss 2.743	
+Epoch: [16][50/981]	Time 1.218 (62.142)	Data 1.136 (57.914)	Loss 2.842	
+Epoch: [16][100/981]	Time 1.154 (116.581)	Data 1.071 (108.207)	Loss 2.833	
+Epoch: [16][150/981]	Time 1.121 (169.287)	Data 1.038 (156.764)	Loss 2.852	
+Epoch: [16][200/981]	Time 1.118 (224.635)	Data 1.035 (207.964)	Loss 2.877	
+Epoch: [16][250/981]	Time 1.096 (275.054)	Data 1.013 (254.233)	Loss 2.891	
+Epoch: [16][300/981]	Time 1.079 (324.771)	Data 0.996 (299.808)	Loss 2.903	
+Epoch: [16][350/981]	Time 1.083 (379.963)	Data 1.000 (350.852)	Loss 2.910	
+Epoch: [16][400/981]	Time 1.076 (431.646)	Data 0.993 (398.382)	Loss 2.916	
+Epoch: [16][450/981]	Time 1.072 (483.516)	Data 0.989 (446.100)	Loss 2.924	
+Epoch: [16][500/981]	Time 1.069 (535.750)	Data 0.986 (494.175)	Loss 2.935	
+Epoch: [16][550/981]	Time 1.067 (587.788)	Data 0.984 (542.068)	Loss 2.943	
+Epoch: [16][600/981]	Time 1.069 (642.387)	Data 0.986 (592.512)	Loss 2.950	
+Epoch: [16][650/981]	Time 1.068 (695.166)	Data 0.985 (641.144)	Loss 2.953	
+Epoch: [16][700/981]	Time 1.067 (747.682)	Data 0.984 (689.529)	Loss 2.960	
+Epoch: [16][750/981]	Time 1.068 (801.878)	Data 0.985 (739.577)	Loss 2.966	
+Epoch: [16][800/981]	Time 1.066 (854.102)	Data 0.983 (787.631)	Loss 2.975	
+Epoch: [16][850/981]	Time 1.064 (905.342)	Data 0.981 (834.730)	Loss 2.977	
+Epoch: [16][900/981]	Time 1.064 (958.997)	Data 0.981 (884.248)	Loss 2.984	
+Epoch: [16][950/981]	Time 1.065 (1012.422)	Data 0.982 (933.527)	Loss 2.988	
+Train: [16]	Time 1043.281	Data 961.899	Loss 2.989	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [16][0/38]	Time 6.569 (6.569)	Data 6.539 (6.539)	Loss 5.6269 (5.6269)	
+Val: [16]	Time 38.488	Data 37.387	Loss 5.668	
+Best error: [4.802]	
+('Starting epoch number:', 18, 'Learning rate:', 0.0008695652173913044)
+Epoch: [17][0/981]	Time 6.981 (6.981)	Data 6.896 (6.896)	Loss 2.765	
+Epoch: [17][50/981]	Time 1.145 (58.382)	Data 1.062 (54.139)	Loss 2.742	
+Epoch: [17][100/981]	Time 1.121 (113.263)	Data 1.038 (104.876)	Loss 2.733	
+Epoch: [17][150/981]	Time 1.113 (168.110)	Data 1.030 (155.577)	Loss 2.746	
+Epoch: [17][200/981]	Time 1.094 (219.815)	Data 1.011 (203.142)	Loss 2.765	
+Epoch: [17][250/981]	Time 1.083 (271.892)	Data 1.000 (251.053)	Loss 2.776	
+Epoch: [17][300/981]	Time 1.079 (324.876)	Data 0.996 (299.881)	Loss 2.791	
+Epoch: [17][350/981]	Time 1.075 (377.462)	Data 0.992 (348.342)	Loss 2.807	
+Epoch: [17][400/981]	Time 1.073 (430.377)	Data 0.990 (397.116)	Loss 2.817	
+Epoch: [17][450/981]	Time 1.069 (482.095)	Data 0.986 (444.690)	Loss 2.820	
+Epoch: [17][500/981]	Time 1.066 (533.838)	Data 0.983 (492.279)	Loss 2.831	
+Epoch: [17][550/981]	Time 1.067 (587.670)	Data 0.984 (541.965)	Loss 2.835	
+Epoch: [17][600/981]	Time 1.064 (639.519)	Data 0.981 (589.663)	Loss 2.843	
+Epoch: [17][650/981]	Time 1.061 (691.020)	Data 0.979 (637.018)	Loss 2.852	
+Epoch: [17][700/981]	Time 1.061 (743.616)	Data 0.978 (685.475)	Loss 2.859	
+Epoch: [17][750/981]	Time 1.061 (796.843)	Data 0.978 (734.551)	Loss 2.864	
+Epoch: [17][800/981]	Time 1.058 (847.691)	Data 0.975 (781.268)	Loss 2.873	
+Epoch: [17][850/981]	Time 1.057 (899.781)	Data 0.974 (829.225)	Loss 2.879	
+Epoch: [17][900/981]	Time 1.059 (953.992)	Data 0.976 (879.268)	Loss 2.886	
+Epoch: [17][950/981]	Time 1.057 (1005.318)	Data 0.974 (926.451)	Loss 2.892	
+Train: [17]	Time 1035.633	Data 954.292	Loss 2.895	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [17][0/38]	Time 8.109 (8.109)	Data 8.075 (8.075)	Loss 5.6766 (5.6766)	
+Val: [17]	Time 39.250	Data 38.181	Loss 5.801	
+Best error: [4.802]	
+('Starting epoch number:', 19, 'Learning rate:', 0.0008695652173913044)
+Epoch: [18][0/981]	Time 7.387 (7.387)	Data 7.303 (7.303)	Loss 2.465	
+Epoch: [18][50/981]	Time 1.176 (59.994)	Data 1.093 (55.764)	Loss 2.596	
+Epoch: [18][100/981]	Time 1.097 (110.761)	Data 1.014 (102.395)	Loss 2.619	
+Epoch: [18][150/981]	Time 1.084 (163.686)	Data 1.001 (151.163)	Loss 2.647	
+Epoch: [18][200/981]	Time 1.077 (216.450)	Data 0.994 (199.763)	Loss 2.664	
+Epoch: [18][250/981]	Time 1.069 (268.218)	Data 0.986 (247.392)	Loss 2.680	
+Epoch: [18][300/981]	Time 1.070 (322.065)	Data 0.987 (297.102)	Loss 2.688	
+Epoch: [18][350/981]	Time 1.069 (375.120)	Data 0.986 (346.028)	Loss 2.704	
+Epoch: [18][400/981]	Time 1.068 (428.392)	Data 0.985 (395.153)	Loss 2.712	
+Epoch: [18][450/981]	Time 1.069 (482.158)	Data 0.986 (444.782)	Loss 2.720	
+Epoch: [18][500/981]	Time 1.064 (532.964)	Data 0.981 (491.442)	Loss 2.732	
+Epoch: [18][550/981]	Time 1.067 (587.739)	Data 0.984 (542.072)	Loss 2.742	
+Epoch: [18][600/981]	Time 1.069 (642.359)	Data 0.986 (592.510)	Loss 2.750	
+Epoch: [18][650/981]	Time 1.066 (694.251)	Data 0.983 (640.258)	Loss 2.755	
+Epoch: [18][700/981]	Time 1.069 (749.336)	Data 0.986 (691.174)	Loss 2.764	
+Epoch: [18][750/981]	Time 1.071 (804.552)	Data 0.988 (742.252)	Loss 2.769	
+Epoch: [18][800/981]	Time 1.070 (857.307)	Data 0.987 (790.853)	Loss 2.778	
+Epoch: [18][850/981]	Time 1.070 (910.537)	Data 0.987 (839.939)	Loss 2.784	
+Epoch: [18][900/981]	Time 1.072 (965.737)	Data 0.989 (890.975)	Loss 2.789	
+Epoch: [18][950/981]	Time 1.069 (1017.046)	Data 0.986 (938.126)	Loss 2.794	
+Train: [18]	Time 1048.095	Data 966.698	Loss 2.798	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [18][0/38]	Time 6.950 (6.950)	Data 6.917 (6.917)	Loss 6.1465 (6.1465)	
+Val: [18]	Time 38.638	Data 37.565	Loss 5.994	
+Best error: [4.802]	
+('Starting epoch number:', 20, 'Learning rate:', 0.0008695652173913044)
+Epoch: [19][0/981]	Time 7.783 (7.783)	Data 7.699 (7.699)	Loss 2.402	
+Epoch: [19][50/981]	Time 1.195 (60.963)	Data 1.112 (56.711)	Loss 2.526	
+Epoch: [19][100/981]	Time 1.136 (114.709)	Data 1.053 (106.309)	Loss 2.556	
+Epoch: [19][150/981]	Time 1.116 (168.478)	Data 1.033 (155.916)	Loss 2.583	
+Epoch: [19][200/981]	Time 1.094 (219.873)	Data 1.011 (203.165)	Loss 2.590	
+Epoch: [19][250/981]	Time 1.082 (271.611)	Data 0.999 (250.750)	Loss 2.606	
+Epoch: [19][300/981]	Time 1.077 (324.281)	Data 0.994 (299.291)	Loss 2.620	
+Epoch: [19][350/981]	Time 1.075 (377.424)	Data 0.992 (348.305)	Loss 2.631	
+Epoch: [19][400/981]	Time 1.076 (431.402)	Data 0.993 (398.143)	Loss 2.638	
+Epoch: [19][450/981]	Time 1.073 (484.125)	Data 0.990 (446.715)	Loss 2.645	
+Epoch: [19][500/981]	Time 1.071 (536.762)	Data 0.988 (495.201)	Loss 2.652	
+Epoch: [19][550/981]	Time 1.069 (589.142)	Data 0.986 (543.446)	Loss 2.662	
+Epoch: [19][600/981]	Time 1.066 (640.940)	Data 0.984 (591.085)	Loss 2.675	
+Epoch: [19][650/981]	Time 1.065 (693.403)	Data 0.982 (639.362)	Loss 2.683	
+Epoch: [19][700/981]	Time 1.063 (744.988)	Data 0.980 (686.804)	Loss 2.692	
+Epoch: [19][750/981]	Time 1.066 (800.810)	Data 0.983 (738.489)	Loss 2.692	
+Epoch: [19][800/981]	Time 1.065 (853.238)	Data 0.982 (786.768)	Loss 2.698	
+Epoch: [19][850/981]	Time 1.065 (906.035)	Data 0.982 (835.437)	Loss 2.707	
+Epoch: [19][900/981]	Time 1.062 (957.088)	Data 0.979 (882.349)	Loss 2.714	
+Epoch: [19][950/981]	Time 1.062 (1009.621)	Data 0.979 (930.744)	Loss 2.719	
+Train: [19]	Time 1040.876	Data 959.529	Loss 2.721	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [19][0/38]	Time 6.060 (6.060)	Data 6.027 (6.027)	Loss 6.2988 (6.2988)	
+Val: [19]	Time 39.617	Data 38.529	Loss 6.113	
+Best error: [4.802]	
+('Starting epoch number:', 21, 'Learning rate:', 0.0007561436672967864)
+Epoch: [20][0/981]	Time 7.673 (7.673)	Data 7.588 (7.588)	Loss 2.459	
+Epoch: [20][50/981]	Time 1.208 (61.595)	Data 1.125 (57.363)	Loss 2.426	
+Epoch: [20][100/981]	Time 1.152 (116.372)	Data 1.069 (107.986)	Loss 2.439	
+Epoch: [20][150/981]	Time 1.118 (168.878)	Data 1.035 (156.347)	Loss 2.430	
+Epoch: [20][200/981]	Time 1.106 (222.265)	Data 1.023 (205.588)	Loss 2.441	
+Epoch: [20][250/981]	Time 1.090 (273.712)	Data 1.007 (252.868)	Loss 2.458	
+Epoch: [20][300/981]	Time 1.086 (327.008)	Data 1.003 (302.005)	Loss 2.470	
+Epoch: [20][350/981]	Time 1.087 (381.423)	Data 1.004 (352.280)	Loss 2.485	
+Epoch: [20][400/981]	Time 1.081 (433.457)	Data 0.998 (400.185)	Loss 2.490	
+Epoch: [20][450/981]	Time 1.081 (487.566)	Data 0.998 (450.130)	Loss 2.493	
+Epoch: [20][500/981]	Time 1.079 (540.809)	Data 0.996 (499.219)	Loss 2.501	
+Epoch: [20][550/981]	Time 1.082 (596.163)	Data 0.999 (550.426)	Loss 2.510	
+Epoch: [20][600/981]	Time 1.080 (649.021)	Data 0.997 (599.135)	Loss 2.515	
+Epoch: [20][650/981]	Time 1.078 (701.704)	Data 0.995 (647.688)	Loss 2.521	
+Epoch: [20][700/981]	Time 1.081 (758.067)	Data 0.998 (699.858)	Loss 2.530	
+Epoch: [20][750/981]	Time 1.081 (811.578)	Data 0.998 (749.234)	Loss 2.534	
+Epoch: [20][800/981]	Time 1.080 (865.090)	Data 0.997 (798.597)	Loss 2.542	
+Epoch: [20][850/981]	Time 1.081 (919.977)	Data 0.998 (849.340)	Loss 2.547	
+Epoch: [20][900/981]	Time 1.078 (971.041)	Data 0.995 (896.261)	Loss 2.555	
+Epoch: [20][950/981]	Time 1.077 (1023.787)	Data 0.994 (944.855)	Loss 2.561	
+Train: [20]	Time 1056.218	Data 974.808	Loss 2.567	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [20][0/38]	Time 6.208 (6.208)	Data 6.178 (6.178)	Loss 5.8594 (5.8594)	
+Val: [20]	Time 39.872	Data 38.791	Loss 6.150	
+Best error: [4.802]	
+('Starting epoch number:', 22, 'Learning rate:', 0.0007561436672967864)
+Epoch: [21][0/981]	Time 7.616 (7.616)	Data 7.532 (7.532)	Loss 1.992	
+Epoch: [21][50/981]	Time 1.193 (60.834)	Data 1.110 (56.607)	Loss 2.338	
+Epoch: [21][100/981]	Time 1.150 (116.146)	Data 1.067 (107.780)	Loss 2.319	
+Epoch: [21][150/981]	Time 1.105 (166.886)	Data 1.022 (154.370)	Loss 2.337	
+Epoch: [21][200/981]	Time 1.089 (218.925)	Data 1.006 (202.278)	Loss 2.341	
+Epoch: [21][250/981]	Time 1.091 (273.809)	Data 1.008 (253.031)	Loss 2.365	
+Epoch: [21][300/981]	Time 1.089 (327.791)	Data 1.006 (302.871)	Loss 2.380	
+Epoch: [21][350/981]	Time 1.085 (380.878)	Data 1.002 (351.803)	Loss 2.386	
+Epoch: [21][400/981]	Time 1.084 (434.573)	Data 1.001 (401.344)	Loss 2.395	
+Epoch: [21][450/981]	Time 1.076 (485.385)	Data 0.993 (448.007)	Loss 2.403	
+Epoch: [21][500/981]	Time 1.072 (537.238)	Data 0.989 (495.704)	Loss 2.411	
+Epoch: [21][550/981]	Time 1.072 (590.545)	Data 0.989 (544.857)	Loss 2.420	
+Epoch: [21][600/981]	Time 1.068 (642.069)	Data 0.985 (592.212)	Loss 2.428	
+Epoch: [21][650/981]	Time 1.065 (693.228)	Data 0.982 (639.206)	Loss 2.436	
+Epoch: [21][700/981]	Time 1.063 (745.096)	Data 0.980 (686.929)	Loss 2.444	
+Epoch: [21][750/981]	Time 1.066 (800.727)	Data 0.983 (738.413)	Loss 2.452	
+Epoch: [21][800/981]	Time 1.066 (854.165)	Data 0.983 (787.701)	Loss 2.460	
+Epoch: [21][850/981]	Time 1.064 (905.346)	Data 0.981 (834.728)	Loss 2.464	
+Epoch: [21][900/981]	Time 1.062 (956.817)	Data 0.979 (882.042)	Loss 2.470	
+Epoch: [21][950/981]	Time 1.061 (1009.074)	Data 0.978 (930.146)	Loss 2.477	
+Train: [21]	Time 1038.546	Data 957.145	Loss 2.480	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [21][0/38]	Time 6.830 (6.830)	Data 6.797 (6.797)	Loss 6.4638 (6.4638)	
+Val: [21]	Time 39.308	Data 38.241	Loss 6.337	
+Best error: [4.802]	
+('Starting epoch number:', 23, 'Learning rate:', 0.0007561436672967864)
+Epoch: [22][0/981]	Time 7.017 (7.017)	Data 6.933 (6.933)	Loss 2.653	
+Epoch: [22][50/981]	Time 1.181 (60.220)	Data 1.098 (55.978)	Loss 2.246	
+Epoch: [22][100/981]	Time 1.154 (116.579)	Data 1.071 (108.190)	Loss 2.230	
+Epoch: [22][150/981]	Time 1.123 (169.610)	Data 1.040 (157.064)	Loss 2.259	
+Epoch: [22][200/981]	Time 1.125 (226.031)	Data 1.041 (209.330)	Loss 2.266	
+Epoch: [22][250/981]	Time 1.103 (276.843)	Data 1.020 (255.991)	Loss 2.270	
+Epoch: [22][300/981]	Time 1.093 (329.108)	Data 1.010 (304.111)	Loss 2.282	
+Epoch: [22][350/981]	Time 1.096 (384.713)	Data 1.013 (355.564)	Loss 2.288	
+Epoch: [22][400/981]	Time 1.086 (435.356)	Data 1.003 (402.038)	Loss 2.299	
+Epoch: [22][450/981]	Time 1.085 (489.153)	Data 1.002 (451.700)	Loss 2.310	
+Epoch: [22][500/981]	Time 1.080 (540.869)	Data 0.997 (499.266)	Loss 2.318	
+Epoch: [22][550/981]	Time 1.078 (593.990)	Data 0.995 (548.257)	Loss 2.328	
+Epoch: [22][600/981]	Time 1.077 (647.479)	Data 0.994 (597.592)	Loss 2.336	
+Epoch: [22][650/981]	Time 1.080 (702.873)	Data 0.997 (648.806)	Loss 2.346	
+Epoch: [22][700/981]	Time 1.077 (755.253)	Data 0.994 (697.049)	Loss 2.357	
+Epoch: [22][750/981]	Time 1.077 (808.559)	Data 0.994 (746.191)	Loss 2.367	
+Epoch: [22][800/981]	Time 1.073 (859.865)	Data 0.990 (793.356)	Loss 2.375	
+Epoch: [22][850/981]	Time 1.072 (912.155)	Data 0.989 (841.496)	Loss 2.382	
+Epoch: [22][900/981]	Time 1.071 (964.816)	Data 0.988 (890.002)	Loss 2.388	
+Epoch: [22][950/981]	Time 1.071 (1018.072)	Data 0.987 (939.102)	Loss 2.396	
+Train: [22]	Time 1048.819	Data 967.361	Loss 2.399	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [22][0/38]	Time 6.604 (6.604)	Data 6.566 (6.566)	Loss 6.3082 (6.3082)	
+Val: [22]	Time 39.400	Data 38.337	Loss 6.342	
+Best error: [4.802]	
+('Starting epoch number:', 24, 'Learning rate:', 0.0007561436672967864)
+Epoch: [23][0/981]	Time 7.903 (7.903)	Data 7.810 (7.810)	Loss 2.358	
+Epoch: [23][50/981]	Time 1.201 (61.266)	Data 1.118 (57.018)	Loss 2.137	
+Epoch: [23][100/981]	Time 1.157 (116.891)	Data 1.074 (108.507)	Loss 2.152	
+Epoch: [23][150/981]	Time 1.140 (172.095)	Data 1.057 (159.564)	Loss 2.186	
+Epoch: [23][200/981]	Time 1.119 (224.839)	Data 1.036 (208.147)	Loss 2.192	
+Epoch: [23][250/981]	Time 1.120 (281.136)	Data 1.037 (260.275)	Loss 2.199	
+Epoch: [23][300/981]	Time 1.116 (335.944)	Data 1.033 (310.941)	Loss 2.212	
+Epoch: [23][350/981]	Time 1.109 (389.399)	Data 1.026 (360.253)	Loss 2.220	
+Epoch: [23][400/981]	Time 1.107 (443.753)	Data 1.024 (410.450)	Loss 2.231	
+Epoch: [23][450/981]	Time 1.102 (497.116)	Data 1.019 (459.670)	Loss 2.242	
+Epoch: [23][500/981]	Time 1.098 (550.316)	Data 1.015 (508.732)	Loss 2.252	
+Epoch: [23][550/981]	Time 1.095 (603.093)	Data 1.012 (557.355)	Loss 2.263	
+Epoch: [23][600/981]	Time 1.092 (656.431)	Data 1.009 (606.566)	Loss 2.270	
+Epoch: [23][650/981]	Time 1.093 (711.422)	Data 1.010 (657.414)	Loss 2.277	
+Epoch: [23][700/981]	Time 1.091 (764.869)	Data 1.008 (706.703)	Loss 2.288	
+Epoch: [23][750/981]	Time 1.091 (819.213)	Data 1.008 (756.899)	Loss 2.295	
+Epoch: [23][800/981]	Time 1.091 (873.631)	Data 1.008 (807.167)	Loss 2.302	
+Epoch: [23][850/981]	Time 1.088 (925.953)	Data 1.005 (855.337)	Loss 2.308	
+Epoch: [23][900/981]	Time 1.089 (981.296)	Data 1.006 (906.539)	Loss 2.315	
+Epoch: [23][950/981]	Time 1.089 (1035.396)	Data 1.006 (956.510)	Loss 2.320	
+Train: [23]	Time 1066.573	Data 985.200	Loss 2.323	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [23][0/38]	Time 6.386 (6.386)	Data 6.356 (6.356)	Loss 6.6514 (6.6514)	
+Val: [23]	Time 39.097	Data 38.024	Loss 6.533	
+Best error: [4.802]	
+('Starting epoch number:', 25, 'Learning rate:', 0.0007561436672967864)
+Epoch: [24][0/981]	Time 8.310 (8.310)	Data 8.226 (8.226)	Loss 2.103	
+Epoch: [24][50/981]	Time 1.246 (63.562)	Data 1.163 (59.317)	Loss 2.081	
+Epoch: [24][100/981]	Time 1.183 (119.489)	Data 1.100 (111.091)	Loss 2.077	
+Epoch: [24][150/981]	Time 1.151 (173.752)	Data 1.068 (161.222)	Loss 2.104	
+Epoch: [24][200/981]	Time 1.137 (228.528)	Data 1.054 (211.848)	Loss 2.117	
+Epoch: [24][250/981]	Time 1.124 (282.190)	Data 1.041 (261.380)	Loss 2.137	
+Epoch: [24][300/981]	Time 1.114 (335.170)	Data 1.031 (310.191)	Loss 2.143	
+Epoch: [24][350/981]	Time 1.107 (388.500)	Data 1.024 (359.392)	Loss 2.154	
+Epoch: [24][400/981]	Time 1.103 (442.203)	Data 1.020 (408.945)	Loss 2.166	
+Epoch: [24][450/981]	Time 1.104 (497.898)	Data 1.021 (460.460)	Loss 2.172	
+Epoch: [24][500/981]	Time 1.102 (551.996)	Data 1.019 (510.407)	Loss 2.185	
+Epoch: [24][550/981]	Time 1.101 (606.405)	Data 1.018 (560.671)	Loss 2.199	
+Epoch: [24][600/981]	Time 1.099 (660.557)	Data 1.016 (610.671)	Loss 2.206	
+Epoch: [24][650/981]	Time 1.098 (715.023)	Data 1.015 (661.007)	Loss 2.214	
+Epoch: [24][700/981]	Time 1.096 (768.326)	Data 1.013 (710.161)	Loss 2.222	
+Epoch: [24][750/981]	Time 1.096 (823.404)	Data 1.013 (761.095)	Loss 2.229	
+Epoch: [24][800/981]	Time 1.096 (877.727)	Data 1.013 (811.282)	Loss 2.237	
+Epoch: [24][850/981]	Time 1.096 (932.975)	Data 1.013 (862.358)	Loss 2.245	
+Epoch: [24][900/981]	Time 1.096 (987.189)	Data 1.013 (912.426)	Loss 2.250	
+Epoch: [24][950/981]	Time 1.093 (1039.733)	Data 1.010 (960.822)	Loss 2.257	
+Train: [24]	Time 1070.174	Data 988.769	Loss 2.260	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [24][0/38]	Time 6.411 (6.411)	Data 6.382 (6.382)	Loss 6.0654 (6.0654)	
+Val: [24]	Time 39.857	Data 38.795	Loss 6.368	
+Best error: [4.802]	
+('Starting epoch number:', 26, 'Learning rate:', 0.0007561436672967864)
+Epoch: [25][0/981]	Time 7.759 (7.759)	Data 7.666 (7.666)	Loss 2.121	
+Epoch: [25][50/981]	Time 1.211 (61.748)	Data 1.128 (57.507)	Loss 1.987	
+Epoch: [25][100/981]	Time 1.138 (114.983)	Data 1.056 (106.610)	Loss 2.000	
+Epoch: [25][150/981]	Time 1.112 (167.950)	Data 1.029 (155.447)	Loss 2.019	
+Epoch: [25][200/981]	Time 1.092 (219.492)	Data 1.009 (202.831)	Loss 2.043	
+Epoch: [25][250/981]	Time 1.076 (270.012)	Data 0.993 (249.210)	Loss 2.057	
+Epoch: [25][300/981]	Time 1.082 (325.577)	Data 0.999 (300.627)	Loss 2.072	
+Epoch: [25][350/981]	Time 1.075 (377.391)	Data 0.992 (348.297)	Loss 2.085	
+Epoch: [25][400/981]	Time 1.071 (429.415)	Data 0.988 (396.172)	Loss 2.101	
+Epoch: [25][450/981]	Time 1.065 (480.330)	Data 0.982 (442.943)	Loss 2.109	
+Epoch: [25][500/981]	Time 1.062 (531.812)	Data 0.979 (490.278)	Loss 2.114	
+Epoch: [25][550/981]	Time 1.061 (584.874)	Data 0.979 (539.211)	Loss 2.127	
+Epoch: [25][600/981]	Time 1.061 (637.590)	Data 0.978 (587.795)	Loss 2.137	
+Epoch: [25][650/981]	Time 1.061 (690.992)	Data 0.979 (637.042)	Loss 2.147	
+Epoch: [25][700/981]	Time 1.060 (743.222)	Data 0.977 (685.131)	Loss 2.157	
+Epoch: [25][750/981]	Time 1.061 (797.057)	Data 0.978 (734.835)	Loss 2.166	
+Epoch: [25][800/981]	Time 1.060 (848.981)	Data 0.977 (782.632)	Loss 2.173	
+Epoch: [25][850/981]	Time 1.060 (902.101)	Data 0.977 (831.572)	Loss 2.180	
+Epoch: [25][900/981]	Time 1.059 (954.114)	Data 0.976 (879.422)	Loss 2.187	
+Epoch: [25][950/981]	Time 1.059 (1007.579)	Data 0.977 (928.743)	Loss 2.191	
+Train: [25]	Time 1036.575	Data 955.262	Loss 2.195	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [25][0/38]	Time 5.924 (5.924)	Data 5.891 (5.891)	Loss 6.1849 (6.1849)	
+Val: [25]	Time 38.414	Data 37.344	Loss 6.520	
+Best error: [4.802]	
+('Starting epoch number:', 27, 'Learning rate:', 0.0007561436672967864)
+Epoch: [26][0/981]	Time 8.502 (8.502)	Data 8.418 (8.418)	Loss 2.115	
+Epoch: [26][50/981]	Time 1.181 (60.221)	Data 1.098 (55.973)	Loss 1.974	
+Epoch: [26][100/981]	Time 1.144 (115.548)	Data 1.061 (107.157)	Loss 1.963	
+Epoch: [26][150/981]	Time 1.116 (168.528)	Data 1.033 (155.987)	Loss 1.973	
+Epoch: [26][200/981]	Time 1.110 (223.050)	Data 1.027 (206.360)	Loss 1.989	
+Epoch: [26][250/981]	Time 1.105 (277.338)	Data 1.022 (256.479)	Loss 2.010	
+Epoch: [26][300/981]	Time 1.095 (329.649)	Data 1.012 (304.635)	Loss 2.020	
+Epoch: [26][350/981]	Time 1.100 (386.271)	Data 1.017 (357.112)	Loss 2.029	
+Epoch: [26][400/981]	Time 1.094 (438.729)	Data 1.011 (405.392)	Loss 2.042	
+Epoch: [26][450/981]	Time 1.092 (492.693)	Data 1.009 (455.194)	Loss 2.053	
+Epoch: [26][500/981]	Time 1.093 (547.645)	Data 1.010 (506.006)	Loss 2.064	
+Epoch: [26][550/981]	Time 1.093 (602.503)	Data 1.010 (556.707)	Loss 2.072	
+Epoch: [26][600/981]	Time 1.092 (656.510)	Data 1.009 (606.534)	Loss 2.082	
+Epoch: [26][650/981]	Time 1.093 (711.459)	Data 1.010 (657.344)	Loss 2.090	
+Epoch: [26][700/981]	Time 1.093 (766.207)	Data 1.010 (707.947)	Loss 2.100	
+Epoch: [26][750/981]	Time 1.092 (819.997)	Data 1.009 (757.600)	Loss 2.109	
+Epoch: [26][800/981]	Time 1.091 (874.088)	Data 1.008 (807.540)	Loss 2.116	
+Epoch: [26][850/981]	Time 1.091 (928.515)	Data 1.008 (857.820)	Loss 2.124	
+Epoch: [26][900/981]	Time 1.087 (979.334)	Data 1.004 (904.495)	Loss 2.133	
+Epoch: [26][950/981]	Time 1.086 (1032.394)	Data 1.003 (953.413)	Loss 2.136	
+Train: [26]	Time 1064.389	Data 982.914	Loss 2.137	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [26][0/38]	Time 6.632 (6.632)	Data 6.602 (6.602)	Loss 6.3628 (6.3628)	
+Val: [26]	Time 39.640	Data 38.571	Loss 6.500	
+Best error: [4.802]	
+('Starting epoch number:', 28, 'Learning rate:', 0.0007561436672967864)
+Epoch: [27][0/981]	Time 7.706 (7.706)	Data 7.622 (7.622)	Loss 1.630	
+Epoch: [27][50/981]	Time 1.176 (59.997)	Data 1.093 (55.766)	Loss 1.882	
+Epoch: [27][100/981]	Time 1.124 (113.478)	Data 1.040 (105.087)	Loss 1.898	
+Epoch: [27][150/981]	Time 1.116 (168.571)	Data 1.033 (156.035)	Loss 1.908	
+Epoch: [27][200/981]	Time 1.093 (219.738)	Data 1.010 (203.046)	Loss 1.919	
+Epoch: [27][250/981]	Time 1.086 (272.474)	Data 1.003 (251.652)	Loss 1.938	
+Epoch: [27][300/981]	Time 1.077 (324.183)	Data 0.994 (299.217)	Loss 1.952	
+Epoch: [27][350/981]	Time 1.067 (374.650)	Data 0.984 (345.533)	Loss 1.959	
+Epoch: [27][400/981]	Time 1.067 (427.802)	Data 0.984 (394.541)	Loss 1.966	
+Epoch: [27][450/981]	Time 1.063 (479.611)	Data 0.980 (442.194)	Loss 1.978	
+Epoch: [27][500/981]	Time 1.062 (532.247)	Data 0.979 (490.695)	Loss 1.994	
+Epoch: [27][550/981]	Time 1.063 (585.979)	Data 0.981 (540.289)	Loss 2.005	
+Epoch: [27][600/981]	Time 1.064 (639.261)	Data 0.981 (589.429)	Loss 2.012	
+Epoch: [27][650/981]	Time 1.060 (690.197)	Data 0.977 (636.216)	Loss 2.021	
+Epoch: [27][700/981]	Time 1.059 (742.532)	Data 0.976 (684.419)	Loss 2.029	
+Epoch: [27][750/981]	Time 1.061 (796.637)	Data 0.978 (734.396)	Loss 2.038	
+Epoch: [27][800/981]	Time 1.059 (848.300)	Data 0.976 (781.909)	Loss 2.047	
+Epoch: [27][850/981]	Time 1.060 (901.672)	Data 0.977 (831.137)	Loss 2.055	
+Epoch: [27][900/981]	Time 1.059 (954.104)	Data 0.976 (879.425)	Loss 2.064	
+Epoch: [27][950/981]	Time 1.056 (1004.356)	Data 0.973 (925.492)	Loss 2.072	
+Train: [27]	Time 1034.847	Data 953.504	Loss 2.077	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [27][0/38]	Time 5.286 (5.286)	Data 5.251 (5.251)	Loss 6.8682 (6.8682)	
+Val: [27]	Time 39.352	Data 38.258	Loss 6.917	
+Best error: [4.802]	
+('Starting epoch number:', 29, 'Learning rate:', 0.0007561436672967864)
+Epoch: [28][0/981]	Time 7.780 (7.780)	Data 7.696 (7.696)	Loss 1.833	
+Epoch: [28][50/981]	Time 1.205 (61.473)	Data 1.122 (57.221)	Loss 1.832	
+Epoch: [28][100/981]	Time 1.165 (117.663)	Data 1.082 (109.271)	Loss 1.833	
+Epoch: [28][150/981]	Time 1.149 (173.526)	Data 1.066 (160.966)	Loss 1.842	
+Epoch: [28][200/981]	Time 1.125 (226.164)	Data 1.042 (209.462)	Loss 1.855	
+Epoch: [28][250/981]	Time 1.132 (284.053)	Data 1.049 (263.207)	Loss 1.872	
+Epoch: [28][300/981]	Time 1.124 (338.257)	Data 1.041 (313.283)	Loss 1.879	
+Epoch: [28][350/981]	Time 1.117 (392.166)	Data 1.034 (363.053)	Loss 1.888	
+Epoch: [28][400/981]	Time 1.114 (446.847)	Data 1.031 (413.552)	Loss 1.908	
+Epoch: [28][450/981]	Time 1.115 (502.794)	Data 1.032 (465.358)	Loss 1.918	
+Epoch: [28][500/981]	Time 1.113 (557.835)	Data 1.030 (516.243)	Loss 1.930	
+Epoch: [28][550/981]	Time 1.109 (611.066)	Data 1.026 (565.323)	Loss 1.939	
+Epoch: [28][600/981]	Time 1.110 (667.021)	Data 1.027 (617.127)	Loss 1.950	
+Epoch: [28][650/981]	Time 1.108 (721.611)	Data 1.025 (667.583)	Loss 1.956	
+Epoch: [28][700/981]	Time 1.109 (777.674)	Data 1.026 (719.497)	Loss 1.967	
+Epoch: [28][750/981]	Time 1.108 (832.084)	Data 1.025 (769.763)	Loss 1.978	
+Epoch: [28][800/981]	Time 1.110 (888.801)	Data 1.027 (822.310)	Loss 1.986	
+Epoch: [28][850/981]	Time 1.106 (941.390)	Data 1.023 (870.757)	Loss 1.994	
+Epoch: [28][900/981]	Time 1.104 (994.459)	Data 1.021 (919.685)	Loss 2.005	
+Epoch: [28][950/981]	Time 1.105 (1050.701)	Data 1.022 (971.758)	Loss 2.013	
+Train: [28]	Time 1082.109	Data 1000.669	Loss 2.018	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [28][0/38]	Time 6.690 (6.690)	Data 6.659 (6.659)	Loss 6.4875 (6.4875)	
+Val: [28]	Time 37.532	Data 36.447	Loss 6.617	
+Best error: [4.802]	
+('Starting epoch number:', 30, 'Learning rate:', 0.0007561436672967864)
+Epoch: [29][0/981]	Time 6.995 (6.995)	Data 6.910 (6.910)	Loss 1.475	
+Epoch: [29][50/981]	Time 1.203 (61.353)	Data 1.120 (57.127)	Loss 1.801	
+Epoch: [29][100/981]	Time 1.175 (118.661)	Data 1.092 (110.295)	Loss 1.805	
+Epoch: [29][150/981]	Time 1.149 (173.534)	Data 1.066 (161.026)	Loss 1.818	
+Epoch: [29][200/981]	Time 1.136 (228.398)	Data 1.053 (211.745)	Loss 1.836	
+Epoch: [29][250/981]	Time 1.133 (284.490)	Data 1.051 (263.685)	Loss 1.844	
+Epoch: [29][300/981]	Time 1.120 (337.268)	Data 1.038 (312.297)	Loss 1.856	
+Epoch: [29][350/981]	Time 1.118 (392.294)	Data 1.035 (363.165)	Loss 1.875	
+Epoch: [29][400/981]	Time 1.116 (447.546)	Data 1.033 (414.249)	Loss 1.886	
+Epoch: [29][450/981]	Time 1.117 (503.753)	Data 1.034 (466.305)	Loss 1.892	
+Epoch: [29][500/981]	Time 1.112 (557.171)	Data 1.029 (515.580)	Loss 1.900	
+Epoch: [29][550/981]	Time 1.115 (614.157)	Data 1.032 (568.426)	Loss 1.907	
+Epoch: [29][600/981]	Time 1.111 (667.722)	Data 1.028 (617.832)	Loss 1.916	
+Epoch: [29][650/981]	Time 1.111 (723.381)	Data 1.028 (669.341)	Loss 1.922	
+Epoch: [29][700/981]	Time 1.107 (775.777)	Data 1.024 (717.606)	Loss 1.932	
+Epoch: [29][750/981]	Time 1.104 (828.741)	Data 1.021 (766.427)	Loss 1.941	
+Epoch: [29][800/981]	Time 1.101 (882.134)	Data 1.018 (815.657)	Loss 1.949	
+Epoch: [29][850/981]	Time 1.097 (933.560)	Data 1.014 (862.938)	Loss 1.955	
+Epoch: [29][900/981]	Time 1.096 (987.166)	Data 1.013 (912.395)	Loss 1.962	
+Epoch: [29][950/981]	Time 1.093 (1039.132)	Data 1.010 (960.229)	Loss 1.968	
+Train: [29]	Time 1069.472	Data 988.096	Loss 1.972	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [29][0/38]	Time 7.800 (7.800)	Data 7.766 (7.766)	Loss 6.9069 (6.9069)	
+Val: [29]	Time 38.978	Data 37.875	Loss 6.900	
+Best error: [4.802]	
+('Starting epoch number:', 31, 'Learning rate:', 0.0006575162324319883)
+Epoch: [30][0/981]	Time 7.375 (7.375)	Data 7.290 (7.290)	Loss 1.849	
+Epoch: [30][50/981]	Time 1.155 (58.930)	Data 1.073 (54.698)	Loss 1.701	
+Epoch: [30][100/981]	Time 1.147 (115.874)	Data 1.064 (107.493)	Loss 1.702	
+Epoch: [30][150/981]	Time 1.127 (170.199)	Data 1.044 (157.659)	Loss 1.719	
+Epoch: [30][200/981]	Time 1.107 (222.449)	Data 1.024 (205.745)	Loss 1.731	
+Epoch: [30][250/981]	Time 1.092 (274.039)	Data 1.009 (253.174)	Loss 1.730	
+Epoch: [30][300/981]	Time 1.082 (325.802)	Data 0.999 (300.795)	Loss 1.739	
+Epoch: [30][350/981]	Time 1.074 (376.988)	Data 0.991 (347.851)	Loss 1.747	
+Epoch: [30][400/981]	Time 1.064 (426.566)	Data 0.981 (393.258)	Loss 1.752	
+Epoch: [30][450/981]	Time 1.064 (479.811)	Data 0.981 (442.340)	Loss 1.761	
+Epoch: [30][500/981]	Time 1.063 (532.544)	Data 0.980 (490.936)	Loss 1.775	
+Epoch: [30][550/981]	Time 1.060 (584.315)	Data 0.977 (538.566)	Loss 1.788	
+Epoch: [30][600/981]	Time 1.057 (635.481)	Data 0.974 (585.579)	Loss 1.797	
+Epoch: [30][650/981]	Time 1.058 (688.819)	Data 0.975 (634.776)	Loss 1.803	
+Epoch: [30][700/981]	Time 1.057 (740.709)	Data 0.974 (682.529)	Loss 1.807	
+Epoch: [30][750/981]	Time 1.056 (792.863)	Data 0.973 (730.532)	Loss 1.815	
+Epoch: [30][800/981]	Time 1.057 (846.908)	Data 0.974 (780.412)	Loss 1.825	
+Epoch: [30][850/981]	Time 1.055 (898.087)	Data 0.972 (827.454)	Loss 1.831	
+Epoch: [30][900/981]	Time 1.055 (950.105)	Data 0.971 (875.304)	Loss 1.836	
+Epoch: [30][950/981]	Time 1.057 (1005.093)	Data 0.974 (926.140)	Loss 1.842	
+Train: [30]	Time 1033.812	Data 952.381	Loss 1.847	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [30][0/38]	Time 6.429 (6.429)	Data 6.400 (6.400)	Loss 6.5212 (6.5212)	
+Val: [30]	Time 38.825	Data 37.753	Loss 6.938	
+Best error: [4.802]	
+('Starting epoch number:', 32, 'Learning rate:', 0.0006575162324319883)
+Epoch: [31][0/981]	Time 7.019 (7.019)	Data 6.934 (6.934)	Loss 1.464	
+Epoch: [31][50/981]	Time 1.236 (63.012)	Data 1.152 (58.776)	Loss 1.581	
+Epoch: [31][100/981]	Time 1.159 (117.091)	Data 1.076 (108.707)	Loss 1.582	
+Epoch: [31][150/981]	Time 1.126 (170.083)	Data 1.043 (157.545)	Loss 1.590	
+Epoch: [31][200/981]	Time 1.120 (225.126)	Data 1.037 (208.436)	Loss 1.611	
+Epoch: [31][250/981]	Time 1.101 (276.392)	Data 1.018 (255.544)	Loss 1.631	
+Epoch: [31][300/981]	Time 1.091 (328.404)	Data 1.008 (303.404)	Loss 1.641	
+Epoch: [31][350/981]	Time 1.086 (381.316)	Data 1.003 (352.185)	Loss 1.652	
+Epoch: [31][400/981]	Time 1.083 (434.291)	Data 1.000 (401.016)	Loss 1.673	
+Epoch: [31][450/981]	Time 1.082 (488.204)	Data 0.999 (450.773)	Loss 1.689	
+Epoch: [31][500/981]	Time 1.077 (539.606)	Data 0.994 (498.045)	Loss 1.700	
+Epoch: [31][550/981]	Time 1.077 (593.431)	Data 0.994 (547.727)	Loss 1.711	
+Epoch: [31][600/981]	Time 1.074 (645.254)	Data 0.991 (595.417)	Loss 1.721	
+Epoch: [31][650/981]	Time 1.073 (698.511)	Data 0.990 (644.522)	Loss 1.729	
+Epoch: [31][700/981]	Time 1.069 (749.453)	Data 0.986 (691.318)	Loss 1.737	
+Epoch: [31][750/981]	Time 1.069 (802.643)	Data 0.986 (740.358)	Loss 1.747	
+Epoch: [31][800/981]	Time 1.066 (854.001)	Data 0.983 (787.587)	Loss 1.757	
+Epoch: [31][850/981]	Time 1.067 (907.707)	Data 0.984 (837.147)	Loss 1.765	
+Epoch: [31][900/981]	Time 1.067 (960.963)	Data 0.984 (886.263)	Loss 1.771	
+Epoch: [31][950/981]	Time 1.062 (1010.273)	Data 0.979 (931.443)	Loss 1.780	
+Train: [31]	Time 1040.062	Data 958.758	Loss 1.783	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [31][0/38]	Time 6.650 (6.650)	Data 6.617 (6.617)	Loss 7.1251 (7.1251)	
+Val: [31]	Time 39.273	Data 38.205	Loss 7.264	
+Best error: [4.802]	
+('Starting epoch number:', 33, 'Learning rate:', 0.0006575162324319883)
+Epoch: [32][0/981]	Time 7.948 (7.948)	Data 7.864 (7.864)	Loss 1.521	
+Epoch: [32][50/981]	Time 1.232 (62.822)	Data 1.149 (58.576)	Loss 1.529	
+Epoch: [32][100/981]	Time 1.149 (116.035)	Data 1.066 (107.616)	Loss 1.533	
+Epoch: [32][150/981]	Time 1.128 (170.264)	Data 1.044 (157.711)	Loss 1.558	
+Epoch: [32][200/981]	Time 1.105 (222.068)	Data 1.022 (205.383)	Loss 1.573	
+Epoch: [32][250/981]	Time 1.083 (271.936)	Data 1.000 (251.103)	Loss 1.587	
+Epoch: [32][300/981]	Time 1.083 (326.131)	Data 1.000 (301.137)	Loss 1.599	
+Epoch: [32][350/981]	Time 1.076 (377.834)	Data 0.993 (348.685)	Loss 1.617	
+Epoch: [32][400/981]	Time 1.073 (430.226)	Data 0.990 (396.923)	Loss 1.633	
+Epoch: [32][450/981]	Time 1.069 (482.340)	Data 0.986 (444.900)	Loss 1.638	
+Epoch: [32][500/981]	Time 1.062 (532.172)	Data 0.979 (490.570)	Loss 1.648	
+Epoch: [32][550/981]	Time 1.063 (585.538)	Data 0.980 (539.772)	Loss 1.659	
+Epoch: [32][600/981]	Time 1.060 (637.246)	Data 0.977 (587.339)	Loss 1.669	
+Epoch: [32][650/981]	Time 1.056 (687.575)	Data 0.973 (633.516)	Loss 1.675	
+Epoch: [32][700/981]	Time 1.056 (740.605)	Data 0.973 (682.394)	Loss 1.684	
+Epoch: [32][750/981]	Time 1.056 (793.431)	Data 0.973 (731.061)	Loss 1.693	
+Epoch: [32][800/981]	Time 1.054 (844.539)	Data 0.971 (778.025)	Loss 1.699	
+Epoch: [32][850/981]	Time 1.055 (898.008)	Data 0.972 (827.336)	Loss 1.707	
+Epoch: [32][900/981]	Time 1.056 (951.761)	Data 0.973 (876.948)	Loss 1.715	
+Epoch: [32][950/981]	Time 1.056 (1004.501)	Data 0.973 (925.528)	Loss 1.724	
+Train: [32]	Time 1034.701	Data 953.227	Loss 1.730	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [32][0/38]	Time 6.773 (6.773)	Data 6.742 (6.742)	Loss 7.3269 (7.3269)	
+Val: [32]	Time 39.054	Data 37.968	Loss 7.098	
+Best error: [4.802]	
+('Starting epoch number:', 34, 'Learning rate:', 0.0006575162324319883)
+Epoch: [33][0/981]	Time 6.666 (6.666)	Data 6.582 (6.582)	Loss 1.429	
+Epoch: [33][50/981]	Time 1.177 (60.048)	Data 1.095 (55.824)	Loss 1.558	
+Epoch: [33][100/981]	Time 1.113 (112.369)	Data 1.030 (104.000)	Loss 1.550	
+Epoch: [33][150/981]	Time 1.097 (165.673)	Data 1.014 (153.178)	Loss 1.552	
+Epoch: [33][200/981]	Time 1.103 (221.788)	Data 1.021 (205.141)	Loss 1.552	
+Epoch: [33][250/981]	Time 1.096 (275.025)	Data 1.013 (254.227)	Loss 1.568	
+Epoch: [33][300/981]	Time 1.082 (325.589)	Data 0.999 (300.639)	Loss 1.578	
+Epoch: [33][350/981]	Time 1.078 (378.280)	Data 0.995 (349.202)	Loss 1.589	
+Epoch: [33][400/981]	Time 1.072 (430.023)	Data 0.990 (396.799)	Loss 1.598	
+Epoch: [33][450/981]	Time 1.073 (483.699)	Data 0.990 (446.328)	Loss 1.609	
+Epoch: [33][500/981]	Time 1.070 (536.169)	Data 0.987 (494.655)	Loss 1.619	
+Epoch: [33][550/981]	Time 1.068 (588.233)	Data 0.985 (542.578)	Loss 1.629	
+Epoch: [33][600/981]	Time 1.067 (641.476)	Data 0.985 (591.694)	Loss 1.641	
+Epoch: [33][650/981]	Time 1.068 (695.056)	Data 0.985 (641.131)	Loss 1.649	
+Epoch: [33][700/981]	Time 1.066 (747.326)	Data 0.983 (689.230)	Loss 1.659	
+Epoch: [33][750/981]	Time 1.066 (800.533)	Data 0.983 (738.273)	Loss 1.666	
+Epoch: [33][800/981]	Time 1.064 (851.961)	Data 0.981 (785.545)	Loss 1.673	
+Epoch: [33][850/981]	Time 1.063 (904.505)	Data 0.980 (833.941)	Loss 1.677	
+Epoch: [33][900/981]	Time 1.060 (955.275)	Data 0.977 (880.567)	Loss 1.685	
+Epoch: [33][950/981]	Time 1.058 (1006.257)	Data 0.975 (927.416)	Loss 1.691	
+Train: [33]	Time 1035.863	Data 954.528	Loss 1.694	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [33][0/38]	Time 6.463 (6.463)	Data 6.432 (6.432)	Loss 7.1532 (7.1532)	
+Val: [33]	Time 39.978	Data 38.901	Loss 7.380	
+Best error: [4.802]	
+('Starting epoch number:', 35, 'Learning rate:', 0.0006575162324319883)
+Epoch: [34][0/981]	Time 6.919 (6.919)	Data 6.835 (6.835)	Loss 1.712	
+Epoch: [34][50/981]	Time 1.153 (58.779)	Data 1.069 (54.539)	Loss 1.426	
+Epoch: [34][100/981]	Time 1.102 (111.287)	Data 1.019 (102.894)	Loss 1.458	
+Epoch: [34][150/981]	Time 1.090 (164.631)	Data 1.007 (152.096)	Loss 1.475	
+Epoch: [34][200/981]	Time 1.084 (217.838)	Data 1.001 (201.158)	Loss 1.495	
+Epoch: [34][250/981]	Time 1.079 (270.878)	Data 0.996 (250.052)	Loss 1.514	
+Epoch: [34][300/981]	Time 1.084 (326.157)	Data 1.001 (301.174)	Loss 1.527	
+Epoch: [34][350/981]	Time 1.081 (379.402)	Data 0.998 (350.280)	Loss 1.538	
+Epoch: [34][400/981]	Time 1.075 (430.979)	Data 0.992 (397.725)	Loss 1.548	
+Epoch: [34][450/981]	Time 1.072 (483.331)	Data 0.989 (445.934)	Loss 1.556	
+Epoch: [34][500/981]	Time 1.069 (535.603)	Data 0.986 (494.061)	Loss 1.564	
+Epoch: [34][550/981]	Time 1.065 (586.907)	Data 0.982 (541.223)	Loss 1.575	
+Epoch: [34][600/981]	Time 1.063 (638.946)	Data 0.980 (589.107)	Loss 1.584	
+Epoch: [34][650/981]	Time 1.064 (692.442)	Data 0.981 (638.461)	Loss 1.590	
+Epoch: [34][700/981]	Time 1.062 (744.669)	Data 0.979 (686.532)	Loss 1.595	
+Epoch: [34][750/981]	Time 1.060 (796.375)	Data 0.978 (734.111)	Loss 1.605	
+Epoch: [34][800/981]	Time 1.058 (847.779)	Data 0.975 (781.351)	Loss 1.613	
+Epoch: [34][850/981]	Time 1.060 (902.038)	Data 0.977 (831.457)	Loss 1.620	
+Epoch: [34][900/981]	Time 1.059 (954.334)	Data 0.976 (879.612)	Loss 1.631	
+Epoch: [34][950/981]	Time 1.059 (1006.961)	Data 0.976 (928.110)	Loss 1.638	
+Train: [34]	Time 1038.004	Data 956.682	Loss 1.643	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [34][0/38]	Time 6.735 (6.735)	Data 6.703 (6.703)	Loss 7.7687 (7.7687)	
+Val: [34]	Time 37.112	Data 36.040	Loss 7.404	
+Best error: [4.802]	
+('Starting epoch number:', 36, 'Learning rate:', 0.0006575162324319883)
+Epoch: [35][0/981]	Time 6.850 (6.850)	Data 6.765 (6.765)	Loss 1.606	
+Epoch: [35][50/981]	Time 1.165 (59.411)	Data 1.082 (55.168)	Loss 1.406	
+Epoch: [35][100/981]	Time 1.108 (111.868)	Data 1.025 (103.487)	Loss 1.420	
+Epoch: [35][150/981]	Time 1.090 (164.560)	Data 1.007 (152.030)	Loss 1.427	
+Epoch: [35][200/981]	Time 1.092 (219.489)	Data 1.009 (202.795)	Loss 1.456	
+Epoch: [35][250/981]	Time 1.082 (271.672)	Data 0.999 (250.824)	Loss 1.476	
+Epoch: [35][300/981]	Time 1.075 (323.516)	Data 0.992 (298.510)	Loss 1.479	
+Epoch: [35][350/981]	Time 1.072 (376.218)	Data 0.989 (347.067)	Loss 1.492	
+Epoch: [35][400/981]	Time 1.064 (426.579)	Data 0.981 (393.270)	Loss 1.503	
+Epoch: [35][450/981]	Time 1.067 (481.097)	Data 0.984 (443.657)	Loss 1.513	
+Epoch: [35][500/981]	Time 1.064 (533.134)	Data 0.981 (491.556)	Loss 1.524	
+Epoch: [35][550/981]	Time 1.062 (585.207)	Data 0.979 (539.500)	Loss 1.535	
+Epoch: [35][600/981]	Time 1.058 (635.871)	Data 0.975 (585.995)	Loss 1.544	
+Epoch: [35][650/981]	Time 1.055 (686.688)	Data 0.972 (632.663)	Loss 1.551	
+Epoch: [35][700/981]	Time 1.055 (739.393)	Data 0.972 (681.217)	Loss 1.561	
+Epoch: [35][750/981]	Time 1.054 (791.341)	Data 0.971 (729.027)	Loss 1.566	
+Epoch: [35][800/981]	Time 1.053 (843.173)	Data 0.970 (776.694)	Loss 1.578	
+Epoch: [35][850/981]	Time 1.053 (896.079)	Data 0.970 (825.444)	Loss 1.588	
+Epoch: [35][900/981]	Time 1.053 (948.820)	Data 0.970 (874.040)	Loss 1.598	
+Epoch: [35][950/981]	Time 1.054 (1002.633)	Data 0.971 (923.697)	Loss 1.605	
+Train: [35]	Time 1031.651	Data 950.241	Loss 1.608	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [35][0/38]	Time 6.759 (6.759)	Data 6.726 (6.726)	Loss 7.4221 (7.4221)	
+Val: [35]	Time 38.946	Data 37.870	Loss 7.759	
+Best error: [4.802]	
+('Starting epoch number:', 37, 'Learning rate:', 0.0006575162324319883)
+Epoch: [36][0/981]	Time 7.015 (7.015)	Data 6.931 (6.931)	Loss 1.518	
+Epoch: [36][50/981]	Time 1.131 (57.687)	Data 1.048 (53.450)	Loss 1.441	
+Epoch: [36][100/981]	Time 1.109 (111.998)	Data 1.026 (103.617)	Loss 1.418	
+Epoch: [36][150/981]	Time 1.088 (164.300)	Data 1.005 (151.771)	Loss 1.431	
+Epoch: [36][200/981]	Time 1.081 (217.308)	Data 0.998 (200.651)	Loss 1.432	
+Epoch: [36][250/981]	Time 1.080 (271.189)	Data 0.998 (250.392)	Loss 1.445	
+Epoch: [36][300/981]	Time 1.071 (322.431)	Data 0.988 (297.485)	Loss 1.450	
+Epoch: [36][350/981]	Time 1.071 (375.874)	Data 0.988 (346.787)	Loss 1.458	
+Epoch: [36][400/981]	Time 1.068 (428.176)	Data 0.985 (394.943)	Loss 1.468	
+Epoch: [36][450/981]	Time 1.064 (479.941)	Data 0.981 (442.561)	Loss 1.479	
+Epoch: [36][500/981]	Time 1.058 (530.066)	Data 0.975 (488.539)	Loss 1.486	
+Epoch: [36][550/981]	Time 1.060 (584.327)	Data 0.978 (538.646)	Loss 1.497	
+Epoch: [36][600/981]	Time 1.058 (635.763)	Data 0.975 (585.920)	Loss 1.505	
+Epoch: [36][650/981]	Time 1.054 (686.131)	Data 0.971 (632.140)	Loss 1.515	
+Epoch: [36][700/981]	Time 1.052 (737.120)	Data 0.969 (678.998)	Loss 1.521	
+Epoch: [36][750/981]	Time 1.050 (788.424)	Data 0.967 (726.160)	Loss 1.530	
+Epoch: [36][800/981]	Time 1.051 (841.945)	Data 0.968 (775.540)	Loss 1.540	
+Epoch: [36][850/981]	Time 1.051 (894.054)	Data 0.968 (823.487)	Loss 1.550	
+Epoch: [36][900/981]	Time 1.050 (945.664)	Data 0.967 (870.963)	Loss 1.557	
+Epoch: [36][950/981]	Time 1.049 (997.289)	Data 0.966 (918.438)	Loss 1.565	
+Train: [36]	Time 1027.305	Data 945.977	Loss 1.570	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [36][0/38]	Time 6.492 (6.492)	Data 6.459 (6.459)	Loss 7.3430 (7.3430)	
+Val: [36]	Time 39.111	Data 38.009	Loss 7.473	
+Best error: [4.802]	
+('Starting epoch number:', 38, 'Learning rate:', 0.0006575162324319883)
+Epoch: [37][0/981]	Time 7.477 (7.477)	Data 7.393 (7.393)	Loss 1.650	
+Epoch: [37][50/981]	Time 1.197 (61.048)	Data 1.114 (56.800)	Loss 1.367	
+Epoch: [37][100/981]	Time 1.131 (114.209)	Data 1.048 (105.826)	Loss 1.372	
+Epoch: [37][150/981]	Time 1.110 (167.566)	Data 1.027 (155.041)	Loss 1.373	
+Epoch: [37][200/981]	Time 1.091 (219.285)	Data 1.008 (202.607)	Loss 1.391	
+Epoch: [37][250/981]	Time 1.087 (272.939)	Data 1.004 (252.100)	Loss 1.400	
+Epoch: [37][300/981]	Time 1.086 (326.979)	Data 1.003 (301.992)	Loss 1.410	
+Epoch: [37][350/981]	Time 1.074 (377.072)	Data 0.991 (347.931)	Loss 1.428	
+Epoch: [37][400/981]	Time 1.068 (428.276)	Data 0.985 (394.992)	Loss 1.443	
+Epoch: [37][450/981]	Time 1.063 (479.258)	Data 0.980 (441.826)	Loss 1.453	
+Epoch: [37][500/981]	Time 1.064 (532.922)	Data 0.981 (491.347)	Loss 1.461	
+Epoch: [37][550/981]	Time 1.060 (584.208)	Data 0.977 (538.472)	Loss 1.465	
+Epoch: [37][600/981]	Time 1.061 (637.368)	Data 0.978 (587.503)	Loss 1.473	
+Epoch: [37][650/981]	Time 1.060 (690.010)	Data 0.977 (635.993)	Loss 1.480	
+Epoch: [37][700/981]	Time 1.058 (741.585)	Data 0.975 (683.449)	Loss 1.490	
+Epoch: [37][750/981]	Time 1.058 (794.601)	Data 0.975 (732.331)	Loss 1.500	
+Epoch: [37][800/981]	Time 1.056 (845.669)	Data 0.973 (779.262)	Loss 1.508	
+Epoch: [37][850/981]	Time 1.057 (899.277)	Data 0.974 (828.719)	Loss 1.515	
+Epoch: [37][900/981]	Time 1.057 (952.683)	Data 0.974 (877.961)	Loss 1.521	
+Epoch: [37][950/981]	Time 1.055 (1003.607)	Data 0.972 (924.721)	Loss 1.529	
+Train: [37]	Time 1033.843	Data 952.482	Loss 1.534	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [37][0/38]	Time 6.401 (6.401)	Data 6.371 (6.371)	Loss 7.1229 (7.1229)	
+Val: [37]	Time 39.579	Data 38.507	Loss 7.301	
+Best error: [4.802]	
+('Starting epoch number:', 39, 'Learning rate:', 0.0006575162324319883)
+Epoch: [38][0/981]	Time 8.130 (8.130)	Data 8.047 (8.047)	Loss 1.304	
+Epoch: [38][50/981]	Time 1.235 (62.997)	Data 1.152 (58.751)	Loss 1.327	
+Epoch: [38][100/981]	Time 1.165 (117.646)	Data 1.082 (109.233)	Loss 1.328	
+Epoch: [38][150/981]	Time 1.131 (170.846)	Data 1.048 (158.291)	Loss 1.342	
+Epoch: [38][200/981]	Time 1.118 (224.794)	Data 1.035 (208.107)	Loss 1.351	
+Epoch: [38][250/981]	Time 1.107 (277.743)	Data 1.024 (256.906)	Loss 1.362	
+Epoch: [38][300/981]	Time 1.100 (331.138)	Data 1.017 (306.159)	Loss 1.370	
+Epoch: [38][350/981]	Time 1.097 (385.060)	Data 1.014 (355.939)	Loss 1.382	
+Epoch: [38][400/981]	Time 1.090 (437.264)	Data 1.007 (404.003)	Loss 1.389	
+Epoch: [38][450/981]	Time 1.085 (489.467)	Data 1.002 (452.060)	Loss 1.399	
+Epoch: [38][500/981]	Time 1.084 (542.928)	Data 1.001 (501.381)	Loss 1.412	
+Epoch: [38][550/981]	Time 1.078 (593.795)	Data 0.995 (548.103)	Loss 1.421	
+Epoch: [38][600/981]	Time 1.071 (643.560)	Data 0.988 (593.738)	Loss 1.434	
+Epoch: [38][650/981]	Time 1.070 (696.415)	Data 0.987 (642.465)	Loss 1.441	
+Epoch: [38][700/981]	Time 1.071 (750.497)	Data 0.988 (692.398)	Loss 1.451	
+Epoch: [38][750/981]	Time 1.068 (801.719)	Data 0.985 (739.456)	Loss 1.458	
+Epoch: [38][800/981]	Time 1.066 (853.846)	Data 0.983 (787.451)	Loss 1.467	
+Epoch: [38][850/981]	Time 1.062 (903.986)	Data 0.979 (833.441)	Loss 1.476	
+Epoch: [38][900/981]	Time 1.063 (957.605)	Data 0.980 (882.916)	Loss 1.483	
+Epoch: [38][950/981]	Time 1.060 (1008.349)	Data 0.977 (929.496)	Loss 1.491	
+Train: [38]	Time 1038.786	Data 957.445	Loss 1.495	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [38][0/38]	Time 6.245 (6.245)	Data 6.215 (6.215)	Loss 8.0829 (8.0829)	
+Val: [38]	Time 38.979	Data 37.907	Loss 7.601	
+Best error: [4.802]	
+('Starting epoch number:', 40, 'Learning rate:', 0.0006575162324319883)
+Epoch: [39][0/981]	Time 7.727 (7.727)	Data 7.643 (7.643)	Loss 1.295	
+Epoch: [39][50/981]	Time 1.193 (60.860)	Data 1.110 (56.619)	Loss 1.263	
+Epoch: [39][100/981]	Time 1.112 (112.340)	Data 1.029 (103.952)	Loss 1.271	
+Epoch: [39][150/981]	Time 1.093 (165.086)	Data 1.010 (152.552)	Loss 1.299	
+Epoch: [39][200/981]	Time 1.089 (218.793)	Data 1.005 (202.100)	Loss 1.309	
+Epoch: [39][250/981]	Time 1.080 (271.148)	Data 0.997 (250.295)	Loss 1.324	
+Epoch: [39][300/981]	Time 1.077 (324.291)	Data 0.994 (299.277)	Loss 1.342	
+Epoch: [39][350/981]	Time 1.072 (376.410)	Data 0.989 (347.251)	Loss 1.352	
+Epoch: [39][400/981]	Time 1.070 (429.162)	Data 0.987 (395.873)	Loss 1.369	
+Epoch: [39][450/981]	Time 1.066 (480.888)	Data 0.983 (443.459)	Loss 1.380	
+Epoch: [39][500/981]	Time 1.060 (531.232)	Data 0.977 (489.652)	Loss 1.389	
+Epoch: [39][550/981]	Time 1.062 (585.174)	Data 0.979 (539.442)	Loss 1.400	
+Epoch: [39][600/981]	Time 1.059 (636.380)	Data 0.976 (586.507)	Loss 1.411	
+Epoch: [39][650/981]	Time 1.059 (689.577)	Data 0.976 (635.557)	Loss 1.419	
+Epoch: [39][700/981]	Time 1.057 (740.831)	Data 0.974 (682.676)	Loss 1.429	
+Epoch: [39][750/981]	Time 1.056 (793.373)	Data 0.973 (731.069)	Loss 1.437	
+Epoch: [39][800/981]	Time 1.056 (845.857)	Data 0.973 (779.388)	Loss 1.444	
+Epoch: [39][850/981]	Time 1.052 (895.473)	Data 0.969 (824.860)	Loss 1.452	
+Epoch: [39][900/981]	Time 1.053 (948.964)	Data 0.970 (874.221)	Loss 1.456	
+Epoch: [39][950/981]	Time 1.053 (1001.722)	Data 0.970 (922.848)	Loss 1.462	
+Train: [39]	Time 1032.464	Data 951.088	Loss 1.469	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [39][0/38]	Time 7.469 (7.469)	Data 7.438 (7.438)	Loss 7.2993 (7.2993)	
+Val: [39]	Time 39.202	Data 38.098	Loss 7.430	
+Best error: [4.802]	
+('Starting epoch number:', 41, 'Learning rate:', 0.0005717532455930334)
+Epoch: [40][0/981]	Time 7.712 (7.712)	Data 7.623 (7.623)	Loss 1.542	
+Epoch: [40][50/981]	Time 1.208 (61.623)	Data 1.125 (57.374)	Loss 1.269	
+Epoch: [40][100/981]	Time 1.135 (114.657)	Data 1.052 (106.246)	Loss 1.262	
+Epoch: [40][150/981]	Time 1.114 (168.202)	Data 1.031 (155.635)	Loss 1.254	
+Epoch: [40][200/981]	Time 1.093 (219.688)	Data 1.010 (202.970)	Loss 1.267	
+Epoch: [40][250/981]	Time 1.087 (272.892)	Data 1.004 (252.015)	Loss 1.275	
+Epoch: [40][300/981]	Time 1.082 (325.629)	Data 0.999 (300.586)	Loss 1.277	
+Epoch: [40][350/981]	Time 1.078 (378.438)	Data 0.995 (349.241)	Loss 1.287	
+Epoch: [40][400/981]	Time 1.071 (429.462)	Data 0.988 (396.135)	Loss 1.291	
+Epoch: [40][450/981]	Time 1.070 (482.774)	Data 0.987 (445.300)	Loss 1.293	
+Epoch: [40][500/981]	Time 1.066 (533.905)	Data 0.983 (492.262)	Loss 1.299	
+Epoch: [40][550/981]	Time 1.063 (585.782)	Data 0.980 (539.994)	Loss 1.302	
+Epoch: [40][600/981]	Time 1.064 (639.505)	Data 0.981 (589.570)	Loss 1.311	
+Epoch: [40][650/981]	Time 1.059 (689.115)	Data 0.975 (635.026)	Loss 1.319	
+Epoch: [40][700/981]	Time 1.057 (740.762)	Data 0.974 (682.514)	Loss 1.325	
+Epoch: [40][750/981]	Time 1.057 (794.035)	Data 0.974 (731.643)	Loss 1.331	
+Epoch: [40][800/981]	Time 1.055 (845.323)	Data 0.972 (778.798)	Loss 1.337	
+Epoch: [40][850/981]	Time 1.054 (897.274)	Data 0.971 (826.621)	Loss 1.342	
+Epoch: [40][900/981]	Time 1.054 (949.472)	Data 0.971 (874.670)	Loss 1.348	
+Epoch: [40][950/981]	Time 1.054 (1002.828)	Data 0.971 (923.892)	Loss 1.353	
+Train: [40]	Time 1032.748	Data 951.312	Loss 1.356	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [40][0/38]	Time 6.627 (6.627)	Data 6.597 (6.597)	Loss 8.1368 (8.1368)	
+Val: [40]	Time 38.468	Data 37.399	Loss 7.997	
+Best error: [4.802]	
+('Starting epoch number:', 42, 'Learning rate:', 0.0005717532455930334)
+Epoch: [41][0/981]	Time 6.579 (6.579)	Data 6.494 (6.494)	Loss 1.146	
+Epoch: [41][50/981]	Time 1.180 (60.168)	Data 1.097 (55.938)	Loss 1.173	
+Epoch: [41][100/981]	Time 1.141 (115.229)	Data 1.058 (106.855)	Loss 1.166	
+Epoch: [41][150/981]	Time 1.126 (170.039)	Data 1.043 (157.516)	Loss 1.175	
+Epoch: [41][200/981]	Time 1.098 (220.598)	Data 1.014 (203.910)	Loss 1.185	
+Epoch: [41][250/981]	Time 1.090 (273.683)	Data 1.007 (252.845)	Loss 1.199	
+Epoch: [41][300/981]	Time 1.085 (326.491)	Data 1.002 (301.509)	Loss 1.209	
+Epoch: [41][350/981]	Time 1.081 (379.467)	Data 0.998 (350.333)	Loss 1.217	
+Epoch: [41][400/981]	Time 1.083 (434.421)	Data 1.000 (401.135)	Loss 1.226	
+Epoch: [41][450/981]	Time 1.080 (486.995)	Data 0.997 (449.562)	Loss 1.235	
+Epoch: [41][500/981]	Time 1.080 (540.837)	Data 0.997 (499.262)	Loss 1.240	
+Epoch: [41][550/981]	Time 1.073 (591.129)	Data 0.990 (545.410)	Loss 1.249	
+Epoch: [41][600/981]	Time 1.069 (642.230)	Data 0.986 (592.380)	Loss 1.261	
+Epoch: [41][650/981]	Time 1.070 (696.278)	Data 0.987 (642.284)	Loss 1.269	
+Epoch: [41][700/981]	Time 1.068 (748.876)	Data 0.985 (690.740)	Loss 1.275	
+Epoch: [41][750/981]	Time 1.067 (800.991)	Data 0.984 (738.717)	Loss 1.281	
+Epoch: [41][800/981]	Time 1.066 (854.184)	Data 0.983 (787.760)	Loss 1.289	
+Epoch: [41][850/981]	Time 1.064 (905.787)	Data 0.981 (835.207)	Loss 1.295	
+Epoch: [41][900/981]	Time 1.063 (957.319)	Data 0.980 (882.613)	Loss 1.300	
+Epoch: [41][950/981]	Time 1.060 (1008.232)	Data 0.977 (929.399)	Loss 1.307	
+Train: [41]	Time 1039.997	Data 958.690	Loss 1.311	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [41][0/38]	Time 6.425 (6.425)	Data 6.393 (6.393)	Loss 7.8708 (7.8708)	
+Val: [41]	Time 39.585	Data 38.492	Loss 8.042	
+Best error: [4.802]	
+('Starting epoch number:', 43, 'Learning rate:', 0.0005717532455930334)
+Epoch: [42][0/981]	Time 6.917 (6.917)	Data 6.833 (6.833)	Loss 0.967	
+Epoch: [42][50/981]	Time 1.185 (60.431)	Data 1.102 (56.192)	Loss 1.112	
+Epoch: [42][100/981]	Time 1.123 (113.417)	Data 1.040 (105.039)	Loss 1.125	
+Epoch: [42][150/981]	Time 1.109 (167.515)	Data 1.026 (155.001)	Loss 1.132	
+Epoch: [42][200/981]	Time 1.098 (220.752)	Data 1.015 (204.093)	Loss 1.143	
+Epoch: [42][250/981]	Time 1.096 (275.197)	Data 1.013 (254.378)	Loss 1.148	
+Epoch: [42][300/981]	Time 1.092 (328.792)	Data 1.009 (303.816)	Loss 1.167	
+Epoch: [42][350/981]	Time 1.083 (380.197)	Data 1.000 (351.062)	Loss 1.181	
+Epoch: [42][400/981]	Time 1.076 (431.480)	Data 0.993 (398.207)	Loss 1.192	
+Epoch: [42][450/981]	Time 1.069 (482.288)	Data 0.986 (444.890)	Loss 1.205	
+Epoch: [42][500/981]	Time 1.068 (534.909)	Data 0.985 (493.366)	Loss 1.213	
+Epoch: [42][550/981]	Time 1.066 (587.543)	Data 0.983 (541.863)	Loss 1.219	
+Epoch: [42][600/981]	Time 1.065 (640.332)	Data 0.983 (590.511)	Loss 1.224	
+Epoch: [42][650/981]	Time 1.065 (693.397)	Data 0.982 (639.409)	Loss 1.235	
+Epoch: [42][700/981]	Time 1.064 (745.962)	Data 0.981 (687.815)	Loss 1.243	
+Epoch: [42][750/981]	Time 1.064 (799.219)	Data 0.981 (736.934)	Loss 1.249	
+Epoch: [42][800/981]	Time 1.062 (850.546)	Data 0.979 (784.112)	Loss 1.257	
+Epoch: [42][850/981]	Time 1.063 (904.972)	Data 0.980 (834.401)	Loss 1.264	
+Epoch: [42][900/981]	Time 1.060 (955.090)	Data 0.977 (880.368)	Loss 1.271	
+Epoch: [42][950/981]	Time 1.060 (1008.516)	Data 0.978 (929.648)	Loss 1.278	
+Train: [42]	Time 1037.882	Data 956.514	Loss 1.282	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [42][0/38]	Time 6.525 (6.525)	Data 6.495 (6.495)	Loss 8.3463 (8.3463)	
+Val: [42]	Time 39.925	Data 38.836	Loss 7.962	
+Best error: [4.802]	
+('Starting epoch number:', 44, 'Learning rate:', 0.0005717532455930334)
+Epoch: [43][0/981]	Time 7.553 (7.553)	Data 7.464 (7.464)	Loss 1.301	
+Epoch: [43][50/981]	Time 1.196 (61.020)	Data 1.113 (56.781)	Loss 1.118	
+Epoch: [43][100/981]	Time 1.147 (115.876)	Data 1.064 (107.481)	Loss 1.116	
+Epoch: [43][150/981]	Time 1.110 (167.628)	Data 1.027 (155.081)	Loss 1.121	
+Epoch: [43][200/981]	Time 1.103 (221.692)	Data 1.020 (205.003)	Loss 1.126	
+Epoch: [43][250/981]	Time 1.084 (272.146)	Data 1.001 (251.313)	Loss 1.134	
+Epoch: [43][300/981]	Time 1.079 (324.826)	Data 0.996 (299.842)	Loss 1.143	
+Epoch: [43][350/981]	Time 1.075 (377.299)	Data 0.992 (348.176)	Loss 1.154	
+Epoch: [43][400/981]	Time 1.071 (429.637)	Data 0.988 (396.373)	Loss 1.162	
+Epoch: [43][450/981]	Time 1.067 (481.193)	Data 0.984 (443.796)	Loss 1.171	
+Epoch: [43][500/981]	Time 1.062 (532.111)	Data 0.979 (490.576)	Loss 1.184	
+Epoch: [43][550/981]	Time 1.060 (584.107)	Data 0.977 (538.444)	Loss 1.197	
+Epoch: [43][600/981]	Time 1.060 (637.168)	Data 0.977 (587.346)	Loss 1.204	
+Epoch: [43][650/981]	Time 1.061 (691.032)	Data 0.979 (637.073)	Loss 1.215	
+Epoch: [43][700/981]	Time 1.058 (741.398)	Data 0.975 (683.307)	Loss 1.226	
+Epoch: [43][750/981]	Time 1.057 (793.975)	Data 0.974 (731.731)	Loss 1.234	
+Epoch: [43][800/981]	Time 1.057 (846.527)	Data 0.974 (780.130)	Loss 1.243	
+Epoch: [43][850/981]	Time 1.056 (898.486)	Data 0.973 (827.951)	Loss 1.249	
+Epoch: [43][900/981]	Time 1.056 (951.438)	Data 0.973 (876.745)	Loss 1.255	
+Epoch: [43][950/981]	Time 1.056 (1004.459)	Data 0.973 (925.618)	Loss 1.257	
+Train: [43]	Time 1035.277	Data 953.962	Loss 1.261	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [43][0/38]	Time 6.812 (6.812)	Data 6.779 (6.779)	Loss 8.0655 (8.0655)	
+Val: [43]	Time 38.840	Data 37.761	Loss 8.344	
+Best error: [4.802]	
+('Starting epoch number:', 45, 'Learning rate:', 0.0005717532455930334)
+Epoch: [44][0/981]	Time 7.516 (7.516)	Data 7.432 (7.432)	Loss 1.301	
+Epoch: [44][50/981]	Time 1.210 (61.731)	Data 1.127 (57.473)	Loss 1.035	
+Epoch: [44][100/981]	Time 1.169 (118.024)	Data 1.085 (109.606)	Loss 1.076	
+Epoch: [44][150/981]	Time 1.139 (171.929)	Data 1.055 (159.366)	Loss 1.099	
+Epoch: [44][200/981]	Time 1.112 (223.608)	Data 1.029 (206.895)	Loss 1.108	
+Epoch: [44][250/981]	Time 1.101 (276.303)	Data 1.018 (255.407)	Loss 1.112	
+Epoch: [44][300/981]	Time 1.087 (327.144)	Data 1.004 (302.107)	Loss 1.120	
+Epoch: [44][350/981]	Time 1.088 (382.002)	Data 1.005 (352.801)	Loss 1.132	
+Epoch: [44][400/981]	Time 1.080 (432.915)	Data 0.996 (399.562)	Loss 1.141	
+Epoch: [44][450/981]	Time 1.072 (483.622)	Data 0.989 (446.111)	Loss 1.153	
+Epoch: [44][500/981]	Time 1.073 (537.648)	Data 0.990 (496.000)	Loss 1.160	
+Epoch: [44][550/981]	Time 1.069 (589.225)	Data 0.986 (543.432)	Loss 1.165	
+Epoch: [44][600/981]	Time 1.067 (641.314)	Data 0.984 (591.391)	Loss 1.171	
+Epoch: [44][650/981]	Time 1.065 (693.163)	Data 0.982 (639.089)	Loss 1.180	
+Epoch: [44][700/981]	Time 1.062 (744.786)	Data 0.979 (686.582)	Loss 1.188	
+Epoch: [44][750/981]	Time 1.063 (798.247)	Data 0.980 (735.889)	Loss 1.198	
+Epoch: [44][800/981]	Time 1.065 (853.322)	Data 0.982 (786.825)	Loss 1.204	
+Epoch: [44][850/981]	Time 1.066 (906.756)	Data 0.983 (836.109)	Loss 1.212	
+Epoch: [44][900/981]	Time 1.065 (959.563)	Data 0.982 (884.769)	Loss 1.219	
+Epoch: [44][950/981]	Time 1.064 (1011.505)	Data 0.981 (932.551)	Loss 1.225	
+Train: [44]	Time 1042.718	Data 961.285	Loss 1.231	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [44][0/38]	Time 6.623 (6.623)	Data 6.590 (6.590)	Loss 8.3512 (8.3512)	
+Val: [44]	Time 39.447	Data 38.364	Loss 8.108	
+Best error: [4.802]	
+('Starting epoch number:', 46, 'Learning rate:', 0.0005717532455930334)
+Epoch: [45][0/981]	Time 6.284 (6.284)	Data 6.199 (6.199)	Loss 0.966	
+Epoch: [45][50/981]	Time 1.197 (61.061)	Data 1.114 (56.827)	Loss 1.042	
+Epoch: [45][100/981]	Time 1.148 (115.995)	Data 1.065 (107.614)	Loss 1.040	
+Epoch: [45][150/981]	Time 1.126 (169.991)	Data 1.043 (157.459)	Loss 1.037	
+Epoch: [45][200/981]	Time 1.121 (225.376)	Data 1.038 (208.671)	Loss 1.055	
+Epoch: [45][250/981]	Time 1.114 (279.601)	Data 1.031 (258.749)	Loss 1.063	
+Epoch: [45][300/981]	Time 1.112 (334.771)	Data 1.029 (309.764)	Loss 1.077	
+Epoch: [45][350/981]	Time 1.105 (387.732)	Data 1.022 (358.575)	Loss 1.088	
+Epoch: [45][400/981]	Time 1.100 (441.049)	Data 1.017 (407.740)	Loss 1.098	
+Epoch: [45][450/981]	Time 1.098 (495.137)	Data 1.015 (457.676)	Loss 1.113	
+Epoch: [45][500/981]	Time 1.088 (544.905)	Data 1.005 (503.289)	Loss 1.124	
+Epoch: [45][550/981]	Time 1.087 (598.910)	Data 1.004 (553.144)	Loss 1.132	
+Epoch: [45][600/981]	Time 1.081 (649.540)	Data 0.998 (599.628)	Loss 1.143	
+Epoch: [45][650/981]	Time 1.080 (702.987)	Data 0.997 (648.932)	Loss 1.150	
+Epoch: [45][700/981]	Time 1.077 (755.273)	Data 0.994 (697.077)	Loss 1.160	
+Epoch: [45][750/981]	Time 1.074 (806.552)	Data 0.991 (744.227)	Loss 1.168	
+Epoch: [45][800/981]	Time 1.075 (861.094)	Data 0.992 (794.630)	Loss 1.175	
+Epoch: [45][850/981]	Time 1.072 (912.044)	Data 0.989 (841.432)	Loss 1.181	
+Epoch: [45][900/981]	Time 1.068 (962.473)	Data 0.985 (887.727)	Loss 1.192	
+Epoch: [45][950/981]	Time 1.067 (1014.765)	Data 0.984 (935.887)	Loss 1.199	
+Train: [45]	Time 1044.130	Data 962.773	Loss 1.203	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [45][0/38]	Time 6.598 (6.598)	Data 6.568 (6.568)	Loss 8.5399 (8.5399)	
+Val: [45]	Time 38.838	Data 37.781	Loss 8.644	
+Best error: [4.802]	
+('Starting epoch number:', 47, 'Learning rate:', 0.0005717532455930334)
+Epoch: [46][0/981]	Time 7.703 (7.703)	Data 7.610 (7.610)	Loss 1.172	
+Epoch: [46][50/981]	Time 1.192 (60.802)	Data 1.109 (56.550)	Loss 1.038	
+Epoch: [46][100/981]	Time 1.147 (115.885)	Data 1.064 (107.498)	Loss 1.050	
+Epoch: [46][150/981]	Time 1.127 (170.132)	Data 1.044 (157.601)	Loss 1.045	
+Epoch: [46][200/981]	Time 1.121 (225.390)	Data 1.038 (208.710)	Loss 1.057	
+Epoch: [46][250/981]	Time 1.108 (278.105)	Data 1.025 (257.282)	Loss 1.066	
+Epoch: [46][300/981]	Time 1.094 (329.434)	Data 1.011 (304.450)	Loss 1.075	
+Epoch: [46][350/981]	Time 1.084 (380.610)	Data 1.001 (351.500)	Loss 1.084	
+Epoch: [46][400/981]	Time 1.086 (435.308)	Data 1.003 (402.063)	Loss 1.091	
+Epoch: [46][450/981]	Time 1.077 (485.664)	Data 0.994 (448.291)	Loss 1.099	
+Epoch: [46][500/981]	Time 1.074 (538.043)	Data 0.991 (496.525)	Loss 1.112	
+Epoch: [46][550/981]	Time 1.071 (590.351)	Data 0.989 (544.684)	Loss 1.121	
+Epoch: [46][600/981]	Time 1.068 (642.044)	Data 0.985 (592.230)	Loss 1.131	
+Epoch: [46][650/981]	Time 1.066 (694.160)	Data 0.983 (640.195)	Loss 1.140	
+Epoch: [46][700/981]	Time 1.064 (745.961)	Data 0.981 (687.849)	Loss 1.150	
+Epoch: [46][750/981]	Time 1.064 (798.767)	Data 0.981 (736.504)	Loss 1.156	
+Epoch: [46][800/981]	Time 1.063 (851.484)	Data 0.980 (785.059)	Loss 1.163	
+Epoch: [46][850/981]	Time 1.062 (903.766)	Data 0.979 (833.199)	Loss 1.166	
+Epoch: [46][900/981]	Time 1.062 (957.124)	Data 0.979 (882.419)	Loss 1.173	
+Epoch: [46][950/981]	Time 1.062 (1009.619)	Data 0.979 (930.770)	Loss 1.177	
+Train: [46]	Time 1040.928	Data 959.591	Loss 1.180	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [46][0/38]	Time 7.110 (7.110)	Data 7.077 (7.077)	Loss 8.6370 (8.6370)	
+Val: [46]	Time 38.569	Data 37.500	Loss 8.360	
+Best error: [4.802]	
+('Starting epoch number:', 48, 'Learning rate:', 0.0005717532455930334)
+Epoch: [47][0/981]	Time 7.004 (7.004)	Data 6.920 (6.920)	Loss 1.011	
+Epoch: [47][50/981]	Time 1.176 (59.979)	Data 1.093 (55.749)	Loss 0.996	
+Epoch: [47][100/981]	Time 1.121 (113.251)	Data 1.038 (104.872)	Loss 0.997	
+Epoch: [47][150/981]	Time 1.092 (164.892)	Data 1.009 (152.349)	Loss 1.024	
+Epoch: [47][200/981]	Time 1.083 (217.733)	Data 1.000 (201.039)	Loss 1.039	
+Epoch: [47][250/981]	Time 1.073 (269.447)	Data 0.990 (248.608)	Loss 1.044	
+Epoch: [47][300/981]	Time 1.074 (323.234)	Data 0.991 (298.245)	Loss 1.053	
+Epoch: [47][350/981]	Time 1.070 (375.598)	Data 0.987 (346.471)	Loss 1.063	
+Epoch: [47][400/981]	Time 1.064 (426.485)	Data 0.981 (393.218)	Loss 1.070	
+Epoch: [47][450/981]	Time 1.062 (479.132)	Data 0.979 (441.735)	Loss 1.077	
+Epoch: [47][500/981]	Time 1.061 (531.536)	Data 0.978 (489.996)	Loss 1.088	
+Epoch: [47][550/981]	Time 1.058 (583.062)	Data 0.975 (537.375)	Loss 1.095	
+Epoch: [47][600/981]	Time 1.058 (635.663)	Data 0.975 (585.817)	Loss 1.102	
+Epoch: [47][650/981]	Time 1.057 (687.991)	Data 0.974 (634.015)	Loss 1.108	
+Epoch: [47][700/981]	Time 1.057 (741.140)	Data 0.974 (683.008)	Loss 1.118	
+Epoch: [47][750/981]	Time 1.056 (793.309)	Data 0.973 (731.022)	Loss 1.126	
+Epoch: [47][800/981]	Time 1.058 (847.116)	Data 0.975 (780.669)	Loss 1.134	
+Epoch: [47][850/981]	Time 1.058 (900.296)	Data 0.975 (829.703)	Loss 1.142	
+Epoch: [47][900/981]	Time 1.057 (952.579)	Data 0.974 (877.856)	Loss 1.149	
+Epoch: [47][950/981]	Time 1.058 (1006.025)	Data 0.975 (927.157)	Loss 1.155	
+Train: [47]	Time 1035.510	Data 954.167	Loss 1.159	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [47][0/38]	Time 6.740 (6.740)	Data 6.706 (6.706)	Loss 7.9034 (7.9034)	
+Val: [47]	Time 38.614	Data 37.494	Loss 8.288	
+Best error: [4.802]	
+('Starting epoch number:', 49, 'Learning rate:', 0.0005717532455930334)
+Epoch: [48][0/981]	Time 8.928 (8.928)	Data 8.844 (8.844)	Loss 0.841	
+Epoch: [48][50/981]	Time 1.227 (62.567)	Data 1.143 (58.311)	Loss 0.982	
+Epoch: [48][100/981]	Time 1.128 (113.892)	Data 1.044 (105.486)	Loss 0.979	
+Epoch: [48][150/981]	Time 1.105 (166.831)	Data 1.022 (154.279)	Loss 0.991	
+Epoch: [48][200/981]	Time 1.102 (221.548)	Data 1.019 (204.828)	Loss 0.996	
+Epoch: [48][250/981]	Time 1.093 (274.258)	Data 1.009 (253.382)	Loss 1.006	
+Epoch: [48][300/981]	Time 1.082 (325.609)	Data 0.999 (300.602)	Loss 1.022	
+Epoch: [48][350/981]	Time 1.073 (376.541)	Data 0.990 (347.389)	Loss 1.031	
+Epoch: [48][400/981]	Time 1.069 (428.511)	Data 0.986 (395.213)	Loss 1.044	
+Epoch: [48][450/981]	Time 1.065 (480.303)	Data 0.982 (442.820)	Loss 1.053	
+Epoch: [48][500/981]	Time 1.067 (534.464)	Data 0.984 (492.831)	Loss 1.062	
+Epoch: [48][550/981]	Time 1.061 (584.814)	Data 0.978 (539.029)	Loss 1.069	
+Epoch: [48][600/981]	Time 1.059 (636.316)	Data 0.976 (586.381)	Loss 1.074	
+Epoch: [48][650/981]	Time 1.056 (687.278)	Data 0.973 (633.207)	Loss 1.081	
+Epoch: [48][700/981]	Time 1.057 (741.074)	Data 0.974 (682.862)	Loss 1.091	
+Epoch: [48][750/981]	Time 1.057 (793.683)	Data 0.974 (731.330)	Loss 1.096	
+Epoch: [48][800/981]	Time 1.055 (844.984)	Data 0.972 (778.484)	Loss 1.104	
+Epoch: [48][850/981]	Time 1.057 (899.240)	Data 0.974 (828.585)	Loss 1.114	
+Epoch: [48][900/981]	Time 1.055 (950.626)	Data 0.972 (875.818)	Loss 1.121	
+Epoch: [48][950/981]	Time 1.052 (1000.594)	Data 0.969 (921.634)	Loss 1.129	
+Train: [48]	Time 1031.045	Data 949.609	Loss 1.131	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [48][0/38]	Time 7.237 (7.237)	Data 7.205 (7.205)	Loss 8.8092 (8.8092)	
+Val: [48]	Time 39.503	Data 38.424	Loss 8.332	
+Best error: [4.802]	
+('Starting epoch number:', 50, 'Learning rate:', 0.0005717532455930334)
+Epoch: [49][0/981]	Time 7.583 (7.583)	Data 7.490 (7.490)	Loss 1.027	
+Epoch: [49][50/981]	Time 1.178 (60.064)	Data 1.095 (55.821)	Loss 0.938	
+Epoch: [49][100/981]	Time 1.170 (118.123)	Data 1.086 (109.713)	Loss 0.940	
+Epoch: [49][150/981]	Time 1.200 (181.243)	Data 1.117 (168.677)	Loss 0.949	
+Epoch: [49][200/981]	Time 1.197 (240.676)	Data 1.114 (223.968)	Loss 0.963	
+Epoch: [49][250/981]	Time 1.187 (298.039)	Data 1.104 (277.200)	Loss 0.977	
+Epoch: [49][300/981]	Time 1.190 (358.172)	Data 1.107 (333.187)	Loss 0.989	
+Epoch: [49][350/981]	Time 1.199 (420.825)	Data 1.116 (391.698)	Loss 1.003	
+Epoch: [49][400/981]	Time 1.178 (472.493)	Data 1.095 (439.210)	Loss 1.013	
+Epoch: [49][450/981]	Time 1.166 (525.666)	Data 1.083 (488.240)	Loss 1.026	
+Epoch: [49][500/981]	Time 1.157 (579.466)	Data 1.074 (537.873)	Loss 1.033	
+Epoch: [49][550/981]	Time 1.147 (631.800)	Data 1.064 (586.042)	Loss 1.045	
+Epoch: [49][600/981]	Time 1.140 (685.128)	Data 1.057 (635.213)	Loss 1.056	
+Epoch: [49][650/981]	Time 1.130 (735.926)	Data 1.047 (681.861)	Loss 1.064	
+Epoch: [49][700/981]	Time 1.124 (788.228)	Data 1.041 (730.013)	Loss 1.073	
+Epoch: [49][750/981]	Time 1.120 (840.975)	Data 1.037 (778.618)	Loss 1.080	
+Epoch: [49][800/981]	Time 1.113 (891.553)	Data 1.030 (825.061)	Loss 1.088	
+Epoch: [49][850/981]	Time 1.109 (943.390)	Data 1.026 (872.751)	Loss 1.095	
+Epoch: [49][900/981]	Time 1.107 (997.262)	Data 1.024 (922.477)	Loss 1.102	
+Epoch: [49][950/981]	Time 1.104 (1050.346)	Data 1.021 (971.397)	Loss 1.108	
+Train: [49]	Time 1082.855	Data 1001.433	Loss 1.113	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [49][0/38]	Time 6.504 (6.504)	Data 6.471 (6.471)	Loss 8.2122 (8.2122)	
+Val: [49]	Time 38.425	Data 37.331	Loss 8.360	
+Best error: [4.802]	
+('Starting epoch number:', 51, 'Learning rate:', 0.0004971767352982899)
+Epoch: [50][0/981]	Time 7.422 (7.422)	Data 7.327 (7.327)	Loss 1.026	
+Epoch: [50][50/981]	Time 1.140 (58.117)	Data 1.056 (53.863)	Loss 0.911	
+Epoch: [50][100/981]	Time 1.108 (111.878)	Data 1.024 (103.470)	Loss 0.916	
+Epoch: [50][150/981]	Time 1.096 (165.511)	Data 1.013 (152.951)	Loss 0.912	
+Epoch: [50][200/981]	Time 1.092 (219.545)	Data 1.009 (202.833)	Loss 0.915	
+Epoch: [50][250/981]	Time 1.089 (273.328)	Data 1.006 (252.461)	Loss 0.913	
+Epoch: [50][300/981]	Time 1.083 (325.920)	Data 1.000 (300.884)	Loss 0.921	
+Epoch: [50][350/981]	Time 1.084 (380.622)	Data 1.001 (351.441)	Loss 0.928	
+Epoch: [50][400/981]	Time 1.082 (433.954)	Data 0.999 (400.635)	Loss 0.937	
+Epoch: [50][450/981]	Time 1.081 (487.370)	Data 0.998 (449.904)	Loss 0.946	
+Epoch: [50][500/981]	Time 1.072 (536.873)	Data 0.989 (495.265)	Loss 0.955	
+Epoch: [50][550/981]	Time 1.066 (587.453)	Data 0.983 (541.698)	Loss 0.964	
+Epoch: [50][600/981]	Time 1.066 (640.791)	Data 0.983 (590.891)	Loss 0.971	
+Epoch: [50][650/981]	Time 1.067 (694.576)	Data 0.984 (640.527)	Loss 0.979	
+Epoch: [50][700/981]	Time 1.067 (747.842)	Data 0.984 (689.647)	Loss 0.987	
+Epoch: [50][750/981]	Time 1.066 (800.826)	Data 0.983 (738.494)	Loss 0.993	
+Epoch: [50][800/981]	Time 1.066 (854.071)	Data 0.983 (787.593)	Loss 0.997	
+Epoch: [50][850/981]	Time 1.065 (906.260)	Data 0.982 (835.627)	Loss 1.003	
+Epoch: [50][900/981]	Time 1.064 (958.465)	Data 0.981 (883.699)	Loss 1.008	
+Epoch: [50][950/981]	Time 1.063 (1011.256)	Data 0.980 (932.351)	Loss 1.015	
+Train: [50]	Time 1041.387	Data 959.988	Loss 1.020	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [50][0/38]	Time 7.300 (7.300)	Data 7.271 (7.271)	Loss 8.8741 (8.8741)	
+Val: [50]	Time 38.305	Data 37.228	Loss 8.561	
+Best error: [4.802]	
+('Starting epoch number:', 52, 'Learning rate:', 0.0004971767352982899)
+Epoch: [51][0/981]	Time 7.564 (7.564)	Data 7.475 (7.475)	Loss 0.638	
+Epoch: [51][50/981]	Time 1.208 (61.587)	Data 1.124 (57.333)	Loss 0.852	
+Epoch: [51][100/981]	Time 1.141 (115.252)	Data 1.058 (106.851)	Loss 0.872	
+Epoch: [51][150/981]	Time 1.105 (166.819)	Data 1.022 (154.270)	Loss 0.872	
+Epoch: [51][200/981]	Time 1.091 (219.386)	Data 1.008 (202.672)	Loss 0.878	
+Epoch: [51][250/981]	Time 1.080 (271.052)	Data 0.997 (250.203)	Loss 0.890	
+Epoch: [51][300/981]	Time 1.073 (323.078)	Data 0.990 (298.088)	Loss 0.902	
+Epoch: [51][350/981]	Time 1.074 (377.137)	Data 0.992 (348.020)	Loss 0.915	
+Epoch: [51][400/981]	Time 1.077 (431.776)	Data 0.994 (398.500)	Loss 0.920	
+Epoch: [51][450/981]	Time 1.070 (482.370)	Data 0.987 (444.952)	Loss 0.926	
+Epoch: [51][500/981]	Time 1.068 (535.002)	Data 0.985 (493.426)	Loss 0.929	
+Epoch: [51][550/981]	Time 1.066 (587.404)	Data 0.983 (541.671)	Loss 0.929	
+Epoch: [51][600/981]	Time 1.067 (641.233)	Data 0.984 (591.369)	Loss 0.936	
+Epoch: [51][650/981]	Time 1.064 (692.355)	Data 0.981 (638.345)	Loss 0.942	
+Epoch: [51][700/981]	Time 1.063 (745.075)	Data 0.980 (686.919)	Loss 0.948	
+Epoch: [51][750/981]	Time 1.058 (794.833)	Data 0.975 (732.525)	Loss 0.956	
+Epoch: [51][800/981]	Time 1.060 (849.064)	Data 0.977 (782.583)	Loss 0.960	
+Epoch: [51][850/981]	Time 1.058 (900.109)	Data 0.975 (829.487)	Loss 0.968	
+Epoch: [51][900/981]	Time 1.058 (952.912)	Data 0.975 (878.143)	Loss 0.973	
+Epoch: [51][950/981]	Time 1.057 (1005.092)	Data 0.974 (926.138)	Loss 0.979	
+Train: [51]	Time 1037.152	Data 955.725	Loss 0.983	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [51][0/38]	Time 6.089 (6.089)	Data 6.059 (6.059)	Loss 8.7248 (8.7248)	
+Val: [51]	Time 39.237	Data 38.158	Loss 8.712	
+Best error: [4.802]	
+('Starting epoch number:', 53, 'Learning rate:', 0.0004971767352982899)
+Epoch: [52][0/981]	Time 7.704 (7.704)	Data 7.620 (7.620)	Loss 0.899	
+Epoch: [52][50/981]	Time 1.159 (59.119)	Data 1.076 (54.889)	Loss 0.859	
+Epoch: [52][100/981]	Time 1.108 (111.893)	Data 1.025 (103.517)	Loss 0.863	
+Epoch: [52][150/981]	Time 1.100 (166.109)	Data 1.017 (153.593)	Loss 0.857	
+Epoch: [52][200/981]	Time 1.092 (219.556)	Data 1.009 (202.888)	Loss 0.853	
+Epoch: [52][250/981]	Time 1.097 (275.424)	Data 1.014 (254.589)	Loss 0.860	
+Epoch: [52][300/981]	Time 1.092 (328.707)	Data 1.009 (303.739)	Loss 0.869	
+Epoch: [52][350/981]	Time 1.091 (383.060)	Data 1.008 (353.948)	Loss 0.879	
+Epoch: [52][400/981]	Time 1.093 (438.449)	Data 1.010 (405.192)	Loss 0.887	
+Epoch: [52][450/981]	Time 1.093 (493.073)	Data 1.010 (455.672)	Loss 0.896	
+Epoch: [52][500/981]	Time 1.089 (545.773)	Data 1.006 (504.221)	Loss 0.906	
+Epoch: [52][550/981]	Time 1.091 (600.954)	Data 1.008 (555.253)	Loss 0.915	
+Epoch: [52][600/981]	Time 1.091 (655.440)	Data 1.008 (605.580)	Loss 0.924	
+Epoch: [52][650/981]	Time 1.090 (709.672)	Data 1.007 (655.647)	Loss 0.931	
+Epoch: [52][700/981]	Time 1.088 (762.668)	Data 1.005 (704.500)	Loss 0.939	
+Epoch: [52][750/981]	Time 1.088 (816.819)	Data 1.005 (754.497)	Loss 0.948	
+Epoch: [52][800/981]	Time 1.085 (868.714)	Data 1.002 (802.241)	Loss 0.952	
+Epoch: [52][850/981]	Time 1.082 (920.627)	Data 0.999 (850.008)	Loss 0.958	
+Epoch: [52][900/981]	Time 1.082 (975.053)	Data 0.999 (900.288)	Loss 0.965	
+Epoch: [52][950/981]	Time 1.080 (1027.237)	Data 0.997 (948.332)	Loss 0.969	
+Train: [52]	Time 1058.123	Data 976.745	Loss 0.973	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [52][0/38]	Time 5.968 (5.968)	Data 5.929 (5.929)	Loss 8.7639 (8.7639)	
+Val: [52]	Time 37.066	Data 35.994	Loss 8.740	
+Best error: [4.802]	
+('Starting epoch number:', 54, 'Learning rate:', 0.0004971767352982899)
+Epoch: [53][0/981]	Time 7.626 (7.626)	Data 7.541 (7.541)	Loss 0.938	
+Epoch: [53][50/981]	Time 1.141 (58.180)	Data 1.058 (53.942)	Loss 0.818	
+Epoch: [53][100/981]	Time 1.115 (112.609)	Data 1.032 (104.217)	Loss 0.829	
+Epoch: [53][150/981]	Time 1.084 (163.727)	Data 1.001 (151.186)	Loss 0.826	
+Epoch: [53][200/981]	Time 1.078 (216.701)	Data 0.995 (200.030)	Loss 0.832	
+Epoch: [53][250/981]	Time 1.079 (270.943)	Data 0.997 (250.132)	Loss 0.850	
+Epoch: [53][300/981]	Time 1.071 (322.270)	Data 0.988 (297.331)	Loss 0.859	
+Epoch: [53][350/981]	Time 1.073 (376.722)	Data 0.990 (347.634)	Loss 0.872	
+Epoch: [53][400/981]	Time 1.069 (428.571)	Data 0.986 (395.348)	Loss 0.876	
+Epoch: [53][450/981]	Time 1.068 (481.704)	Data 0.985 (444.325)	Loss 0.883	
+Epoch: [53][500/981]	Time 1.066 (534.259)	Data 0.983 (492.729)	Loss 0.890	
+Epoch: [53][550/981]	Time 1.066 (587.282)	Data 0.983 (541.602)	Loss 0.900	
+Epoch: [53][600/981]	Time 1.064 (639.401)	Data 0.981 (589.539)	Loss 0.910	
+Epoch: [53][650/981]	Time 1.066 (693.882)	Data 0.983 (639.875)	Loss 0.915	
+Epoch: [53][700/981]	Time 1.063 (745.481)	Data 0.980 (687.328)	Loss 0.921	
+Epoch: [53][750/981]	Time 1.062 (797.846)	Data 0.979 (735.565)	Loss 0.924	
+Epoch: [53][800/981]	Time 1.061 (849.464)	Data 0.978 (783.035)	Loss 0.929	
+Epoch: [53][850/981]	Time 1.060 (902.356)	Data 0.977 (831.777)	Loss 0.938	
+Epoch: [53][900/981]	Time 1.059 (954.478)	Data 0.976 (879.727)	Loss 0.940	
+Epoch: [53][950/981]	Time 1.061 (1008.742)	Data 0.978 (929.856)	Loss 0.949	
+Train: [53]	Time 1038.268	Data 956.909	Loss 0.952	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [53][0/38]	Time 6.696 (6.696)	Data 6.664 (6.664)	Loss 8.7544 (8.7544)	
+Val: [53]	Time 40.716	Data 39.615	Loss 8.937	
+Best error: [4.802]	
+('Starting epoch number:', 55, 'Learning rate:', 0.0004971767352982899)
+Epoch: [54][0/981]	Time 7.365 (7.365)	Data 7.280 (7.280)	Loss 0.737	
+Epoch: [54][50/981]	Time 1.219 (62.191)	Data 1.136 (57.940)	Loss 0.767	
+Epoch: [54][100/981]	Time 1.151 (116.294)	Data 1.068 (107.897)	Loss 0.779	
+Epoch: [54][150/981]	Time 1.113 (168.031)	Data 1.030 (155.492)	Loss 0.800	
+Epoch: [54][200/981]	Time 1.119 (224.886)	Data 1.036 (208.183)	Loss 0.818	
+Epoch: [54][250/981]	Time 1.104 (277.081)	Data 1.021 (256.224)	Loss 0.825	
+Epoch: [54][300/981]	Time 1.089 (327.866)	Data 1.006 (302.875)	Loss 0.832	
+Epoch: [54][350/981]	Time 1.080 (379.179)	Data 0.997 (350.027)	Loss 0.841	
+Epoch: [54][400/981]	Time 1.075 (431.025)	Data 0.992 (397.743)	Loss 0.850	
+Epoch: [54][450/981]	Time 1.068 (481.860)	Data 0.985 (444.432)	Loss 0.858	
+Epoch: [54][500/981]	Time 1.069 (535.450)	Data 0.986 (493.861)	Loss 0.864	
+Epoch: [54][550/981]	Time 1.064 (586.451)	Data 0.981 (540.733)	Loss 0.875	
+Epoch: [54][600/981]	Time 1.063 (638.681)	Data 0.980 (588.814)	Loss 0.884	
+Epoch: [54][650/981]	Time 1.063 (691.748)	Data 0.980 (637.730)	Loss 0.889	
+Epoch: [54][700/981]	Time 1.061 (743.457)	Data 0.978 (685.299)	Loss 0.897	
+Epoch: [54][750/981]	Time 1.059 (795.007)	Data 0.976 (732.720)	Loss 0.907	
+Epoch: [54][800/981]	Time 1.057 (846.347)	Data 0.974 (779.904)	Loss 0.915	
+Epoch: [54][850/981]	Time 1.055 (897.396)	Data 0.972 (826.799)	Loss 0.920	
+Epoch: [54][900/981]	Time 1.056 (951.016)	Data 0.973 (876.266)	Loss 0.927	
+Epoch: [54][950/981]	Time 1.053 (1001.240)	Data 0.970 (922.349)	Loss 0.931	
+Train: [54]	Time 1032.047	Data 950.680	Loss 0.932	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [54][0/38]	Time 6.520 (6.520)	Data 6.490 (6.490)	Loss 9.3317 (9.3317)	
+Val: [54]	Time 38.122	Data 37.022	Loss 9.334	
+Best error: [4.802]	
+('Starting epoch number:', 56, 'Learning rate:', 0.0004971767352982899)
+Epoch: [55][0/981]	Time 7.448 (7.448)	Data 7.363 (7.363)	Loss 0.873	
+Epoch: [55][50/981]	Time 1.201 (61.264)	Data 1.118 (57.017)	Loss 0.771	
+Epoch: [55][100/981]	Time 1.141 (115.289)	Data 1.058 (106.872)	Loss 0.776	
+Epoch: [55][150/981]	Time 1.116 (168.591)	Data 1.033 (156.011)	Loss 0.787	
+Epoch: [55][200/981]	Time 1.142 (229.611)	Data 1.059 (212.857)	Loss 0.799	
+Epoch: [55][250/981]	Time 1.118 (280.674)	Data 1.035 (259.765)	Loss 0.819	
+Epoch: [55][300/981]	Time 1.103 (332.084)	Data 1.020 (307.024)	Loss 0.828	
+Epoch: [55][350/981]	Time 1.115 (391.433)	Data 1.032 (362.228)	Loss 0.834	
+Epoch: [55][400/981]	Time 1.104 (442.846)	Data 1.021 (409.510)	Loss 0.841	
+Epoch: [55][450/981]	Time 1.098 (495.320)	Data 1.015 (457.835)	Loss 0.850	
+Epoch: [55][500/981]	Time 1.099 (550.748)	Data 1.016 (509.117)	Loss 0.853	
+Epoch: [55][550/981]	Time 1.097 (604.312)	Data 1.014 (558.537)	Loss 0.862	
+Epoch: [55][600/981]	Time 1.097 (659.493)	Data 1.014 (609.575)	Loss 0.868	
+Epoch: [55][650/981]	Time 1.092 (710.953)	Data 1.009 (656.879)	Loss 0.877	
+Epoch: [55][700/981]	Time 1.095 (767.463)	Data 1.012 (709.239)	Loss 0.884	
+Epoch: [55][750/981]	Time 1.092 (820.462)	Data 1.009 (758.111)	Loss 0.889	
+Epoch: [55][800/981]	Time 1.089 (872.236)	Data 1.006 (805.738)	Loss 0.896	
+Epoch: [55][850/981]	Time 1.085 (923.553)	Data 1.002 (852.915)	Loss 0.905	
+Epoch: [55][900/981]	Time 1.084 (976.548)	Data 1.001 (901.775)	Loss 0.910	
+Epoch: [55][950/981]	Time 1.082 (1028.982)	Data 0.999 (950.076)	Loss 0.914	
+Train: [55]	Time 1060.851	Data 979.471	Loss 0.917	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [55][0/38]	Time 6.488 (6.488)	Data 6.458 (6.458)	Loss 8.9592 (8.9592)	
+Val: [55]	Time 38.370	Data 37.296	Loss 9.013	
+Best error: [4.802]	
+('Starting epoch number:', 57, 'Learning rate:', 0.0004971767352982899)
+Epoch: [56][0/981]	Time 6.870 (6.870)	Data 6.786 (6.786)	Loss 1.008	
+Epoch: [56][50/981]	Time 1.195 (60.952)	Data 1.112 (56.724)	Loss 0.767	
+Epoch: [56][100/981]	Time 1.160 (117.200)	Data 1.078 (108.828)	Loss 0.789	
+Epoch: [56][150/981]	Time 1.297 (195.897)	Data 1.215 (183.493)	Loss 0.794	
+Epoch: [56][200/981]	Time 1.245 (250.256)	Data 1.163 (233.824)	Loss 0.799	
+Epoch: [56][250/981]	Time 1.212 (304.178)	Data 1.130 (283.706)	Loss 0.813	
+Epoch: [56][300/981]	Time 1.188 (357.710)	Data 1.107 (333.189)	Loss 0.820	
+Epoch: [56][350/981]	Time 1.172 (411.207)	Data 1.090 (382.655)	Loss 0.828	
+Epoch: [56][400/981]	Time 1.157 (463.860)	Data 1.075 (431.235)	Loss 0.834	
+Epoch: [56][450/981]	Time 1.149 (518.368)	Data 1.068 (481.688)	Loss 0.842	
+Epoch: [56][500/981]	Time 1.142 (572.122)	Data 1.061 (531.390)	Loss 0.842	
+Epoch: [56][550/981]	Time 1.153 (635.349)	Data 1.072 (590.567)	Loss 0.846	
+Epoch: [56][600/981]	Time 1.153 (692.938)	Data 1.072 (644.098)	Loss 0.854	
+Epoch: [56][650/981]	Time 1.148 (747.296)	Data 1.067 (694.407)	Loss 0.860	
+Epoch: [56][700/981]	Time 1.142 (800.516)	Data 1.061 (743.596)	Loss 0.866	
+Epoch: [56][750/981]	Time 1.138 (854.707)	Data 1.057 (793.740)	Loss 0.871	
+Epoch: [56][800/981]	Time 1.132 (906.496)	Data 1.051 (841.487)	Loss 0.878	
+Epoch: [56][850/981]	Time 1.127 (959.162)	Data 1.046 (890.116)	Loss 0.882	
+Epoch: [56][900/981]	Time 1.125 (1013.397)	Data 1.044 (940.327)	Loss 0.888	
+Epoch: [56][950/981]	Time 1.122 (1067.338)	Data 1.041 (990.229)	Loss 0.896	
+Train: [56]	Time 1098.982	Data 1019.461	Loss 0.899	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [56][0/38]	Time 6.497 (6.497)	Data 6.465 (6.465)	Loss 9.3141 (9.3141)	
+Val: [56]	Time 39.579	Data 38.545	Loss 9.428	
+Best error: [4.802]	
+('Starting epoch number:', 58, 'Learning rate:', 0.0004971767352982899)
+Epoch: [57][0/981]	Time 7.616 (7.616)	Data 7.533 (7.533)	Loss 0.681	
+Epoch: [57][50/981]	Time 1.235 (62.961)	Data 1.154 (58.838)	Loss 0.772	
+Epoch: [57][100/981]	Time 1.156 (116.736)	Data 1.075 (108.569)	Loss 0.754	
+Epoch: [57][150/981]	Time 1.129 (170.478)	Data 1.048 (158.265)	Loss 0.768	
+Epoch: [57][200/981]	Time 1.106 (222.323)	Data 1.025 (206.053)	Loss 0.779	
+Epoch: [57][250/981]	Time 1.103 (276.799)	Data 1.022 (256.490)	Loss 0.788	
+Epoch: [57][300/981]	Time 1.091 (328.463)	Data 1.010 (304.115)	Loss 0.799	
+Epoch: [57][350/981]	Time 1.088 (381.869)	Data 1.007 (353.459)	Loss 0.807	
+Epoch: [57][400/981]	Time 1.089 (436.555)	Data 1.008 (404.107)	Loss 0.813	
+Epoch: [57][450/981]	Time 1.083 (488.387)	Data 1.002 (451.880)	Loss 0.823	
+Epoch: [57][500/981]	Time 1.081 (541.714)	Data 1.000 (501.183)	Loss 0.829	
+Epoch: [57][550/981]	Time 1.081 (595.633)	Data 1.000 (551.042)	Loss 0.832	
+Epoch: [57][600/981]	Time 1.081 (649.424)	Data 1.000 (600.792)	Loss 0.840	
+Epoch: [57][650/981]	Time 1.079 (702.498)	Data 0.998 (649.825)	Loss 0.847	
+Epoch: [57][700/981]	Time 1.081 (757.820)	Data 1.000 (701.090)	Loss 0.856	
+Epoch: [57][750/981]	Time 1.079 (810.032)	Data 0.998 (749.248)	Loss 0.863	
+Epoch: [57][800/981]	Time 1.080 (865.153)	Data 0.999 (800.321)	Loss 0.868	
+Epoch: [57][850/981]	Time 1.077 (916.704)	Data 0.996 (847.850)	Loss 0.873	
+Epoch: [57][900/981]	Time 1.076 (969.694)	Data 0.995 (896.794)	Loss 0.877	
+Epoch: [57][950/981]	Time 1.074 (1021.251)	Data 0.993 (944.310)	Loss 0.881	
+Train: [57]	Time 1051.884	Data 972.526	Loss 0.884	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [57][0/38]	Time 6.551 (6.551)	Data 6.519 (6.519)	Loss 9.6095 (9.6095)	
+Val: [57]	Time 39.491	Data 38.442	Loss 9.372	
+Best error: [4.802]	
+('Starting epoch number:', 59, 'Learning rate:', 0.0004971767352982899)
+Epoch: [58][0/981]	Time 7.021 (7.021)	Data 6.939 (6.939)	Loss 0.849	
+Epoch: [58][50/981]	Time 1.179 (60.143)	Data 1.097 (55.963)	Loss 0.712	
+Epoch: [58][100/981]	Time 1.121 (113.235)	Data 1.040 (105.031)	Loss 0.725	
+Epoch: [58][150/981]	Time 1.102 (166.398)	Data 1.021 (154.140)	Loss 0.737	
+Epoch: [58][200/981]	Time 1.092 (219.571)	Data 1.011 (203.282)	Loss 0.752	
+Epoch: [58][250/981]	Time 1.076 (270.116)	Data 0.995 (249.768)	Loss 0.765	
+Epoch: [58][300/981]	Time 1.081 (325.478)	Data 1.000 (301.086)	Loss 0.775	
+Epoch: [58][350/981]	Time 1.078 (378.477)	Data 0.997 (350.045)	Loss 0.786	
+Epoch: [58][400/981]	Time 1.071 (429.571)	Data 0.990 (397.100)	Loss 0.794	
+Epoch: [58][450/981]	Time 1.072 (483.334)	Data 0.991 (446.819)	Loss 0.806	
+Epoch: [58][500/981]	Time 1.067 (534.779)	Data 0.986 (494.222)	Loss 0.815	
+Epoch: [58][550/981]	Time 1.066 (587.543)	Data 0.985 (542.961)	Loss 0.821	
+Epoch: [58][600/981]	Time 1.067 (641.328)	Data 0.986 (592.709)	Loss 0.828	
+Epoch: [58][650/981]	Time 1.069 (695.865)	Data 0.988 (643.213)	Loss 0.833	
+Epoch: [58][700/981]	Time 1.069 (749.650)	Data 0.989 (692.958)	Loss 0.840	
+Epoch: [58][750/981]	Time 1.069 (802.550)	Data 0.988 (741.815)	Loss 0.847	
+Epoch: [58][800/981]	Time 1.067 (854.270)	Data 0.986 (789.502)	Loss 0.851	
+Epoch: [58][850/981]	Time 1.066 (907.481)	Data 0.986 (838.663)	Loss 0.858	
+Epoch: [58][900/981]	Time 1.066 (960.515)	Data 0.985 (887.659)	Loss 0.859	
+Epoch: [58][950/981]	Time 1.065 (1013.070)	Data 0.984 (936.166)	Loss 0.865	
+Train: [58]	Time 1044.659	Data 965.344	Loss 0.869	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [58][0/38]	Time 6.192 (6.192)	Data 6.160 (6.160)	Loss 10.3671 (10.3671)	
+Val: [58]	Time 39.544	Data 38.470	Loss 9.533	
+Best error: [4.802]	
+('Starting epoch number:', 60, 'Learning rate:', 0.0004971767352982899)
+Epoch: [59][0/981]	Time 7.717 (7.717)	Data 7.634 (7.634)	Loss 0.521	
+Epoch: [59][50/981]	Time 1.228 (62.651)	Data 1.147 (58.506)	Loss 0.751	
+Epoch: [59][100/981]	Time 1.139 (115.001)	Data 1.058 (106.815)	Loss 0.739	
+Epoch: [59][150/981]	Time 1.116 (168.480)	Data 1.035 (156.271)	Loss 0.740	
+Epoch: [59][200/981]	Time 1.107 (222.476)	Data 1.026 (206.207)	Loss 0.745	
+Epoch: [59][250/981]	Time 1.098 (275.558)	Data 1.017 (255.247)	Loss 0.748	
+Epoch: [59][300/981]	Time 1.090 (328.145)	Data 1.009 (303.805)	Loss 0.756	
+Epoch: [59][350/981]	Time 1.090 (382.547)	Data 1.009 (354.157)	Loss 0.766	
+Epoch: [59][400/981]	Time 1.086 (435.513)	Data 1.005 (403.057)	Loss 0.775	
+Epoch: [59][450/981]	Time 1.076 (485.439)	Data 0.995 (448.940)	Loss 0.781	
+Epoch: [59][500/981]	Time 1.073 (537.330)	Data 0.992 (496.771)	Loss 0.789	
+Epoch: [59][550/981]	Time 1.074 (591.651)	Data 0.993 (547.055)	Loss 0.798	
+Epoch: [59][600/981]	Time 1.072 (643.972)	Data 0.991 (595.335)	Loss 0.804	
+Epoch: [59][650/981]	Time 1.072 (698.111)	Data 0.991 (645.426)	Loss 0.814	
+Epoch: [59][700/981]	Time 1.072 (751.318)	Data 0.991 (694.588)	Loss 0.824	
+Epoch: [59][750/981]	Time 1.072 (804.889)	Data 0.991 (744.120)	Loss 0.830	
+Epoch: [59][800/981]	Time 1.070 (856.850)	Data 0.989 (792.035)	Loss 0.835	
+Epoch: [59][850/981]	Time 1.067 (908.107)	Data 0.986 (839.235)	Loss 0.840	
+Epoch: [59][900/981]	Time 1.068 (962.326)	Data 0.987 (889.428)	Loss 0.847	
+Epoch: [59][950/981]	Time 1.069 (1016.760)	Data 0.988 (939.819)	Loss 0.850	
+Train: [59]	Time 1047.110	Data 967.733	Loss 0.854	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [59][0/38]	Time 6.883 (6.883)	Data 6.853 (6.853)	Loss 10.0305 (10.0305)	
+Val: [59]	Time 39.142	Data 38.108	Loss 9.602	
+Best error: [4.802]	
+('Starting epoch number:', 61, 'Learning rate:', 0.00043232759591155647)
+Epoch: [60][0/981]	Time 7.836 (7.836)	Data 7.744 (7.744)	Loss 0.564	
+Epoch: [60][50/981]	Time 1.183 (60.348)	Data 1.102 (56.209)	Loss 0.689	
+Epoch: [60][100/981]	Time 1.132 (114.382)	Data 1.051 (106.196)	Loss 0.705	
+Epoch: [60][150/981]	Time 1.104 (166.758)	Data 1.024 (154.550)	Loss 0.694	
+Epoch: [60][200/981]	Time 1.101 (221.350)	Data 1.020 (205.104)	Loss 0.693	
+Epoch: [60][250/981]	Time 1.080 (271.104)	Data 0.999 (250.816)	Loss 0.700	
+Epoch: [60][300/981]	Time 1.067 (321.238)	Data 0.986 (296.902)	Loss 0.710	
+Epoch: [60][350/981]	Time 1.066 (374.048)	Data 0.985 (345.656)	Loss 0.714	
+Epoch: [60][400/981]	Time 1.064 (426.680)	Data 0.983 (394.249)	Loss 0.714	
+Epoch: [60][450/981]	Time 1.066 (480.819)	Data 0.985 (444.349)	Loss 0.719	
+Epoch: [60][500/981]	Time 1.063 (532.688)	Data 0.982 (492.175)	Loss 0.724	
+Epoch: [60][550/981]	Time 1.059 (583.447)	Data 0.978 (538.913)	Loss 0.731	
+Epoch: [60][600/981]	Time 1.057 (635.122)	Data 0.976 (586.555)	Loss 0.738	
+Epoch: [60][650/981]	Time 1.057 (688.098)	Data 0.976 (635.511)	Loss 0.742	
+Epoch: [60][700/981]	Time 1.055 (739.691)	Data 0.974 (683.079)	Loss 0.747	
+Epoch: [60][750/981]	Time 1.054 (791.786)	Data 0.974 (731.148)	Loss 0.751	
+Epoch: [60][800/981]	Time 1.053 (843.691)	Data 0.973 (779.023)	Loss 0.756	
+Epoch: [60][850/981]	Time 1.052 (895.336)	Data 0.971 (826.632)	Loss 0.760	
+Epoch: [60][900/981]	Time 1.054 (949.419)	Data 0.973 (876.670)	Loss 0.765	
+Epoch: [60][950/981]	Time 1.052 (1000.877)	Data 0.972 (924.080)	Loss 0.771	
+Train: [60]	Time 1031.874	Data 952.668	Loss 0.774	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [60][0/38]	Time 7.401 (7.401)	Data 7.368 (7.368)	Loss 10.0068 (10.0068)	
+Val: [60]	Time 37.658	Data 36.618	Loss 9.954	
+Best error: [4.802]	
+('Starting epoch number:', 62, 'Learning rate:', 0.00043232759591155647)
+Epoch: [61][0/981]	Time 6.914 (6.914)	Data 6.832 (6.832)	Loss 0.618	
+Epoch: [61][50/981]	Time 1.219 (62.172)	Data 1.138 (58.022)	Loss 0.638	
+Epoch: [61][100/981]	Time 1.148 (115.919)	Data 1.067 (107.725)	Loss 0.642	
+Epoch: [61][150/981]	Time 1.123 (169.644)	Data 1.042 (157.388)	Loss 0.652	
+Epoch: [61][200/981]	Time 1.110 (223.114)	Data 1.029 (206.821)	Loss 0.659	
+Epoch: [61][250/981]	Time 1.111 (278.872)	Data 1.030 (258.538)	Loss 0.667	
+Epoch: [61][300/981]	Time 1.108 (333.532)	Data 1.027 (309.174)	Loss 0.674	
+Epoch: [61][350/981]	Time 1.105 (387.788)	Data 1.024 (359.368)	Loss 0.688	
+Epoch: [61][400/981]	Time 1.104 (442.700)	Data 1.023 (410.235)	Loss 0.698	
+Epoch: [61][450/981]	Time 1.102 (496.894)	Data 1.021 (460.366)	Loss 0.702	
+Epoch: [61][500/981]	Time 1.098 (550.182)	Data 1.017 (509.608)	Loss 0.710	
+Epoch: [61][550/981]	Time 1.093 (602.500)	Data 1.012 (557.887)	Loss 0.713	
+Epoch: [61][600/981]	Time 1.094 (657.464)	Data 1.013 (608.810)	Loss 0.718	
+Epoch: [61][650/981]	Time 1.093 (711.690)	Data 1.012 (658.968)	Loss 0.721	
+Epoch: [61][700/981]	Time 1.091 (764.587)	Data 1.010 (707.826)	Loss 0.727	
+Epoch: [61][750/981]	Time 1.090 (818.650)	Data 1.009 (757.866)	Loss 0.733	
+Epoch: [61][800/981]	Time 1.086 (869.886)	Data 1.005 (805.034)	Loss 0.739	
+Epoch: [61][850/981]	Time 1.085 (923.404)	Data 1.004 (854.517)	Loss 0.745	
+Epoch: [61][900/981]	Time 1.082 (974.945)	Data 1.001 (902.038)	Loss 0.751	
+Epoch: [61][950/981]	Time 1.080 (1027.223)	Data 0.999 (950.275)	Loss 0.754	
+Train: [61]	Time 1057.406	Data 978.017	Loss 0.757	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [61][0/38]	Time 5.962 (5.962)	Data 5.930 (5.930)	Loss 10.5248 (10.5248)	
+Val: [61]	Time 38.278	Data 37.226	Loss 9.866	
+Best error: [4.802]	
+('Starting epoch number:', 63, 'Learning rate:', 0.00043232759591155647)
+Epoch: [62][0/981]	Time 7.606 (7.606)	Data 7.524 (7.524)	Loss 0.597	
+Epoch: [62][50/981]	Time 1.173 (59.805)	Data 1.091 (55.661)	Loss 0.644	
+Epoch: [62][100/981]	Time 1.106 (111.663)	Data 1.025 (103.497)	Loss 0.639	
+Epoch: [62][150/981]	Time 1.098 (165.733)	Data 1.017 (153.525)	Loss 0.637	
+Epoch: [62][200/981]	Time 1.095 (220.063)	Data 1.014 (203.818)	Loss 0.635	
+Epoch: [62][250/981]	Time 1.082 (271.650)	Data 1.001 (251.370)	Loss 0.638	
+Epoch: [62][300/981]	Time 1.075 (323.540)	Data 0.994 (299.220)	Loss 0.650	
+Epoch: [62][350/981]	Time 1.071 (375.784)	Data 0.990 (347.426)	Loss 0.659	
+Epoch: [62][400/981]	Time 1.070 (428.887)	Data 0.989 (396.501)	Loss 0.663	
+Epoch: [62][450/981]	Time 1.066 (480.939)	Data 0.986 (444.534)	Loss 0.677	
+Epoch: [62][500/981]	Time 1.065 (533.449)	Data 0.984 (493.009)	Loss 0.686	
+Epoch: [62][550/981]	Time 1.065 (586.613)	Data 0.984 (542.149)	Loss 0.696	
+Epoch: [62][600/981]	Time 1.063 (638.568)	Data 0.982 (590.065)	Loss 0.701	
+Epoch: [62][650/981]	Time 1.058 (688.920)	Data 0.978 (636.367)	Loss 0.708	
+Epoch: [62][700/981]	Time 1.062 (744.283)	Data 0.981 (687.685)	Loss 0.718	
+Epoch: [62][750/981]	Time 1.059 (795.383)	Data 0.978 (734.746)	Loss 0.723	
+Epoch: [62][800/981]	Time 1.061 (849.476)	Data 0.980 (784.813)	Loss 0.727	
+Epoch: [62][850/981]	Time 1.058 (900.090)	Data 0.977 (831.382)	Loss 0.732	
+Epoch: [62][900/981]	Time 1.058 (953.119)	Data 0.977 (880.343)	Loss 0.737	
+Epoch: [62][950/981]	Time 1.058 (1005.952)	Data 0.977 (929.152)	Loss 0.742	
+Train: [62]	Time 1037.814	Data 958.600	Loss 0.745	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [62][0/38]	Time 5.975 (5.975)	Data 5.943 (5.943)	Loss 9.9366 (9.9366)	
+Val: [62]	Time 39.640	Data 38.596	Loss 10.093	
+Best error: [4.802]	
+('Starting epoch number:', 64, 'Learning rate:', 0.00043232759591155647)
+Epoch: [63][0/981]	Time 7.736 (7.736)	Data 7.654 (7.654)	Loss 0.513	
+Epoch: [63][50/981]	Time 1.116 (56.891)	Data 1.035 (52.769)	Loss 0.639	
+Epoch: [63][100/981]	Time 1.085 (109.597)	Data 1.004 (101.453)	Loss 0.644	
+Epoch: [63][150/981]	Time 1.074 (162.205)	Data 0.994 (150.023)	Loss 0.639	
+Epoch: [63][200/981]	Time 1.075 (216.164)	Data 0.995 (199.925)	Loss 0.646	
+Epoch: [63][250/981]	Time 1.078 (270.479)	Data 0.997 (250.212)	Loss 0.647	
+Epoch: [63][300/981]	Time 1.067 (321.295)	Data 0.987 (296.989)	Loss 0.650	
+Epoch: [63][350/981]	Time 1.063 (373.052)	Data 0.982 (344.721)	Loss 0.658	
+Epoch: [63][400/981]	Time 1.064 (426.807)	Data 0.984 (394.436)	Loss 0.667	
+Epoch: [63][450/981]	Time 1.062 (478.770)	Data 0.981 (442.352)	Loss 0.672	
+Epoch: [63][500/981]	Time 1.059 (530.766)	Data 0.979 (490.312)	Loss 0.679	
+Epoch: [63][550/981]	Time 1.056 (581.768)	Data 0.975 (537.278)	Loss 0.686	
+Epoch: [63][600/981]	Time 1.060 (636.902)	Data 0.979 (588.369)	Loss 0.693	
+Epoch: [63][650/981]	Time 1.061 (690.914)	Data 0.981 (638.337)	Loss 0.697	
+Epoch: [63][700/981]	Time 1.062 (744.493)	Data 0.981 (687.861)	Loss 0.707	
+Epoch: [63][750/981]	Time 1.063 (798.261)	Data 0.982 (737.574)	Loss 0.711	
+Epoch: [63][800/981]	Time 1.063 (851.373)	Data 0.982 (786.637)	Loss 0.718	
+Epoch: [63][850/981]	Time 1.066 (906.983)	Data 0.985 (838.173)	Loss 0.721	
+Epoch: [63][900/981]	Time 1.066 (960.713)	Data 0.985 (887.867)	Loss 0.724	
+Epoch: [63][950/981]	Time 1.067 (1014.941)	Data 0.986 (938.029)	Loss 0.729	
+Train: [63]	Time 1046.110	Data 966.780	Loss 0.732	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [63][0/38]	Time 6.132 (6.132)	Data 6.099 (6.099)	Loss 10.4793 (10.4793)	
+Val: [63]	Time 38.874	Data 37.829	Loss 9.901	
+Best error: [4.802]	
+('Starting epoch number:', 65, 'Learning rate:', 0.00043232759591155647)
+Epoch: [64][0/981]	Time 7.575 (7.575)	Data 7.483 (7.483)	Loss 0.460	
+Epoch: [64][50/981]	Time 1.183 (60.333)	Data 1.102 (56.180)	Loss 0.642	
+Epoch: [64][100/981]	Time 1.117 (112.801)	Data 1.036 (104.614)	Loss 0.625	
+Epoch: [64][150/981]	Time 1.101 (166.227)	Data 1.020 (153.993)	Loss 0.623	
+Epoch: [64][200/981]	Time 1.087 (218.552)	Data 1.006 (202.289)	Loss 0.635	
+Epoch: [64][250/981]	Time 1.086 (272.483)	Data 1.005 (252.172)	Loss 0.639	
+Epoch: [64][300/981]	Time 1.084 (326.273)	Data 1.003 (301.892)	Loss 0.645	
+Epoch: [64][350/981]	Time 1.081 (379.412)	Data 1.000 (350.983)	Loss 0.651	
+Epoch: [64][400/981]	Time 1.082 (434.056)	Data 1.001 (401.586)	Loss 0.655	
+Epoch: [64][450/981]	Time 1.085 (489.519)	Data 1.004 (452.970)	Loss 0.662	
+Epoch: [64][500/981]	Time 1.085 (543.504)	Data 1.004 (502.915)	Loss 0.665	
+Epoch: [64][550/981]	Time 1.082 (596.279)	Data 1.001 (551.651)	Loss 0.671	
+Epoch: [64][600/981]	Time 1.083 (650.770)	Data 1.002 (602.111)	Loss 0.679	
+Epoch: [64][650/981]	Time 1.083 (704.912)	Data 1.002 (652.220)	Loss 0.683	
+Epoch: [64][700/981]	Time 1.081 (757.849)	Data 1.000 (701.140)	Loss 0.688	
+Epoch: [64][750/981]	Time 1.080 (811.391)	Data 0.999 (750.614)	Loss 0.692	
+Epoch: [64][800/981]	Time 1.080 (864.719)	Data 0.999 (799.883)	Loss 0.699	
+Epoch: [64][850/981]	Time 1.081 (920.151)	Data 1.000 (851.276)	Loss 0.705	
+Epoch: [64][900/981]	Time 1.079 (972.007)	Data 0.998 (899.086)	Loss 0.709	
+Epoch: [64][950/981]	Time 1.078 (1025.217)	Data 0.997 (948.256)	Loss 0.714	
+Train: [64]	Time 1056.550	Data 977.149	Loss 0.717	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [64][0/38]	Time 6.758 (6.758)	Data 6.729 (6.729)	Loss 10.1241 (10.1241)	
+Val: [64]	Time 37.954	Data 36.908	Loss 10.128	
+Best error: [4.802]	
+('Starting epoch number:', 66, 'Learning rate:', 0.00043232759591155647)
+Epoch: [65][0/981]	Time 7.350 (7.350)	Data 7.258 (7.258)	Loss 0.599	
+Epoch: [65][50/981]	Time 1.253 (63.927)	Data 1.172 (59.769)	Loss 0.628	
+Epoch: [65][100/981]	Time 1.198 (120.997)	Data 1.117 (112.791)	Loss 0.614	
+Epoch: [65][150/981]	Time 1.186 (179.142)	Data 1.105 (166.893)	Loss 0.610	
+Epoch: [65][200/981]	Time 1.155 (232.254)	Data 1.074 (215.968)	Loss 0.616	
+Epoch: [65][250/981]	Time 1.140 (286.158)	Data 1.059 (265.848)	Loss 0.620	
+Epoch: [65][300/981]	Time 1.138 (342.583)	Data 1.057 (318.220)	Loss 0.623	
+Epoch: [65][350/981]	Time 1.122 (393.797)	Data 1.041 (365.385)	Loss 0.626	
+Epoch: [65][400/981]	Time 1.114 (446.558)	Data 1.033 (414.110)	Loss 0.630	
+Epoch: [65][450/981]	Time 1.108 (499.840)	Data 1.027 (463.348)	Loss 0.641	
+Epoch: [65][500/981]	Time 1.107 (554.560)	Data 1.026 (514.007)	Loss 0.648	
+Epoch: [65][550/981]	Time 1.104 (608.339)	Data 1.023 (563.745)	Loss 0.654	
+Epoch: [65][600/981]	Time 1.104 (663.406)	Data 1.023 (614.766)	Loss 0.659	
+Epoch: [65][650/981]	Time 1.097 (714.230)	Data 1.016 (661.549)	Loss 0.668	
+Epoch: [65][700/981]	Time 1.096 (768.196)	Data 1.015 (711.472)	Loss 0.675	
+Epoch: [65][750/981]	Time 1.094 (821.740)	Data 1.013 (760.954)	Loss 0.682	
+Epoch: [65][800/981]	Time 1.093 (875.473)	Data 1.012 (810.657)	Loss 0.689	
+Epoch: [65][850/981]	Time 1.091 (928.230)	Data 1.010 (859.362)	Loss 0.695	
+Epoch: [65][900/981]	Time 1.090 (981.662)	Data 1.009 (908.755)	Loss 0.698	
+Epoch: [65][950/981]	Time 1.090 (1037.050)	Data 1.010 (960.087)	Loss 0.704	
+Train: [65]	Time 1066.470	Data 987.089	Loss 0.707	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [65][0/38]	Time 6.267 (6.267)	Data 6.237 (6.237)	Loss 9.9140 (9.9140)	
+Val: [65]	Time 38.206	Data 37.159	Loss 9.928	
+Best error: [4.802]	
+('Starting epoch number:', 67, 'Learning rate:', 0.00043232759591155647)
+Epoch: [66][0/981]	Time 8.117 (8.117)	Data 8.034 (8.034)	Loss 0.521	
+Epoch: [66][50/981]	Time 1.240 (63.218)	Data 1.159 (59.099)	Loss 0.603	
+Epoch: [66][100/981]	Time 1.176 (118.811)	Data 1.096 (110.660)	Loss 0.597	
+Epoch: [66][150/981]	Time 1.158 (174.891)	Data 1.077 (162.654)	Loss 0.599	
+Epoch: [66][200/981]	Time 1.139 (229.033)	Data 1.059 (212.761)	Loss 0.596	
+Epoch: [66][250/981]	Time 1.130 (283.731)	Data 1.049 (263.414)	Loss 0.607	
+Epoch: [66][300/981]	Time 1.122 (337.601)	Data 1.041 (313.248)	Loss 0.615	
+Epoch: [66][350/981]	Time 1.111 (389.814)	Data 1.030 (361.431)	Loss 0.619	
+Epoch: [66][400/981]	Time 1.109 (444.819)	Data 1.028 (412.382)	Loss 0.629	
+Epoch: [66][450/981]	Time 1.111 (501.146)	Data 1.030 (464.663)	Loss 0.637	
+Epoch: [66][500/981]	Time 1.104 (553.124)	Data 1.023 (512.588)	Loss 0.646	
+Epoch: [66][550/981]	Time 1.102 (607.387)	Data 1.021 (562.800)	Loss 0.653	
+Epoch: [66][600/981]	Time 1.101 (661.627)	Data 1.020 (612.999)	Loss 0.660	
+Epoch: [66][650/981]	Time 1.097 (713.963)	Data 1.016 (661.285)	Loss 0.664	
+Epoch: [66][700/981]	Time 1.094 (766.884)	Data 1.013 (710.167)	Loss 0.670	
+Epoch: [66][750/981]	Time 1.089 (817.875)	Data 1.008 (757.119)	Loss 0.674	
+Epoch: [66][800/981]	Time 1.088 (871.199)	Data 1.007 (806.405)	Loss 0.680	
+Epoch: [66][850/981]	Time 1.087 (925.053)	Data 1.006 (856.206)	Loss 0.687	
+Epoch: [66][900/981]	Time 1.086 (978.652)	Data 1.005 (905.791)	Loss 0.692	
+Epoch: [66][950/981]	Time 1.085 (1031.964)	Data 1.004 (955.057)	Loss 0.698	
+Train: [66]	Time 1063.621	Data 984.301	Loss 0.701	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [66][0/38]	Time 7.010 (7.010)	Data 6.978 (6.978)	Loss 10.2471 (10.2471)	
+Val: [66]	Time 40.047	Data 39.001	Loss 10.111	
+Best error: [4.802]	
+('Starting epoch number:', 68, 'Learning rate:', 0.00043232759591155647)
+Epoch: [67][0/981]	Time 7.390 (7.390)	Data 7.298 (7.298)	Loss 0.946	
+Epoch: [67][50/981]	Time 1.184 (60.366)	Data 1.103 (56.233)	Loss 0.593	
+Epoch: [67][100/981]	Time 1.146 (115.760)	Data 1.065 (107.580)	Loss 0.609	
+Epoch: [67][150/981]	Time 1.119 (168.999)	Data 1.038 (156.772)	Loss 0.613	
+Epoch: [67][200/981]	Time 1.105 (222.088)	Data 1.024 (205.813)	Loss 0.603	
+Epoch: [67][250/981]	Time 1.103 (276.766)	Data 1.022 (256.447)	Loss 0.602	
+Epoch: [67][300/981]	Time 1.099 (330.659)	Data 1.018 (306.302)	Loss 0.602	
+Epoch: [67][350/981]	Time 1.087 (381.543)	Data 1.006 (353.142)	Loss 0.613	
+Epoch: [67][400/981]	Time 1.086 (435.395)	Data 1.005 (402.966)	Loss 0.619	
+Epoch: [67][450/981]	Time 1.090 (491.688)	Data 1.009 (455.214)	Loss 0.630	
+Epoch: [67][500/981]	Time 1.086 (544.260)	Data 1.005 (503.737)	Loss 0.638	
+Epoch: [67][550/981]	Time 1.087 (599.154)	Data 1.007 (554.598)	Loss 0.644	
+Epoch: [67][600/981]	Time 1.086 (652.775)	Data 1.005 (604.179)	Loss 0.651	
+Epoch: [67][650/981]	Time 1.088 (707.966)	Data 1.007 (655.332)	Loss 0.655	
+Epoch: [67][700/981]	Time 1.087 (762.024)	Data 1.006 (705.350)	Loss 0.659	
+Epoch: [67][750/981]	Time 1.085 (814.486)	Data 1.004 (753.769)	Loss 0.667	
+Epoch: [67][800/981]	Time 1.083 (867.577)	Data 1.002 (802.795)	Loss 0.672	
+Epoch: [67][850/981]	Time 1.084 (922.161)	Data 1.003 (853.336)	Loss 0.675	
+Epoch: [67][900/981]	Time 1.080 (973.371)	Data 0.999 (900.504)	Loss 0.679	
+Epoch: [67][950/981]	Time 1.082 (1029.171)	Data 1.001 (952.267)	Loss 0.684	
+Train: [67]	Time 1058.271	Data 978.918	Loss 0.687	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [67][0/38]	Time 6.884 (6.884)	Data 6.855 (6.855)	Loss 9.6887 (9.6887)	
+Val: [67]	Time 40.522	Data 39.470	Loss 10.133	
+Best error: [4.802]	
+('Starting epoch number:', 69, 'Learning rate:', 0.00043232759591155647)
+Epoch: [68][0/981]	Time 7.585 (7.585)	Data 7.503 (7.503)	Loss 0.611	
+Epoch: [68][50/981]	Time 1.146 (58.430)	Data 1.065 (54.300)	Loss 0.585	
+Epoch: [68][100/981]	Time 1.132 (114.317)	Data 1.051 (106.134)	Loss 0.569	
+Epoch: [68][150/981]	Time 1.113 (167.997)	Data 1.032 (155.767)	Loss 0.583	
+Epoch: [68][200/981]	Time 1.108 (222.710)	Data 1.027 (206.434)	Loss 0.593	
+Epoch: [68][250/981]	Time 1.091 (273.953)	Data 1.010 (253.619)	Loss 0.596	
+Epoch: [68][300/981]	Time 1.092 (328.604)	Data 1.011 (304.233)	Loss 0.609	
+Epoch: [68][350/981]	Time 1.088 (381.783)	Data 1.007 (353.363)	Loss 0.612	
+Epoch: [68][400/981]	Time 1.088 (436.436)	Data 1.007 (403.978)	Loss 0.618	
+Epoch: [68][450/981]	Time 1.082 (487.820)	Data 1.001 (451.337)	Loss 0.627	
+Epoch: [68][500/981]	Time 1.085 (543.395)	Data 1.004 (502.859)	Loss 0.634	
+Epoch: [68][550/981]	Time 1.082 (596.432)	Data 1.002 (551.870)	Loss 0.638	
+Epoch: [68][600/981]	Time 1.086 (652.516)	Data 1.005 (603.921)	Loss 0.643	
+Epoch: [68][650/981]	Time 1.086 (706.759)	Data 1.005 (654.142)	Loss 0.650	
+Epoch: [68][700/981]	Time 1.083 (758.884)	Data 1.002 (702.194)	Loss 0.655	
+Epoch: [68][750/981]	Time 1.081 (811.977)	Data 1.000 (751.228)	Loss 0.661	
+Epoch: [68][800/981]	Time 1.081 (866.068)	Data 1.000 (801.279)	Loss 0.668	
+Epoch: [68][850/981]	Time 1.082 (920.707)	Data 1.001 (851.866)	Loss 0.673	
+Epoch: [68][900/981]	Time 1.085 (977.198)	Data 1.004 (904.311)	Loss 0.677	
+Epoch: [68][950/981]	Time 1.083 (1029.677)	Data 1.002 (952.744)	Loss 0.682	
+Train: [68]	Time 1060.941	Data 981.595	Loss 0.684	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [68][0/38]	Time 6.480 (6.480)	Data 6.448 (6.448)	Loss 10.8225 (10.8225)	
+Val: [68]	Time 41.255	Data 40.190	Loss 10.674	
+Best error: [4.802]	
+('Starting epoch number:', 70, 'Learning rate:', 0.00043232759591155647)
+Epoch: [69][0/981]	Time 6.546 (6.546)	Data 6.465 (6.465)	Loss 0.635	
+Epoch: [69][50/981]	Time 1.251 (63.817)	Data 1.170 (59.653)	Loss 0.571	
+Epoch: [69][100/981]	Time 1.194 (120.609)	Data 1.113 (112.393)	Loss 0.573	
+Epoch: [69][150/981]	Time 1.166 (176.116)	Data 1.085 (163.850)	Loss 0.581	
+Epoch: [69][200/981]	Time 1.142 (229.493)	Data 1.061 (213.181)	Loss 0.588	
+Epoch: [69][250/981]	Time 1.131 (283.971)	Data 1.050 (263.613)	Loss 0.592	
+Epoch: [69][300/981]	Time 1.117 (336.245)	Data 1.036 (311.835)	Loss 0.594	
+Epoch: [69][350/981]	Time 1.105 (387.914)	Data 1.024 (359.465)	Loss 0.600	
+Epoch: [69][400/981]	Time 1.102 (441.811)	Data 1.021 (409.296)	Loss 0.605	
+Epoch: [69][450/981]	Time 1.100 (495.935)	Data 1.019 (459.396)	Loss 0.611	
+Epoch: [69][500/981]	Time 1.097 (549.516)	Data 1.016 (508.930)	Loss 0.620	
+Epoch: [69][550/981]	Time 1.100 (606.230)	Data 1.019 (561.602)	Loss 0.623	
+Epoch: [69][600/981]	Time 1.098 (659.683)	Data 1.017 (611.027)	Loss 0.626	
+Epoch: [69][650/981]	Time 1.097 (714.061)	Data 1.016 (661.361)	Loss 0.633	
+Epoch: [69][700/981]	Time 1.095 (767.615)	Data 1.014 (710.875)	Loss 0.638	
+Epoch: [69][750/981]	Time 1.095 (822.163)	Data 1.014 (761.363)	Loss 0.642	
+Epoch: [69][800/981]	Time 1.095 (877.123)	Data 1.014 (812.295)	Loss 0.649	
+Epoch: [69][850/981]	Time 1.091 (928.696)	Data 1.010 (859.821)	Loss 0.654	
+Epoch: [69][900/981]	Time 1.090 (982.466)	Data 1.009 (909.532)	Loss 0.659	
+Epoch: [69][950/981]	Time 1.089 (1036.046)	Data 1.008 (959.060)	Loss 0.664	
+Train: [69]	Time 1066.966	Data 987.570	Loss 0.666	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [69][0/38]	Time 7.153 (7.153)	Data 7.121 (7.121)	Loss 10.8339 (10.8339)	
+Val: [69]	Time 40.626	Data 39.573	Loss 10.600	
+Best error: [4.802]	
+('Starting epoch number:', 71, 'Learning rate:', 0.0003759370399230926)
+Epoch: [70][0/981]	Time 7.248 (7.248)	Data 7.155 (7.155)	Loss 0.677	
+Epoch: [70][50/981]	Time 1.201 (61.245)	Data 1.119 (57.077)	Loss 0.522	
+Epoch: [70][100/981]	Time 1.141 (115.287)	Data 1.060 (107.073)	Loss 0.526	
+Epoch: [70][150/981]	Time 1.129 (170.449)	Data 1.048 (158.208)	Loss 0.521	
+Epoch: [70][200/981]	Time 1.125 (226.194)	Data 1.044 (209.903)	Loss 0.526	
+Epoch: [70][250/981]	Time 1.131 (283.769)	Data 1.050 (263.426)	Loss 0.533	
+Epoch: [70][300/981]	Time 1.123 (338.075)	Data 1.042 (313.673)	Loss 0.542	
+Epoch: [70][350/981]	Time 1.126 (395.261)	Data 1.045 (366.820)	Loss 0.544	
+Epoch: [70][400/981]	Time 1.121 (449.439)	Data 1.040 (416.904)	Loss 0.552	
+Epoch: [70][450/981]	Time 1.114 (502.416)	Data 1.033 (465.850)	Loss 0.560	
+Epoch: [70][500/981]	Time 1.109 (555.857)	Data 1.028 (515.248)	Loss 0.567	
+Epoch: [70][550/981]	Time 1.106 (609.654)	Data 1.025 (564.996)	Loss 0.570	
+Epoch: [70][600/981]	Time 1.102 (662.197)	Data 1.021 (613.499)	Loss 0.572	
+Epoch: [70][650/981]	Time 1.101 (717.033)	Data 1.020 (664.285)	Loss 0.578	
+Epoch: [70][700/981]	Time 1.098 (770.005)	Data 1.017 (713.203)	Loss 0.583	
+Epoch: [70][750/981]	Time 1.097 (823.936)	Data 1.016 (763.091)	Loss 0.590	
+Epoch: [70][800/981]	Time 1.094 (876.616)	Data 1.013 (811.714)	Loss 0.594	
+Epoch: [70][850/981]	Time 1.093 (930.279)	Data 1.012 (861.343)	Loss 0.598	
+Epoch: [70][900/981]	Time 1.091 (983.072)	Data 1.010 (910.092)	Loss 0.600	
+Epoch: [70][950/981]	Time 1.090 (1036.526)	Data 1.009 (959.514)	Loss 0.603	
+Train: [70]	Time 1066.160	Data 986.724	Loss 0.605	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [70][0/38]	Time 6.039 (6.039)	Data 6.009 (6.009)	Loss 11.2830 (11.2830)	
+Val: [70]	Time 38.690	Data 37.582	Loss 10.596	
+Best error: [4.802]	
+('Starting epoch number:', 72, 'Learning rate:', 0.0003759370399230926)
+Epoch: [71][0/981]	Time 8.282 (8.282)	Data 8.200 (8.200)	Loss 0.531	
+Epoch: [71][50/981]	Time 1.232 (62.843)	Data 1.151 (58.703)	Loss 0.488	
+Epoch: [71][100/981]	Time 1.180 (119.216)	Data 1.099 (111.031)	Loss 0.496	
+Epoch: [71][150/981]	Time 1.181 (178.261)	Data 1.099 (165.982)	Loss 0.504	
+Epoch: [71][200/981]	Time 1.168 (234.807)	Data 1.087 (218.484)	Loss 0.513	
+Epoch: [71][250/981]	Time 1.152 (289.235)	Data 1.071 (268.869)	Loss 0.506	
+Epoch: [71][300/981]	Time 1.147 (345.209)	Data 1.066 (320.770)	Loss 0.517	
+Epoch: [71][350/981]	Time 1.145 (401.919)	Data 1.064 (373.428)	Loss 0.524	
+Epoch: [71][400/981]	Time 1.141 (457.557)	Data 1.060 (425.039)	Loss 0.528	
+Epoch: [71][450/981]	Time 1.142 (515.147)	Data 1.061 (478.579)	Loss 0.536	
+Epoch: [71][500/981]	Time 1.138 (570.285)	Data 1.057 (529.634)	Loss 0.540	
+Epoch: [71][550/981]	Time 1.136 (625.818)	Data 1.055 (581.065)	Loss 0.546	
+Epoch: [71][600/981]	Time 1.129 (678.827)	Data 1.048 (630.025)	Loss 0.549	
+Epoch: [71][650/981]	Time 1.125 (732.512)	Data 1.044 (679.676)	Loss 0.555	
+Epoch: [71][700/981]	Time 1.122 (786.710)	Data 1.041 (729.848)	Loss 0.558	
+Epoch: [71][750/981]	Time 1.119 (840.344)	Data 1.038 (779.433)	Loss 0.562	
+Epoch: [71][800/981]	Time 1.117 (894.864)	Data 1.036 (829.924)	Loss 0.567	
+Epoch: [71][850/981]	Time 1.115 (949.143)	Data 1.034 (880.152)	Loss 0.572	
+Epoch: [71][900/981]	Time 1.112 (1001.569)	Data 1.031 (928.537)	Loss 0.579	
+Epoch: [71][950/981]	Time 1.109 (1054.862)	Data 1.028 (977.776)	Loss 0.583	
+Train: [71]	Time 1085.992	Data 1006.455	Loss 0.585	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [71][0/38]	Time 5.839 (5.839)	Data 5.810 (5.810)	Loss 10.3233 (10.3233)	
+Val: [71]	Time 37.424	Data 36.398	Loss 10.559	
+Best error: [4.802]	
+('Starting epoch number:', 73, 'Learning rate:', 0.0003759370399230926)
+Epoch: [72][0/981]	Time 6.021 (6.021)	Data 5.929 (5.929)	Loss 0.576	
+Epoch: [72][50/981]	Time 1.234 (62.941)	Data 1.153 (58.801)	Loss 0.539	
+Epoch: [72][100/981]	Time 1.180 (119.226)	Data 1.099 (111.047)	Loss 0.513	
+Epoch: [72][150/981]	Time 1.158 (174.827)	Data 1.077 (162.590)	Loss 0.509	
+Epoch: [72][200/981]	Time 1.129 (226.945)	Data 1.048 (210.681)	Loss 0.509	
+Epoch: [72][250/981]	Time 1.118 (280.587)	Data 1.037 (260.296)	Loss 0.514	
+Epoch: [72][300/981]	Time 1.109 (333.718)	Data 1.028 (309.382)	Loss 0.524	
+Epoch: [72][350/981]	Time 1.103 (387.231)	Data 1.022 (358.855)	Loss 0.532	
+Epoch: [72][400/981]	Time 1.100 (441.229)	Data 1.019 (408.812)	Loss 0.537	
+Epoch: [72][450/981]	Time 1.095 (493.746)	Data 1.014 (457.253)	Loss 0.542	
+Epoch: [72][500/981]	Time 1.100 (551.087)	Data 1.019 (510.548)	Loss 0.545	
+Epoch: [72][550/981]	Time 1.118 (615.868)	Data 1.037 (571.290)	Loss 0.546	
+Epoch: [72][600/981]	Time 1.117 (671.218)	Data 1.036 (622.586)	Loss 0.551	
+Epoch: [72][650/981]	Time 1.114 (725.351)	Data 1.033 (672.655)	Loss 0.559	
+Epoch: [72][700/981]	Time 1.115 (781.440)	Data 1.034 (724.716)	Loss 0.563	
+Epoch: [72][750/981]	Time 1.109 (832.952)	Data 1.028 (772.177)	Loss 0.568	
+Epoch: [72][800/981]	Time 1.108 (887.624)	Data 1.027 (822.788)	Loss 0.572	
+Epoch: [72][850/981]	Time 1.107 (941.922)	Data 1.026 (873.060)	Loss 0.576	
+Epoch: [72][900/981]	Time 1.105 (995.172)	Data 1.024 (922.262)	Loss 0.582	
+Epoch: [72][950/981]	Time 1.103 (1048.564)	Data 1.022 (971.609)	Loss 0.588	
+Train: [72]	Time 1079.015	Data 999.627	Loss 0.590	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [72][0/38]	Time 7.101 (7.101)	Data 7.072 (7.072)	Loss 10.5079 (10.5079)	
+Val: [72]	Time 39.928	Data 38.842	Loss 10.622	
+Best error: [4.802]	
+('Starting epoch number:', 74, 'Learning rate:', 0.0003759370399230926)
+Epoch: [73][0/981]	Time 7.626 (7.626)	Data 7.534 (7.534)	Loss 0.409	
+Epoch: [73][50/981]	Time 1.196 (60.991)	Data 1.114 (56.838)	Loss 0.495	
+Epoch: [73][100/981]	Time 1.142 (115.379)	Data 1.061 (107.156)	Loss 0.507	
+Epoch: [73][150/981]	Time 1.112 (167.961)	Data 1.031 (155.699)	Loss 0.505	
+Epoch: [73][200/981]	Time 1.112 (223.470)	Data 1.031 (207.172)	Loss 0.501	
+Epoch: [73][250/981]	Time 1.106 (277.706)	Data 1.025 (257.355)	Loss 0.504	
+Epoch: [73][300/981]	Time 1.097 (330.100)	Data 1.016 (305.719)	Loss 0.507	
+Epoch: [73][350/981]	Time 1.100 (386.016)	Data 1.019 (357.586)	Loss 0.517	
+Epoch: [73][400/981]	Time 1.098 (440.321)	Data 1.017 (407.852)	Loss 0.527	
+Epoch: [73][450/981]	Time 1.090 (491.429)	Data 1.009 (454.907)	Loss 0.532	
+Epoch: [73][500/981]	Time 1.087 (544.535)	Data 1.006 (503.984)	Loss 0.537	
+Epoch: [73][550/981]	Time 1.086 (598.596)	Data 1.005 (554.002)	Loss 0.543	
+Epoch: [73][600/981]	Time 1.087 (653.190)	Data 1.006 (604.558)	Loss 0.550	
+Epoch: [73][650/981]	Time 1.083 (705.324)	Data 1.003 (652.645)	Loss 0.556	
+Epoch: [73][700/981]	Time 1.083 (758.982)	Data 1.002 (702.262)	Loss 0.560	
+Epoch: [73][750/981]	Time 1.081 (811.865)	Data 1.000 (751.104)	Loss 0.563	
+Epoch: [73][800/981]	Time 1.081 (866.087)	Data 1.000 (801.319)	Loss 0.567	
+Epoch: [73][850/981]	Time 1.082 (921.016)	Data 1.001 (852.181)	Loss 0.570	
+Epoch: [73][900/981]	Time 1.079 (972.351)	Data 0.998 (899.466)	Loss 0.573	
+Epoch: [73][950/981]	Time 1.079 (1026.373)	Data 0.998 (949.447)	Loss 0.578	
+Train: [73]	Time 1058.506	Data 979.148	Loss 0.580	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [73][0/38]	Time 6.339 (6.339)	Data 6.310 (6.310)	Loss 11.8048 (11.8048)	
+Val: [73]	Time 41.807	Data 40.754	Loss 11.062	
+Best error: [4.802]	
+('Starting epoch number:', 75, 'Learning rate:', 0.0003759370399230926)
+Epoch: [74][0/981]	Time 8.593 (8.593)	Data 8.512 (8.512)	Loss 0.482	
+Epoch: [74][50/981]	Time 1.279 (65.224)	Data 1.198 (61.090)	Loss 0.507	
+Epoch: [74][100/981]	Time 1.218 (123.030)	Data 1.137 (114.847)	Loss 0.497	
+Epoch: [74][150/981]	Time 1.214 (183.307)	Data 1.133 (171.073)	Loss 0.497	
+Epoch: [74][200/981]	Time 1.205 (242.132)	Data 1.124 (225.834)	Loss 0.503	
+Epoch: [74][250/981]	Time 1.185 (297.375)	Data 1.104 (277.027)	Loss 0.501	
+Epoch: [74][300/981]	Time 1.173 (353.109)	Data 1.092 (328.697)	Loss 0.506	
+Epoch: [74][350/981]	Time 1.165 (408.922)	Data 1.084 (380.457)	Loss 0.513	
+Epoch: [74][400/981]	Time 1.151 (461.631)	Data 1.070 (429.126)	Loss 0.518	
+Epoch: [74][450/981]	Time 1.145 (516.186)	Data 1.063 (479.615)	Loss 0.521	
+Epoch: [74][500/981]	Time 1.141 (571.474)	Data 1.060 (530.847)	Loss 0.525	
+Epoch: [74][550/981]	Time 1.132 (623.673)	Data 1.051 (579.012)	Loss 0.531	
+Epoch: [74][600/981]	Time 1.125 (675.871)	Data 1.044 (627.160)	Loss 0.535	
+Epoch: [74][650/981]	Time 1.120 (728.900)	Data 1.039 (676.125)	Loss 0.542	
+Epoch: [74][700/981]	Time 1.119 (784.537)	Data 1.038 (727.726)	Loss 0.545	
+Epoch: [74][750/981]	Time 1.119 (840.333)	Data 1.038 (779.478)	Loss 0.551	
+Epoch: [74][800/981]	Time 1.116 (893.858)	Data 1.035 (828.964)	Loss 0.557	
+Epoch: [74][850/981]	Time 1.113 (947.082)	Data 1.032 (878.151)	Loss 0.562	
+Epoch: [74][900/981]	Time 1.109 (999.108)	Data 1.028 (926.108)	Loss 0.564	
+Epoch: [74][950/981]	Time 1.109 (1054.726)	Data 1.028 (977.666)	Loss 0.569	
+Train: [74]	Time 1086.025	Data 1006.545	Loss 0.571	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [74][0/38]	Time 6.857 (6.857)	Data 6.828 (6.828)	Loss 10.0217 (10.0217)	
+Val: [74]	Time 40.501	Data 39.439	Loss 10.676	
+Best error: [4.802]	
+('Starting epoch number:', 76, 'Learning rate:', 0.0003759370399230926)
+Epoch: [75][0/981]	Time 6.993 (6.993)	Data 6.911 (6.911)	Loss 0.220	
+Epoch: [75][50/981]	Time 1.267 (64.608)	Data 1.186 (60.490)	Loss 0.462	
+Epoch: [75][100/981]	Time 1.214 (122.654)	Data 1.133 (114.472)	Loss 0.483	
+Epoch: [75][150/981]	Time 1.195 (180.504)	Data 1.114 (168.272)	Loss 0.467	
+Epoch: [75][200/981]	Time 1.177 (236.501)	Data 1.096 (220.246)	Loss 0.479	
+Epoch: [75][250/981]	Time 1.164 (292.198)	Data 1.083 (271.903)	Loss 0.488	
+Epoch: [75][300/981]	Time 1.152 (346.732)	Data 1.071 (322.391)	Loss 0.495	
+Epoch: [75][350/981]	Time 1.142 (400.715)	Data 1.061 (372.322)	Loss 0.506	
+Epoch: [75][400/981]	Time 1.131 (453.453)	Data 1.050 (421.003)	Loss 0.510	
+Epoch: [75][450/981]	Time 1.120 (505.264)	Data 1.039 (468.752)	Loss 0.519	
+Epoch: [75][500/981]	Time 1.119 (560.657)	Data 1.038 (520.104)	Loss 0.524	
+Epoch: [75][550/981]	Time 1.113 (613.514)	Data 1.033 (568.923)	Loss 0.528	
+Epoch: [75][600/981]	Time 1.109 (666.603)	Data 1.028 (617.960)	Loss 0.532	
+Epoch: [75][650/981]	Time 1.104 (718.527)	Data 1.023 (665.826)	Loss 0.536	
+Epoch: [75][700/981]	Time 1.106 (775.533)	Data 1.025 (718.780)	Loss 0.540	
+Epoch: [75][750/981]	Time 1.104 (828.877)	Data 1.023 (768.088)	Loss 0.543	
+Epoch: [75][800/981]	Time 1.102 (882.341)	Data 1.021 (817.499)	Loss 0.547	
+Epoch: [75][850/981]	Time 1.101 (936.690)	Data 1.020 (867.786)	Loss 0.552	
+Epoch: [75][900/981]	Time 1.099 (990.434)	Data 1.018 (917.483)	Loss 0.556	
+Epoch: [75][950/981]	Time 1.098 (1043.741)	Data 1.017 (966.747)	Loss 0.559	
+Train: [75]	Time 1075.738	Data 996.304	Loss 0.560	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [75][0/38]	Time 5.603 (5.603)	Data 5.573 (5.573)	Loss 10.6284 (10.6284)	
+Val: [75]	Time 40.145	Data 39.084	Loss 11.273	
+Best error: [4.802]	
+('Starting epoch number:', 77, 'Learning rate:', 0.0003759370399230926)
+Epoch: [76][0/981]	Time 7.021 (7.021)	Data 6.938 (6.938)	Loss 0.242	
+Epoch: [76][50/981]	Time 1.215 (61.960)	Data 1.134 (57.825)	Loss 0.466	
+Epoch: [76][100/981]	Time 1.156 (116.801)	Data 1.075 (108.623)	Loss 0.463	
+Epoch: [76][150/981]	Time 1.146 (172.971)	Data 1.064 (160.738)	Loss 0.473	
+Epoch: [76][200/981]	Time 1.133 (227.749)	Data 1.052 (211.463)	Loss 0.476	
+Epoch: [76][250/981]	Time 1.134 (284.629)	Data 1.053 (264.298)	Loss 0.478	
+Epoch: [76][300/981]	Time 1.124 (338.176)	Data 1.042 (313.782)	Loss 0.482	
+Epoch: [76][350/981]	Time 1.113 (390.727)	Data 1.032 (362.286)	Loss 0.491	
+Epoch: [76][400/981]	Time 1.105 (443.188)	Data 1.024 (410.712)	Loss 0.497	
+Epoch: [76][450/981]	Time 1.101 (496.657)	Data 1.020 (460.131)	Loss 0.500	
+Epoch: [76][500/981]	Time 1.101 (551.404)	Data 1.020 (510.795)	Loss 0.505	
+Epoch: [76][550/981]	Time 1.101 (606.695)	Data 1.020 (562.039)	Loss 0.512	
+Epoch: [76][600/981]	Time 1.100 (660.883)	Data 1.019 (612.145)	Loss 0.519	
+Epoch: [76][650/981]	Time 1.098 (714.666)	Data 1.017 (661.888)	Loss 0.523	
+Epoch: [76][700/981]	Time 1.096 (768.438)	Data 1.015 (711.610)	Loss 0.528	
+Epoch: [76][750/981]	Time 1.093 (820.725)	Data 1.012 (759.837)	Loss 0.534	
+Epoch: [76][800/981]	Time 1.096 (877.750)	Data 1.015 (812.798)	Loss 0.537	
+Epoch: [76][850/981]	Time 1.094 (931.041)	Data 1.013 (862.031)	Loss 0.542	
+Epoch: [76][900/981]	Time 1.095 (986.258)	Data 1.014 (913.211)	Loss 0.547	
+Epoch: [76][950/981]	Time 1.095 (1041.374)	Data 1.014 (964.269)	Loss 0.551	
+Train: [76]	Time 1072.579	Data 993.037	Loss 0.554	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [76][0/38]	Time 6.151 (6.151)	Data 6.122 (6.122)	Loss 9.4956 (9.4956)	
+Val: [76]	Time 40.026	Data 38.963	Loss 10.611	
+Best error: [4.802]	
+('Starting epoch number:', 78, 'Learning rate:', 0.0003759370399230926)
+Epoch: [77][0/981]	Time 7.421 (7.421)	Data 7.339 (7.339)	Loss 0.583	
+Epoch: [77][50/981]	Time 1.276 (65.100)	Data 1.195 (60.966)	Loss 0.477	
+Epoch: [77][100/981]	Time 1.221 (123.297)	Data 1.140 (115.123)	Loss 0.474	
+Epoch: [77][150/981]	Time 1.206 (182.146)	Data 1.125 (169.888)	Loss 0.467	
+Epoch: [77][200/981]	Time 1.195 (240.287)	Data 1.114 (223.982)	Loss 0.470	
+Epoch: [77][250/981]	Time 1.175 (294.875)	Data 1.094 (274.521)	Loss 0.477	
+Epoch: [77][300/981]	Time 1.161 (349.574)	Data 1.080 (325.182)	Loss 0.479	
+Epoch: [77][350/981]	Time 1.149 (403.309)	Data 1.068 (374.892)	Loss 0.481	
+Epoch: [77][400/981]	Time 1.140 (457.020)	Data 1.059 (424.542)	Loss 0.489	
+Epoch: [77][450/981]	Time 1.127 (508.229)	Data 1.046 (471.713)	Loss 0.496	
+Epoch: [77][500/981]	Time 1.115 (558.405)	Data 1.034 (517.843)	Loss 0.502	
+Epoch: [77][550/981]	Time 1.109 (611.241)	Data 1.028 (566.653)	Loss 0.507	
+Epoch: [77][600/981]	Time 1.102 (662.471)	Data 1.021 (613.840)	Loss 0.512	
+Epoch: [77][650/981]	Time 1.098 (714.731)	Data 1.017 (662.058)	Loss 0.518	
+Epoch: [77][700/981]	Time 1.094 (766.646)	Data 1.013 (709.916)	Loss 0.522	
+Epoch: [77][750/981]	Time 1.092 (820.140)	Data 1.011 (759.371)	Loss 0.528	
+Epoch: [77][800/981]	Time 1.089 (872.143)	Data 1.008 (807.328)	Loss 0.532	
+Epoch: [77][850/981]	Time 1.085 (923.249)	Data 1.004 (854.397)	Loss 0.537	
+Epoch: [77][900/981]	Time 1.084 (976.936)	Data 1.003 (904.057)	Loss 0.541	
+Epoch: [77][950/981]	Time 1.082 (1028.764)	Data 1.001 (951.827)	Loss 0.545	
+Train: [77]	Time 1057.256	Data 977.877	Loss 0.546	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [77][0/38]	Time 5.846 (5.846)	Data 5.817 (5.817)	Loss 11.1873 (11.1873)	
+Val: [77]	Time 39.368	Data 38.341	Loss 11.529	
+Best error: [4.802]	
+('Starting epoch number:', 79, 'Learning rate:', 0.0003759370399230926)
+Epoch: [78][0/981]	Time 7.765 (7.765)	Data 7.673 (7.673)	Loss 0.382	
+Epoch: [78][50/981]	Time 1.161 (59.229)	Data 1.080 (55.078)	Loss 0.444	
+Epoch: [78][100/981]	Time 1.111 (112.217)	Data 1.030 (103.999)	Loss 0.459	
+Epoch: [78][150/981]	Time 1.085 (163.829)	Data 1.004 (151.575)	Loss 0.461	
+Epoch: [78][200/981]	Time 1.084 (217.969)	Data 1.003 (201.667)	Loss 0.460	
+Epoch: [78][250/981]	Time 1.069 (268.312)	Data 0.988 (247.969)	Loss 0.470	
+Epoch: [78][300/981]	Time 1.072 (322.528)	Data 0.991 (298.141)	Loss 0.474	
+Epoch: [78][350/981]	Time 1.061 (372.474)	Data 0.980 (344.052)	Loss 0.483	
+Epoch: [78][400/981]	Time 1.064 (426.509)	Data 0.983 (394.033)	Loss 0.492	
+Epoch: [78][450/981]	Time 1.062 (478.777)	Data 0.981 (442.265)	Loss 0.498	
+Epoch: [78][500/981]	Time 1.060 (531.024)	Data 0.979 (490.473)	Loss 0.504	
+Epoch: [78][550/981]	Time 1.060 (584.161)	Data 0.979 (539.571)	Loss 0.510	
+Epoch: [78][600/981]	Time 1.061 (637.562)	Data 0.980 (588.923)	Loss 0.517	
+Epoch: [78][650/981]	Time 1.059 (689.495)	Data 0.978 (636.818)	Loss 0.521	
+Epoch: [78][700/981]	Time 1.056 (740.177)	Data 0.975 (683.453)	Loss 0.524	
+Epoch: [78][750/981]	Time 1.056 (793.404)	Data 0.976 (732.628)	Loss 0.529	
+Epoch: [78][800/981]	Time 1.060 (848.864)	Data 0.979 (784.054)	Loss 0.532	
+Epoch: [78][850/981]	Time 1.057 (899.290)	Data 0.976 (830.440)	Loss 0.537	
+Epoch: [78][900/981]	Time 1.058 (952.978)	Data 0.977 (880.087)	Loss 0.542	
+Epoch: [78][950/981]	Time 1.058 (1006.320)	Data 0.977 (929.379)	Loss 0.545	
+Train: [78]	Time 1038.797	Data 959.423	Loss 0.546	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [78][0/38]	Time 7.010 (7.010)	Data 6.981 (6.981)	Loss 11.2238 (11.2238)	
+Val: [78]	Time 40.993	Data 39.940	Loss 11.335	
+Best error: [4.802]	
+('Starting epoch number:', 80, 'Learning rate:', 0.0003759370399230926)
+Epoch: [79][0/981]	Time 7.475 (7.475)	Data 7.393 (7.393)	Loss 0.459	
+Epoch: [79][50/981]	Time 1.190 (60.682)	Data 1.108 (56.533)	Loss 0.472	
+Epoch: [79][100/981]	Time 1.145 (115.624)	Data 1.064 (107.420)	Loss 0.464	
+Epoch: [79][150/981]	Time 1.137 (171.760)	Data 1.056 (159.508)	Loss 0.477	
+Epoch: [79][200/981]	Time 1.126 (226.399)	Data 1.045 (210.093)	Loss 0.472	
+Epoch: [79][250/981]	Time 1.113 (279.260)	Data 1.032 (258.924)	Loss 0.476	
+Epoch: [79][300/981]	Time 1.107 (333.223)	Data 1.026 (308.833)	Loss 0.474	
+Epoch: [79][350/981]	Time 1.105 (387.790)	Data 1.024 (359.358)	Loss 0.478	
+Epoch: [79][400/981]	Time 1.102 (441.903)	Data 1.021 (409.416)	Loss 0.480	
+Epoch: [79][450/981]	Time 1.100 (495.997)	Data 1.019 (459.453)	Loss 0.487	
+Epoch: [79][500/981]	Time 1.101 (551.592)	Data 1.020 (510.993)	Loss 0.494	
+Epoch: [79][550/981]	Time 1.101 (606.450)	Data 1.020 (561.805)	Loss 0.501	
+Epoch: [79][600/981]	Time 1.099 (660.451)	Data 1.018 (611.771)	Loss 0.506	
+Epoch: [79][650/981]	Time 1.095 (712.871)	Data 1.014 (660.148)	Loss 0.511	
+Epoch: [79][700/981]	Time 1.094 (766.935)	Data 1.013 (710.153)	Loss 0.513	
+Epoch: [79][750/981]	Time 1.093 (820.909)	Data 1.012 (760.064)	Loss 0.517	
+Epoch: [79][800/981]	Time 1.091 (874.289)	Data 1.010 (809.406)	Loss 0.521	
+Epoch: [79][850/981]	Time 1.091 (928.227)	Data 1.010 (859.299)	Loss 0.527	
+Epoch: [79][900/981]	Time 1.089 (981.551)	Data 1.008 (908.583)	Loss 0.532	
+Epoch: [79][950/981]	Time 1.089 (1035.693)	Data 1.008 (958.677)	Loss 0.535	
+Train: [79]	Time 1064.476	Data 985.047	Loss 0.539	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [79][0/38]	Time 6.562 (6.562)	Data 6.533 (6.533)	Loss 8.8448 (8.8448)	
+Val: [79]	Time 38.040	Data 36.992	Loss 10.984	
+Best error: [4.802]	
+('Starting epoch number:', 81, 'Learning rate:', 0.00032690177384616753)
+Epoch: [80][0/981]	Time 7.629 (7.629)	Data 7.546 (7.546)	Loss 0.470	
+Epoch: [80][50/981]	Time 1.255 (64.016)	Data 1.174 (59.881)	Loss 0.433	
+Epoch: [80][100/981]	Time 1.183 (119.478)	Data 1.102 (111.274)	Loss 0.413	
+Epoch: [80][150/981]	Time 1.138 (171.825)	Data 1.057 (159.587)	Loss 0.409	
+Epoch: [80][200/981]	Time 1.126 (226.229)	Data 1.044 (209.931)	Loss 0.417	
+Epoch: [80][250/981]	Time 1.110 (278.567)	Data 1.029 (258.215)	Loss 0.424	
+Epoch: [80][300/981]	Time 1.096 (329.837)	Data 1.015 (305.445)	Loss 0.428	
+Epoch: [80][350/981]	Time 1.095 (384.429)	Data 1.014 (355.997)	Loss 0.436	
+Epoch: [80][400/981]	Time 1.093 (438.223)	Data 1.012 (405.726)	Loss 0.442	
+Epoch: [80][450/981]	Time 1.089 (491.194)	Data 1.008 (454.631)	Loss 0.448	
+Epoch: [80][500/981]	Time 1.091 (546.497)	Data 1.010 (505.887)	Loss 0.452	
+Epoch: [80][550/981]	Time 1.089 (600.149)	Data 1.008 (555.508)	Loss 0.455	
+Epoch: [80][600/981]	Time 1.088 (653.609)	Data 1.007 (604.908)	Loss 0.460	
+Epoch: [80][650/981]	Time 1.087 (707.601)	Data 1.006 (654.831)	Loss 0.463	
+Epoch: [80][700/981]	Time 1.087 (761.958)	Data 1.006 (705.135)	Loss 0.465	
+Epoch: [80][750/981]	Time 1.086 (815.694)	Data 1.005 (754.830)	Loss 0.468	
+Epoch: [80][800/981]	Time 1.084 (868.671)	Data 1.003 (803.760)	Loss 0.472	
+Epoch: [80][850/981]	Time 1.085 (922.935)	Data 1.004 (853.992)	Loss 0.476	
+Epoch: [80][900/981]	Time 1.083 (975.884)	Data 1.002 (902.882)	Loss 0.478	
+Epoch: [80][950/981]	Time 1.081 (1027.872)	Data 1.000 (950.822)	Loss 0.481	
+Train: [80]	Time 1061.032	Data 981.546	Loss 0.482	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [80][0/38]	Time 6.080 (6.080)	Data 6.050 (6.050)	Loss 11.5286 (11.5286)	
+Val: [80]	Time 40.480	Data 39.425	Loss 11.630	
+Best error: [4.802]	
+('Starting epoch number:', 82, 'Learning rate:', 0.00032690177384616753)
+Epoch: [81][0/981]	Time 6.661 (6.661)	Data 6.573 (6.573)	Loss 0.262	
+Epoch: [81][50/981]	Time 1.219 (62.187)	Data 1.138 (58.055)	Loss 0.402	
+Epoch: [81][100/981]	Time 1.176 (118.796)	Data 1.095 (110.623)	Loss 0.401	
+Epoch: [81][150/981]	Time 1.150 (173.659)	Data 1.069 (161.433)	Loss 0.404	
+Epoch: [81][200/981]	Time 1.139 (228.916)	Data 1.058 (212.644)	Loss 0.414	
+Epoch: [81][250/981]	Time 1.124 (282.198)	Data 1.043 (261.871)	Loss 0.413	
+Epoch: [81][300/981]	Time 1.116 (335.871)	Data 1.035 (311.507)	Loss 0.418	
+Epoch: [81][350/981]	Time 1.102 (386.822)	Data 1.021 (358.432)	Loss 0.419	
+Epoch: [81][400/981]	Time 1.099 (440.816)	Data 1.018 (408.384)	Loss 0.425	
+Epoch: [81][450/981]	Time 1.094 (493.446)	Data 1.013 (456.966)	Loss 0.426	
+Epoch: [81][500/981]	Time 1.096 (548.998)	Data 1.015 (508.471)	Loss 0.429	
+Epoch: [81][550/981]	Time 1.092 (601.656)	Data 1.011 (557.100)	Loss 0.429	
+Epoch: [81][600/981]	Time 1.089 (654.623)	Data 1.008 (606.012)	Loss 0.432	
+Epoch: [81][650/981]	Time 1.089 (709.135)	Data 1.008 (656.483)	Loss 0.434	
+Epoch: [81][700/981]	Time 1.090 (763.959)	Data 1.009 (707.269)	Loss 0.438	
+Epoch: [81][750/981]	Time 1.088 (817.209)	Data 1.007 (756.477)	Loss 0.443	
+Epoch: [81][800/981]	Time 1.087 (870.770)	Data 1.006 (805.986)	Loss 0.449	
+Epoch: [81][850/981]	Time 1.086 (924.040)	Data 1.005 (855.213)	Loss 0.454	
+Epoch: [81][900/981]	Time 1.084 (976.276)	Data 1.003 (903.403)	Loss 0.458	
+Epoch: [81][950/981]	Time 1.086 (1032.544)	Data 1.005 (955.627)	Loss 0.462	
+Train: [81]	Time 1062.244	Data 982.908	Loss 0.464	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [81][0/38]	Time 7.081 (7.081)	Data 7.047 (7.047)	Loss 11.6178 (11.6178)	
+Val: [81]	Time 40.569	Data 39.515	Loss 11.007	
+Best error: [4.802]	
+('Starting epoch number:', 83, 'Learning rate:', 0.00032690177384616753)
+Epoch: [82][0/981]	Time 7.676 (7.676)	Data 7.584 (7.584)	Loss 0.374	
+Epoch: [82][50/981]	Time 1.140 (58.161)	Data 1.059 (54.026)	Loss 0.384	
+Epoch: [82][100/981]	Time 1.107 (111.830)	Data 1.026 (103.656)	Loss 0.369	
+Epoch: [82][150/981]	Time 1.091 (164.753)	Data 1.010 (152.526)	Loss 0.377	
+Epoch: [82][200/981]	Time 1.081 (217.275)	Data 1.000 (200.992)	Loss 0.382	
+Epoch: [82][250/981]	Time 1.074 (269.487)	Data 0.993 (249.171)	Loss 0.392	
+Epoch: [82][300/981]	Time 1.075 (323.481)	Data 0.994 (299.112)	Loss 0.403	
+Epoch: [82][350/981]	Time 1.071 (375.805)	Data 0.990 (347.393)	Loss 0.408	
+Epoch: [82][400/981]	Time 1.069 (428.559)	Data 0.988 (396.095)	Loss 0.413	
+Epoch: [82][450/981]	Time 1.067 (481.020)	Data 0.986 (444.520)	Loss 0.419	
+Epoch: [82][500/981]	Time 1.066 (534.015)	Data 0.985 (493.443)	Loss 0.422	
+Epoch: [82][550/981]	Time 1.065 (586.576)	Data 0.984 (541.971)	Loss 0.429	
+Epoch: [82][600/981]	Time 1.067 (641.062)	Data 0.986 (592.406)	Loss 0.435	
+Epoch: [82][650/981]	Time 1.065 (693.326)	Data 0.984 (640.611)	Loss 0.440	
+Epoch: [82][700/981]	Time 1.064 (746.031)	Data 0.983 (689.277)	Loss 0.444	
+Epoch: [82][750/981]	Time 1.065 (799.473)	Data 0.984 (738.671)	Loss 0.449	
+Epoch: [82][800/981]	Time 1.066 (853.777)	Data 0.985 (788.918)	Loss 0.455	
+Epoch: [82][850/981]	Time 1.066 (906.969)	Data 0.985 (838.081)	Loss 0.459	
+Epoch: [82][900/981]	Time 1.064 (959.106)	Data 0.984 (886.162)	Loss 0.463	
+Epoch: [82][950/981]	Time 1.064 (1011.496)	Data 0.983 (934.511)	Loss 0.467	
+Train: [82]	Time 1041.854	Data 962.455	Loss 0.468	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [82][0/38]	Time 6.802 (6.802)	Data 6.769 (6.769)	Loss 12.1787 (12.1787)	
+Val: [82]	Time 38.207	Data 37.153	Loss 11.766	
+Best error: [4.802]	
+('Starting epoch number:', 84, 'Learning rate:', 0.00032690177384616753)
+Epoch: [83][0/981]	Time 8.154 (8.154)	Data 8.072 (8.072)	Loss 0.452	
+Epoch: [83][50/981]	Time 1.233 (62.902)	Data 1.152 (58.773)	Loss 0.389	
+Epoch: [83][100/981]	Time 1.172 (118.402)	Data 1.091 (110.214)	Loss 0.391	
+Epoch: [83][150/981]	Time 1.147 (173.227)	Data 1.066 (160.979)	Loss 0.392	
+Epoch: [83][200/981]	Time 1.143 (229.809)	Data 1.062 (213.492)	Loss 0.397	
+Epoch: [83][250/981]	Time 1.120 (281.136)	Data 1.039 (260.764)	Loss 0.400	
+Epoch: [83][300/981]	Time 1.116 (335.942)	Data 1.035 (311.504)	Loss 0.405	
+Epoch: [83][350/981]	Time 1.115 (391.248)	Data 1.034 (362.772)	Loss 0.412	
+Epoch: [83][400/981]	Time 1.103 (442.164)	Data 1.022 (409.630)	Loss 0.416	
+Epoch: [83][450/981]	Time 1.104 (497.791)	Data 1.023 (461.216)	Loss 0.420	
+Epoch: [83][500/981]	Time 1.103 (552.679)	Data 1.022 (512.056)	Loss 0.426	
+Epoch: [83][550/981]	Time 1.103 (607.694)	Data 1.022 (563.005)	Loss 0.431	
+Epoch: [83][600/981]	Time 1.104 (663.460)	Data 1.023 (614.722)	Loss 0.433	
+Epoch: [83][650/981]	Time 1.101 (716.977)	Data 1.020 (664.188)	Loss 0.437	
+Epoch: [83][700/981]	Time 1.100 (770.814)	Data 1.018 (713.960)	Loss 0.440	
+Epoch: [83][750/981]	Time 1.098 (824.396)	Data 1.017 (763.510)	Loss 0.444	
+Epoch: [83][800/981]	Time 1.097 (878.586)	Data 1.016 (813.640)	Loss 0.451	
+Epoch: [83][850/981]	Time 1.095 (931.708)	Data 1.014 (862.711)	Loss 0.455	
+Epoch: [83][900/981]	Time 1.094 (986.038)	Data 1.013 (912.971)	Loss 0.459	
+Epoch: [83][950/981]	Time 1.092 (1038.757)	Data 1.011 (961.642)	Loss 0.464	
+Train: [83]	Time 1070.496	Data 990.952	Loss 0.466	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [83][0/38]	Time 6.743 (6.743)	Data 6.714 (6.714)	Loss 10.2190 (10.2190)	
+Val: [83]	Time 40.747	Data 39.700	Loss 11.445	
+Best error: [4.802]	
+('Starting epoch number:', 85, 'Learning rate:', 0.00032690177384616753)
+Epoch: [84][0/981]	Time 8.019 (8.019)	Data 7.932 (7.932)	Loss 0.633	
+Epoch: [84][50/981]	Time 1.271 (64.819)	Data 1.190 (60.676)	Loss 0.376	
+Epoch: [84][100/981]	Time 1.203 (121.534)	Data 1.122 (113.334)	Loss 0.394	
+Epoch: [84][150/981]	Time 1.172 (176.922)	Data 1.091 (164.685)	Loss 0.391	
+Epoch: [84][200/981]	Time 1.164 (234.058)	Data 1.083 (217.771)	Loss 0.393	
+Epoch: [84][250/981]	Time 1.149 (288.452)	Data 1.068 (268.118)	Loss 0.399	
+Epoch: [84][300/981]	Time 1.141 (343.491)	Data 1.060 (319.115)	Loss 0.407	
+Epoch: [84][350/981]	Time 1.137 (399.152)	Data 1.056 (370.727)	Loss 0.413	
+Epoch: [84][400/981]	Time 1.131 (453.462)	Data 1.050 (421.002)	Loss 0.417	
+Epoch: [84][450/981]	Time 1.136 (512.328)	Data 1.055 (475.811)	Loss 0.420	
+Epoch: [84][500/981]	Time 1.131 (566.610)	Data 1.050 (526.049)	Loss 0.424	
+Epoch: [84][550/981]	Time 1.131 (622.917)	Data 1.050 (578.312)	Loss 0.428	
+Epoch: [84][600/981]	Time 1.133 (680.878)	Data 1.052 (632.244)	Loss 0.432	
+Epoch: [84][650/981]	Time 1.133 (737.631)	Data 1.052 (684.917)	Loss 0.439	
+Epoch: [84][700/981]	Time 1.129 (791.464)	Data 1.048 (734.689)	Loss 0.443	
+Epoch: [84][750/981]	Time 1.127 (846.488)	Data 1.046 (785.642)	Loss 0.447	
+Epoch: [84][800/981]	Time 1.122 (898.963)	Data 1.041 (834.088)	Loss 0.449	
+Epoch: [84][850/981]	Time 1.118 (951.836)	Data 1.037 (882.904)	Loss 0.453	
+Epoch: [84][900/981]	Time 1.115 (1004.461)	Data 1.034 (931.501)	Loss 0.458	
+Epoch: [84][950/981]	Time 1.115 (1060.254)	Data 1.034 (983.254)	Loss 0.461	
+Train: [84]	Time 1091.509	Data 1012.096	Loss 0.462	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [84][0/38]	Time 6.498 (6.498)	Data 6.466 (6.466)	Loss 11.0606 (11.0606)	
+Val: [84]	Time 41.665	Data 40.627	Loss 11.572	
+Best error: [4.802]	
+('Starting epoch number:', 86, 'Learning rate:', 0.00032690177384616753)
+Epoch: [85][0/981]	Time 7.726 (7.726)	Data 7.633 (7.633)	Loss 0.330	
+Epoch: [85][50/981]	Time 1.161 (59.186)	Data 1.079 (55.046)	Loss 0.359	
+Epoch: [85][100/981]	Time 1.114 (112.506)	Data 1.033 (104.326)	Loss 0.371	
+Epoch: [85][150/981]	Time 1.109 (167.489)	Data 1.028 (155.260)	Loss 0.374	
+Epoch: [85][200/981]	Time 1.094 (219.856)	Data 1.013 (203.575)	Loss 0.374	
+Epoch: [85][250/981]	Time 1.080 (271.020)	Data 0.999 (250.703)	Loss 0.382	
+Epoch: [85][300/981]	Time 1.075 (323.640)	Data 0.994 (299.283)	Loss 0.391	
+Epoch: [85][350/981]	Time 1.077 (378.181)	Data 0.997 (349.786)	Loss 0.399	
+Epoch: [85][400/981]	Time 1.069 (428.775)	Data 0.988 (396.348)	Loss 0.406	
+Epoch: [85][450/981]	Time 1.065 (480.141)	Data 0.984 (443.663)	Loss 0.413	
+Epoch: [85][500/981]	Time 1.069 (535.534)	Data 0.988 (495.004)	Loss 0.419	
+Epoch: [85][550/981]	Time 1.068 (588.705)	Data 0.988 (544.138)	Loss 0.422	
+Epoch: [85][600/981]	Time 1.065 (640.220)	Data 0.984 (591.618)	Loss 0.426	
+Epoch: [85][650/981]	Time 1.062 (691.654)	Data 0.982 (639.005)	Loss 0.432	
+Epoch: [85][700/981]	Time 1.064 (745.737)	Data 0.983 (689.046)	Loss 0.435	
+Epoch: [85][750/981]	Time 1.060 (796.422)	Data 0.980 (735.688)	Loss 0.439	
+Epoch: [85][800/981]	Time 1.060 (848.765)	Data 0.979 (783.986)	Loss 0.442	
+Epoch: [85][850/981]	Time 1.059 (901.046)	Data 0.978 (832.228)	Loss 0.445	
+Epoch: [85][900/981]	Time 1.059 (954.201)	Data 0.978 (881.348)	Loss 0.447	
+Epoch: [85][950/981]	Time 1.058 (1005.755)	Data 0.977 (928.839)	Loss 0.451	
+Train: [85]	Time 1036.252	Data 956.901	Loss 0.452	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [85][0/38]	Time 6.546 (6.546)	Data 6.514 (6.514)	Loss 13.0328 (13.0328)	
+Val: [85]	Time 38.416	Data 37.380	Loss 11.951	
+Best error: [4.802]	
+('Starting epoch number:', 87, 'Learning rate:', 0.00032690177384616753)
+Epoch: [86][0/981]	Time 7.195 (7.195)	Data 7.104 (7.104)	Loss 0.290	
+Epoch: [86][50/981]	Time 1.149 (58.622)	Data 1.068 (54.482)	Loss 0.400	
+Epoch: [86][100/981]	Time 1.144 (115.586)	Data 1.063 (107.397)	Loss 0.383	
+Epoch: [86][150/981]	Time 1.128 (170.339)	Data 1.047 (158.105)	Loss 0.374	
+Epoch: [86][200/981]	Time 1.126 (226.275)	Data 1.045 (209.988)	Loss 0.377	
+Epoch: [86][250/981]	Time 1.115 (279.929)	Data 1.034 (259.595)	Loss 0.387	
+Epoch: [86][300/981]	Time 1.121 (337.325)	Data 1.040 (312.948)	Loss 0.393	
+Epoch: [86][350/981]	Time 1.118 (392.365)	Data 1.037 (363.930)	Loss 0.397	
+Epoch: [86][400/981]	Time 1.121 (449.383)	Data 1.040 (416.895)	Loss 0.402	
+Epoch: [86][450/981]	Time 1.118 (504.264)	Data 1.037 (467.723)	Loss 0.407	
+Epoch: [86][500/981]	Time 1.121 (561.450)	Data 1.040 (520.862)	Loss 0.413	
+Epoch: [86][550/981]	Time 1.120 (617.150)	Data 1.039 (572.498)	Loss 0.419	
+Epoch: [86][600/981]	Time 1.117 (671.295)	Data 1.036 (622.605)	Loss 0.423	
+Epoch: [86][650/981]	Time 1.115 (725.568)	Data 1.034 (672.845)	Loss 0.427	
+Epoch: [86][700/981]	Time 1.112 (779.235)	Data 1.031 (722.446)	Loss 0.429	
+Epoch: [86][750/981]	Time 1.107 (831.400)	Data 1.026 (770.568)	Loss 0.434	
+Epoch: [86][800/981]	Time 1.107 (886.723)	Data 1.026 (821.840)	Loss 0.436	
+Epoch: [86][850/981]	Time 1.104 (939.833)	Data 1.023 (870.900)	Loss 0.441	
+Epoch: [86][900/981]	Time 1.101 (991.972)	Data 1.020 (919.009)	Loss 0.443	
+Epoch: [86][950/981]	Time 1.098 (1044.533)	Data 1.017 (967.525)	Loss 0.447	
+Train: [86]	Time 1074.642	Data 995.223	Loss 0.448	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [86][0/38]	Time 8.176 (8.176)	Data 8.145 (8.145)	Loss 11.5359 (11.5359)	
+Val: [86]	Time 38.461	Data 37.422	Loss 11.813	
+Best error: [4.802]	
+('Starting epoch number:', 88, 'Learning rate:', 0.00032690177384616753)
+Epoch: [87][0/981]	Time 7.490 (7.490)	Data 7.410 (7.410)	Loss 0.298	
+Epoch: [87][50/981]	Time 1.247 (63.616)	Data 1.166 (59.445)	Loss 0.384	
+Epoch: [87][100/981]	Time 1.194 (120.604)	Data 1.113 (112.393)	Loss 0.375	
+Epoch: [87][150/981]	Time 1.166 (176.132)	Data 1.085 (163.876)	Loss 0.391	
+Epoch: [87][200/981]	Time 1.157 (232.604)	Data 1.076 (216.265)	Loss 0.398	
+Epoch: [87][250/981]	Time 1.137 (285.452)	Data 1.056 (265.039)	Loss 0.392	
+Epoch: [87][300/981]	Time 1.126 (338.862)	Data 1.045 (314.406)	Loss 0.397	
+Epoch: [87][350/981]	Time 1.119 (392.824)	Data 1.038 (364.318)	Loss 0.405	
+Epoch: [87][400/981]	Time 1.113 (446.262)	Data 1.032 (413.702)	Loss 0.410	
+Epoch: [87][450/981]	Time 1.108 (499.817)	Data 1.027 (463.189)	Loss 0.415	
+Epoch: [87][500/981]	Time 1.109 (555.365)	Data 1.027 (514.696)	Loss 0.416	
+Epoch: [87][550/981]	Time 1.107 (609.888)	Data 1.026 (565.161)	Loss 0.418	
+Epoch: [87][600/981]	Time 1.102 (662.315)	Data 1.021 (613.546)	Loss 0.420	
+Epoch: [87][650/981]	Time 1.101 (716.549)	Data 1.020 (663.721)	Loss 0.423	
+Epoch: [87][700/981]	Time 1.101 (771.869)	Data 1.020 (714.965)	Loss 0.426	
+Epoch: [87][750/981]	Time 1.098 (824.226)	Data 1.016 (763.246)	Loss 0.429	
+Epoch: [87][800/981]	Time 1.095 (876.881)	Data 1.014 (811.845)	Loss 0.433	
+Epoch: [87][850/981]	Time 1.093 (929.816)	Data 1.011 (860.732)	Loss 0.438	
+Epoch: [87][900/981]	Time 1.091 (983.405)	Data 1.010 (910.295)	Loss 0.441	
+Epoch: [87][950/981]	Time 1.091 (1037.961)	Data 1.010 (960.808)	Loss 0.444	
+Train: [87]	Time 1068.836	Data 989.238	Loss 0.447	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [87][0/38]	Time 6.197 (6.197)	Data 6.169 (6.169)	Loss 11.0003 (11.0003)	
+Val: [87]	Time 37.876	Data 36.794	Loss 11.538	
+Best error: [4.802]	
+('Starting epoch number:', 89, 'Learning rate:', 0.00032690177384616753)
+Epoch: [88][0/981]	Time 7.684 (7.684)	Data 7.599 (7.599)	Loss 0.302	
+Epoch: [88][50/981]	Time 1.258 (64.179)	Data 1.177 (60.049)	Loss 0.393	
+Epoch: [88][100/981]	Time 1.194 (120.554)	Data 1.112 (112.361)	Loss 0.378	
+Epoch: [88][150/981]	Time 1.156 (174.507)	Data 1.075 (162.252)	Loss 0.384	
+Epoch: [88][200/981]	Time 1.145 (230.072)	Data 1.064 (213.777)	Loss 0.384	
+Epoch: [88][250/981]	Time 1.144 (287.061)	Data 1.063 (266.728)	Loss 0.382	
+Epoch: [88][300/981]	Time 1.126 (338.943)	Data 1.045 (314.568)	Loss 0.385	
+Epoch: [88][350/981]	Time 1.122 (393.953)	Data 1.041 (365.550)	Loss 0.392	
+Epoch: [88][400/981]	Time 1.114 (446.701)	Data 1.033 (414.248)	Loss 0.399	
+Epoch: [88][450/981]	Time 1.113 (501.803)	Data 1.032 (465.310)	Loss 0.402	
+Epoch: [88][500/981]	Time 1.110 (556.300)	Data 1.029 (515.762)	Loss 0.405	
+Epoch: [88][550/981]	Time 1.110 (611.403)	Data 1.029 (566.822)	Loss 0.407	
+Epoch: [88][600/981]	Time 1.110 (667.336)	Data 1.029 (618.687)	Loss 0.413	
+Epoch: [88][650/981]	Time 1.108 (721.042)	Data 1.027 (668.351)	Loss 0.418	
+Epoch: [88][700/981]	Time 1.107 (775.693)	Data 1.026 (718.959)	Loss 0.420	
+Epoch: [88][750/981]	Time 1.106 (830.259)	Data 1.025 (769.483)	Loss 0.422	
+Epoch: [88][800/981]	Time 1.107 (886.902)	Data 1.026 (822.076)	Loss 0.427	
+Epoch: [88][850/981]	Time 1.108 (942.920)	Data 1.027 (874.042)	Loss 0.431	
+Epoch: [88][900/981]	Time 1.105 (995.448)	Data 1.024 (922.521)	Loss 0.436	
+Epoch: [88][950/981]	Time 1.103 (1049.281)	Data 1.022 (972.307)	Loss 0.441	
+Train: [88]	Time 1080.341	Data 1000.936	Loss 0.443	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [88][0/38]	Time 6.537 (6.537)	Data 6.509 (6.509)	Loss 11.3764 (11.3764)	
+Val: [88]	Time 41.075	Data 40.006	Loss 11.897	
+Best error: [4.802]	
+('Starting epoch number:', 90, 'Learning rate:', 0.00032690177384616753)
+Epoch: [89][0/981]	Time 7.454 (7.454)	Data 7.367 (7.367)	Loss 0.346	
+Epoch: [89][50/981]	Time 1.201 (61.255)	Data 1.119 (57.086)	Loss 0.386	
+Epoch: [89][100/981]	Time 1.135 (114.669)	Data 1.054 (106.439)	Loss 0.378	
+Epoch: [89][150/981]	Time 1.119 (168.950)	Data 1.038 (156.676)	Loss 0.378	
+Epoch: [89][200/981]	Time 1.108 (222.744)	Data 1.027 (206.422)	Loss 0.381	
+Epoch: [89][250/981]	Time 1.108 (278.053)	Data 1.027 (257.684)	Loss 0.389	
+Epoch: [89][300/981]	Time 1.105 (332.505)	Data 1.024 (308.098)	Loss 0.392	
+Epoch: [89][350/981]	Time 1.103 (387.205)	Data 1.022 (358.734)	Loss 0.396	
+Epoch: [89][400/981]	Time 1.104 (442.784)	Data 1.023 (410.281)	Loss 0.401	
+Epoch: [89][450/981]	Time 1.103 (497.518)	Data 1.022 (460.979)	Loss 0.404	
+Epoch: [89][500/981]	Time 1.105 (553.387)	Data 1.024 (512.813)	Loss 0.409	
+Epoch: [89][550/981]	Time 1.103 (607.739)	Data 1.022 (563.127)	Loss 0.411	
+Epoch: [89][600/981]	Time 1.102 (662.250)	Data 1.021 (613.597)	Loss 0.414	
+Epoch: [89][650/981]	Time 1.103 (718.185)	Data 1.022 (665.490)	Loss 0.415	
+Epoch: [89][700/981]	Time 1.102 (772.665)	Data 1.021 (715.913)	Loss 0.418	
+Epoch: [89][750/981]	Time 1.102 (827.469)	Data 1.021 (766.691)	Loss 0.424	
+Epoch: [89][800/981]	Time 1.104 (884.488)	Data 1.023 (819.665)	Loss 0.427	
+Epoch: [89][850/981]	Time 1.106 (940.833)	Data 1.025 (871.986)	Loss 0.430	
+Epoch: [89][900/981]	Time 1.107 (996.993)	Data 1.026 (924.080)	Loss 0.434	
+Epoch: [89][950/981]	Time 1.107 (1052.810)	Data 1.026 (975.857)	Loss 0.438	
+Train: [89]	Time 1085.524	Data 1006.159	Loss 0.439	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [89][0/38]	Time 6.305 (6.305)	Data 6.274 (6.274)	Loss 12.1921 (12.1921)	
+Val: [89]	Time 38.599	Data 37.549	Loss 11.806	
+Best error: [4.802]	
+('Starting epoch number:', 91, 'Learning rate:', 0.0002842624120401457)
+Epoch: [90][0/981]	Time 7.338 (7.338)	Data 7.257 (7.257)	Loss 0.452	
+Epoch: [90][50/981]	Time 1.181 (60.226)	Data 1.100 (56.083)	Loss 0.362	
+Epoch: [90][100/981]	Time 1.139 (115.007)	Data 1.058 (106.832)	Loss 0.368	
+Epoch: [90][150/981]	Time 1.131 (170.727)	Data 1.050 (158.493)	Loss 0.366	
+Epoch: [90][200/981]	Time 1.115 (224.140)	Data 1.034 (207.878)	Loss 0.364	
+Epoch: [90][250/981]	Time 1.117 (280.260)	Data 1.036 (259.928)	Loss 0.355	
+Epoch: [90][300/981]	Time 1.112 (334.732)	Data 1.031 (310.358)	Loss 0.353	
+Epoch: [90][350/981]	Time 1.109 (389.389)	Data 1.028 (360.969)	Loss 0.359	
+Epoch: [90][400/981]	Time 1.110 (445.269)	Data 1.029 (412.807)	Loss 0.363	
+Epoch: [90][450/981]	Time 1.105 (498.386)	Data 1.024 (461.887)	Loss 0.362	
+Epoch: [90][500/981]	Time 1.104 (553.185)	Data 1.023 (512.665)	Loss 0.365	
+Epoch: [90][550/981]	Time 1.105 (608.686)	Data 1.024 (564.120)	Loss 0.367	
+Epoch: [90][600/981]	Time 1.104 (663.503)	Data 1.023 (614.876)	Loss 0.370	
+Epoch: [90][650/981]	Time 1.105 (719.638)	Data 1.025 (666.970)	Loss 0.372	
+Epoch: [90][700/981]	Time 1.101 (772.048)	Data 1.020 (715.324)	Loss 0.374	
+Epoch: [90][750/981]	Time 1.103 (828.285)	Data 1.022 (767.532)	Loss 0.378	
+Epoch: [90][800/981]	Time 1.100 (880.856)	Data 1.019 (816.054)	Loss 0.381	
+Epoch: [90][850/981]	Time 1.100 (936.431)	Data 1.019 (867.568)	Loss 0.385	
+Epoch: [90][900/981]	Time 1.100 (990.960)	Data 1.019 (918.071)	Loss 0.385	
+Epoch: [90][950/981]	Time 1.101 (1046.810)	Data 1.020 (969.873)	Loss 0.388	
+Train: [90]	Time 1077.148	Data 997.797	Loss 0.389	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [90][0/38]	Time 5.936 (5.936)	Data 5.905 (5.905)	Loss 11.6468 (11.6468)	
+Val: [90]	Time 42.021	Data 40.974	Loss 12.249	
+Best error: [4.802]	
+('Starting epoch number:', 92, 'Learning rate:', 0.0002842624120401457)
+Epoch: [91][0/981]	Time 7.164 (7.164)	Data 7.074 (7.074)	Loss 0.230	
+Epoch: [91][50/981]	Time 1.263 (64.400)	Data 1.181 (60.253)	Loss 0.331	
+Epoch: [91][100/981]	Time 1.195 (120.647)	Data 1.113 (112.445)	Loss 0.334	
+Epoch: [91][150/981]	Time 1.168 (176.313)	Data 1.087 (164.076)	Loss 0.332	
+Epoch: [91][200/981]	Time 1.158 (232.686)	Data 1.077 (216.406)	Loss 0.332	
+Epoch: [91][250/981]	Time 1.155 (289.948)	Data 1.074 (269.606)	Loss 0.334	
+Epoch: [91][300/981]	Time 1.146 (344.853)	Data 1.065 (320.452)	Loss 0.336	
+Epoch: [91][350/981]	Time 1.143 (401.315)	Data 1.062 (372.845)	Loss 0.337	
+Epoch: [91][400/981]	Time 1.141 (457.624)	Data 1.060 (425.115)	Loss 0.338	
+Epoch: [91][450/981]	Time 1.138 (513.027)	Data 1.056 (476.474)	Loss 0.342	
+Epoch: [91][500/981]	Time 1.135 (568.788)	Data 1.054 (528.177)	Loss 0.346	
+Epoch: [91][550/981]	Time 1.133 (624.403)	Data 1.052 (579.762)	Loss 0.349	
+Epoch: [91][600/981]	Time 1.131 (679.901)	Data 1.050 (631.174)	Loss 0.352	
+Epoch: [91][650/981]	Time 1.129 (735.159)	Data 1.048 (682.373)	Loss 0.358	
+Epoch: [91][700/981]	Time 1.128 (790.962)	Data 1.047 (734.121)	Loss 0.363	
+Epoch: [91][750/981]	Time 1.126 (845.639)	Data 1.045 (784.753)	Loss 0.365	
+Epoch: [91][800/981]	Time 1.125 (901.163)	Data 1.044 (836.222)	Loss 0.369	
+Epoch: [91][850/981]	Time 1.121 (954.062)	Data 1.040 (885.061)	Loss 0.372	
+Epoch: [91][900/981]	Time 1.117 (1006.484)	Data 1.036 (933.453)	Loss 0.377	
+Epoch: [91][950/981]	Time 1.116 (1060.884)	Data 1.034 (983.802)	Loss 0.380	
+Train: [91]	Time 1092.006	Data 1012.477	Loss 0.382	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [91][0/38]	Time 6.960 (6.960)	Data 6.933 (6.933)	Loss 12.0444 (12.0444)	
+Val: [91]	Time 40.860	Data 39.815	Loss 12.392	
+Best error: [4.802]	
+('Starting epoch number:', 93, 'Learning rate:', 0.0002842624120401457)
+Epoch: [92][0/981]	Time 8.143 (8.143)	Data 8.058 (8.058)	Loss 0.508	
+Epoch: [92][50/981]	Time 1.257 (64.103)	Data 1.176 (59.970)	Loss 0.335	
+Epoch: [92][100/981]	Time 1.207 (121.904)	Data 1.126 (113.715)	Loss 0.325	
+Epoch: [92][150/981]	Time 1.204 (181.807)	Data 1.123 (169.549)	Loss 0.319	
+Epoch: [92][200/981]	Time 1.196 (240.419)	Data 1.115 (224.077)	Loss 0.329	
+Epoch: [92][250/981]	Time 1.191 (298.954)	Data 1.110 (278.513)	Loss 0.335	
+Epoch: [92][300/981]	Time 1.193 (359.123)	Data 1.112 (334.620)	Loss 0.341	
+Epoch: [92][350/981]	Time 1.196 (419.753)	Data 1.115 (391.212)	Loss 0.342	
+Epoch: [92][400/981]	Time 1.192 (478.143)	Data 1.111 (445.551)	Loss 0.344	
+Epoch: [92][450/981]	Time 1.184 (533.767)	Data 1.102 (497.129)	Loss 0.350	
+Epoch: [92][500/981]	Time 1.177 (589.467)	Data 1.095 (548.765)	Loss 0.354	
+Epoch: [92][550/981]	Time 1.171 (645.138)	Data 1.090 (600.397)	Loss 0.361	
+Epoch: [92][600/981]	Time 1.166 (700.581)	Data 1.084 (651.766)	Loss 0.364	
+Epoch: [92][650/981]	Time 1.161 (756.090)	Data 1.080 (703.227)	Loss 0.368	
+Epoch: [92][700/981]	Time 1.161 (813.918)	Data 1.080 (757.008)	Loss 0.371	
+Epoch: [92][750/981]	Time 1.156 (868.200)	Data 1.075 (807.230)	Loss 0.376	
+Epoch: [92][800/981]	Time 1.149 (920.682)	Data 1.068 (855.687)	Loss 0.380	
+Epoch: [92][850/981]	Time 1.147 (976.417)	Data 1.066 (907.370)	Loss 0.382	
+Epoch: [92][900/981]	Time 1.148 (1034.163)	Data 1.067 (961.069)	Loss 0.386	
+Epoch: [92][950/981]	Time 1.146 (1089.865)	Data 1.065 (1012.709)	Loss 0.388	
+Train: [92]	Time 1119.522	Data 1039.955	Loss 0.389	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [92][0/38]	Time 6.045 (6.045)	Data 6.014 (6.014)	Loss 12.5489 (12.5489)	
+Val: [92]	Time 36.021	Data 34.977	Loss 12.279	
+Best error: [4.802]	
+('Starting epoch number:', 94, 'Learning rate:', 0.0002842624120401457)
+Epoch: [93][0/981]	Time 7.021 (7.021)	Data 6.941 (6.941)	Loss 0.487	
+Epoch: [93][50/981]	Time 1.155 (58.881)	Data 1.074 (54.749)	Loss 0.307	
+Epoch: [93][100/981]	Time 1.134 (114.517)	Data 1.053 (106.303)	Loss 0.310	
+Epoch: [93][150/981]	Time 1.128 (170.310)	Data 1.047 (158.062)	Loss 0.315	
+Epoch: [93][200/981]	Time 1.117 (224.504)	Data 1.036 (208.206)	Loss 0.316	
+Epoch: [93][250/981]	Time 1.116 (280.048)	Data 1.035 (259.711)	Loss 0.322	
+Epoch: [93][300/981]	Time 1.111 (334.471)	Data 1.030 (310.086)	Loss 0.326	
+Epoch: [93][350/981]	Time 1.117 (391.965)	Data 1.036 (363.533)	Loss 0.335	
+Epoch: [93][400/981]	Time 1.109 (444.875)	Data 1.028 (412.404)	Loss 0.338	
+Epoch: [93][450/981]	Time 1.112 (501.579)	Data 1.031 (465.054)	Loss 0.343	
+Epoch: [93][500/981]	Time 1.110 (556.008)	Data 1.029 (515.445)	Loss 0.346	
+Epoch: [93][550/981]	Time 1.106 (609.646)	Data 1.025 (565.022)	Loss 0.349	
+Epoch: [93][600/981]	Time 1.106 (664.821)	Data 1.025 (616.157)	Loss 0.351	
+Epoch: [93][650/981]	Time 1.107 (720.881)	Data 1.026 (668.167)	Loss 0.357	
+Epoch: [93][700/981]	Time 1.107 (775.865)	Data 1.026 (719.085)	Loss 0.360	
+Epoch: [93][750/981]	Time 1.107 (831.307)	Data 1.026 (770.458)	Loss 0.361	
+Epoch: [93][800/981]	Time 1.109 (888.491)	Data 1.028 (823.601)	Loss 0.367	
+Epoch: [93][850/981]	Time 1.110 (944.252)	Data 1.029 (875.308)	Loss 0.369	
+Epoch: [93][900/981]	Time 1.110 (999.689)	Data 1.029 (926.712)	Loss 0.372	
+Epoch: [93][950/981]	Time 1.111 (1057.020)	Data 1.030 (979.987)	Loss 0.373	
+Train: [93]	Time 1088.725	Data 1009.279	Loss 0.375	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [93][0/38]	Time 6.976 (6.976)	Data 6.945 (6.945)	Loss 12.5054 (12.5054)	
+Val: [93]	Time 36.731	Data 35.698	Loss 12.367	
+Best error: [4.802]	
+('Starting epoch number:', 95, 'Learning rate:', 0.0002842624120401457)
+Epoch: [94][0/981]	Time 7.957 (7.957)	Data 7.877 (7.877)	Loss 0.363	
+Epoch: [94][50/981]	Time 1.180 (60.191)	Data 1.100 (56.076)	Loss 0.322	
+Epoch: [94][100/981]	Time 1.117 (112.779)	Data 1.036 (104.627)	Loss 0.325	
+Epoch: [94][150/981]	Time 1.094 (165.267)	Data 1.014 (153.082)	Loss 0.319	
+Epoch: [94][200/981]	Time 1.084 (217.837)	Data 1.003 (201.613)	Loss 0.315	
+Epoch: [94][250/981]	Time 1.081 (271.304)	Data 1.000 (251.037)	Loss 0.321	
+Epoch: [94][300/981]	Time 1.078 (324.450)	Data 0.997 (300.150)	Loss 0.327	
+Epoch: [94][350/981]	Time 1.079 (378.887)	Data 0.999 (350.565)	Loss 0.331	
+Epoch: [94][400/981]	Time 1.079 (432.831)	Data 0.999 (400.472)	Loss 0.335	
+Epoch: [94][450/981]	Time 1.074 (484.208)	Data 0.993 (447.797)	Loss 0.340	
+Epoch: [94][500/981]	Time 1.070 (536.135)	Data 0.989 (495.692)	Loss 0.343	
+Epoch: [94][550/981]	Time 1.073 (591.126)	Data 0.992 (546.655)	Loss 0.345	
+Epoch: [94][600/981]	Time 1.070 (643.260)	Data 0.990 (594.746)	Loss 0.349	
+Epoch: [94][650/981]	Time 1.071 (697.536)	Data 0.991 (644.977)	Loss 0.355	
+Epoch: [94][700/981]	Time 1.068 (748.854)	Data 0.988 (692.240)	Loss 0.362	
+Epoch: [94][750/981]	Time 1.067 (801.391)	Data 0.986 (740.740)	Loss 0.367	
+Epoch: [94][800/981]	Time 1.068 (855.161)	Data 0.987 (790.468)	Loss 0.369	
+Epoch: [94][850/981]	Time 1.066 (907.197)	Data 0.985 (838.466)	Loss 0.372	
+Epoch: [94][900/981]	Time 1.067 (961.129)	Data 0.986 (888.376)	Loss 0.373	
+Epoch: [94][950/981]	Time 1.065 (1013.127)	Data 0.985 (936.340)	Loss 0.376	
+Train: [94]	Time 1043.189	Data 963.974	Loss 0.379	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [94][0/38]	Time 6.059 (6.059)	Data 6.031 (6.031)	Loss 13.1105 (13.1105)	
+Val: [94]	Time 36.700	Data 35.652	Loss 12.250	
+Best error: [4.802]	
+('Starting epoch number:', 96, 'Learning rate:', 0.0002842624120401457)
+Epoch: [95][0/981]	Time 8.321 (8.321)	Data 8.241 (8.241)	Loss 0.424	
+Epoch: [95][50/981]	Time 1.199 (61.131)	Data 1.118 (57.006)	Loss 0.320	
+Epoch: [95][100/981]	Time 1.143 (115.449)	Data 1.062 (107.276)	Loss 0.325	
+Epoch: [95][150/981]	Time 1.121 (169.252)	Data 1.040 (157.031)	Loss 0.334	
+Epoch: [95][200/981]	Time 1.107 (222.462)	Data 1.026 (206.182)	Loss 0.335	
+Epoch: [95][250/981]	Time 1.098 (275.667)	Data 1.017 (255.354)	Loss 0.335	
+Epoch: [95][300/981]	Time 1.087 (327.152)	Data 1.006 (302.796)	Loss 0.335	
+Epoch: [95][350/981]	Time 1.079 (378.799)	Data 0.998 (350.421)	Loss 0.333	
+Epoch: [95][400/981]	Time 1.076 (431.632)	Data 0.996 (399.231)	Loss 0.337	
+Epoch: [95][450/981]	Time 1.074 (484.378)	Data 0.993 (447.942)	Loss 0.338	
+Epoch: [95][500/981]	Time 1.073 (537.771)	Data 0.993 (497.312)	Loss 0.343	
+Epoch: [95][550/981]	Time 1.069 (588.873)	Data 0.988 (544.393)	Loss 0.348	
+Epoch: [95][600/981]	Time 1.068 (642.035)	Data 0.988 (593.505)	Loss 0.352	
+Epoch: [95][650/981]	Time 1.067 (694.941)	Data 0.987 (642.371)	Loss 0.358	
+Epoch: [95][700/981]	Time 1.069 (749.190)	Data 0.988 (692.598)	Loss 0.361	
+Epoch: [95][750/981]	Time 1.067 (801.339)	Data 0.986 (740.696)	Loss 0.363	
+Epoch: [95][800/981]	Time 1.067 (854.775)	Data 0.986 (790.103)	Loss 0.364	
+Epoch: [95][850/981]	Time 1.063 (904.934)	Data 0.983 (836.225)	Loss 0.367	
+Epoch: [95][900/981]	Time 1.064 (958.599)	Data 0.983 (885.853)	Loss 0.370	
+Epoch: [95][950/981]	Time 1.062 (1010.107)	Data 0.981 (933.335)	Loss 0.375	
+Train: [95]	Time 1040.691	Data 961.479	Loss 0.378	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [95][0/38]	Time 6.560 (6.560)	Data 6.533 (6.533)	Loss 12.9119 (12.9119)	
+Val: [95]	Time 36.514	Data 35.449	Loss 12.499	
+Best error: [4.802]	
+('Starting epoch number:', 97, 'Learning rate:', 0.0002842624120401457)
+Epoch: [96][0/981]	Time 7.448 (7.448)	Data 7.367 (7.367)	Loss 0.373	
+Epoch: [96][50/981]	Time 1.186 (60.484)	Data 1.105 (56.366)	Loss 0.330	
+Epoch: [96][100/981]	Time 1.139 (115.041)	Data 1.058 (106.882)	Loss 0.318	
+Epoch: [96][150/981]	Time 1.105 (166.883)	Data 1.024 (154.685)	Loss 0.321	
+Epoch: [96][200/981]	Time 1.096 (220.372)	Data 1.016 (204.143)	Loss 0.322	
+Epoch: [96][250/981]	Time 1.095 (274.837)	Data 1.014 (254.559)	Loss 0.325	
+Epoch: [96][300/981]	Time 1.085 (326.547)	Data 1.004 (302.225)	Loss 0.326	
+Epoch: [96][350/981]	Time 1.081 (379.265)	Data 1.000 (350.906)	Loss 0.328	
+Epoch: [96][400/981]	Time 1.074 (430.784)	Data 0.994 (398.401)	Loss 0.325	
+Epoch: [96][450/981]	Time 1.071 (482.954)	Data 0.990 (446.535)	Loss 0.329	
+Epoch: [96][500/981]	Time 1.066 (533.825)	Data 0.985 (493.381)	Loss 0.335	
+Epoch: [96][550/981]	Time 1.064 (586.068)	Data 0.983 (541.585)	Loss 0.339	
+Epoch: [96][600/981]	Time 1.066 (640.405)	Data 0.985 (591.872)	Loss 0.343	
+Epoch: [96][650/981]	Time 1.062 (691.543)	Data 0.982 (638.972)	Loss 0.348	
+Epoch: [96][700/981]	Time 1.065 (746.578)	Data 0.984 (689.963)	Loss 0.354	
+Epoch: [96][750/981]	Time 1.061 (796.526)	Data 0.980 (735.883)	Loss 0.357	
+Epoch: [96][800/981]	Time 1.062 (850.895)	Data 0.982 (786.208)	Loss 0.362	
+Epoch: [96][850/981]	Time 1.061 (902.744)	Data 0.980 (834.022)	Loss 0.367	
+Epoch: [96][900/981]	Time 1.060 (955.374)	Data 0.980 (882.604)	Loss 0.369	
+Epoch: [96][950/981]	Time 1.059 (1007.124)	Data 0.978 (930.309)	Loss 0.371	
+Train: [96]	Time 1036.359	Data 957.111	Loss 0.371	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [96][0/38]	Time 6.781 (6.781)	Data 6.753 (6.753)	Loss 12.7263 (12.7263)	
+Val: [96]	Time 36.864	Data 35.805	Loss 12.659	
+Best error: [4.802]	
+('Starting epoch number:', 98, 'Learning rate:', 0.0002842624120401457)
+Epoch: [97][0/981]	Time 7.410 (7.410)	Data 7.329 (7.329)	Loss 0.326	
+Epoch: [97][50/981]	Time 1.198 (61.089)	Data 1.117 (56.962)	Loss 0.307	
+Epoch: [97][100/981]	Time 1.127 (113.803)	Data 1.046 (105.612)	Loss 0.308	
+Epoch: [97][150/981]	Time 1.086 (163.939)	Data 1.005 (151.711)	Loss 0.298	
+Epoch: [97][200/981]	Time 1.088 (218.710)	Data 1.007 (202.434)	Loss 0.299	
+Epoch: [97][250/981]	Time 1.074 (269.454)	Data 0.993 (249.144)	Loss 0.306	
+Epoch: [97][300/981]	Time 1.063 (320.047)	Data 0.982 (295.685)	Loss 0.307	
+Epoch: [97][350/981]	Time 1.055 (370.465)	Data 0.975 (342.056)	Loss 0.311	
+Epoch: [97][400/981]	Time 1.053 (422.341)	Data 0.972 (389.884)	Loss 0.316	
+Epoch: [97][450/981]	Time 1.060 (478.021)	Data 0.979 (441.523)	Loss 0.320	
+Epoch: [97][500/981]	Time 1.057 (529.690)	Data 0.976 (489.163)	Loss 0.324	
+Epoch: [97][550/981]	Time 1.057 (582.197)	Data 0.976 (537.622)	Loss 0.329	
+Epoch: [97][600/981]	Time 1.057 (634.997)	Data 0.976 (586.371)	Loss 0.334	
+Epoch: [97][650/981]	Time 1.056 (687.765)	Data 0.976 (635.099)	Loss 0.338	
+Epoch: [97][700/981]	Time 1.054 (738.844)	Data 0.973 (682.141)	Loss 0.343	
+Epoch: [97][750/981]	Time 1.054 (791.690)	Data 0.973 (730.948)	Loss 0.348	
+Epoch: [97][800/981]	Time 1.053 (843.275)	Data 0.972 (778.491)	Loss 0.353	
+Epoch: [97][850/981]	Time 1.050 (893.374)	Data 0.969 (824.565)	Loss 0.355	
+Epoch: [97][900/981]	Time 1.052 (947.416)	Data 0.971 (874.564)	Loss 0.359	
+Epoch: [97][950/981]	Time 1.051 (999.445)	Data 0.970 (922.569)	Loss 0.362	
+Train: [97]	Time 1032.141	Data 952.854	Loss 0.364	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [97][0/38]	Time 7.059 (7.059)	Data 7.028 (7.028)	Loss 12.6120 (12.6120)	
+Val: [97]	Time 40.703	Data 39.659	Loss 12.416	
+Best error: [4.802]	
+('Starting epoch number:', 99, 'Learning rate:', 0.0002842624120401457)
+Epoch: [98][0/981]	Time 8.137 (8.137)	Data 8.056 (8.056)	Loss 0.181	
+Epoch: [98][50/981]	Time 1.242 (63.327)	Data 1.160 (59.177)	Loss 0.317	
+Epoch: [98][100/981]	Time 1.155 (116.605)	Data 1.074 (108.433)	Loss 0.320	
+Epoch: [98][150/981]	Time 1.135 (171.406)	Data 1.054 (159.212)	Loss 0.314	
+Epoch: [98][200/981]	Time 1.104 (221.866)	Data 1.023 (205.621)	Loss 0.316	
+Epoch: [98][250/981]	Time 1.098 (275.485)	Data 1.017 (255.184)	Loss 0.319	
+Epoch: [98][300/981]	Time 1.092 (328.719)	Data 1.011 (304.398)	Loss 0.326	
+Epoch: [98][350/981]	Time 1.089 (382.270)	Data 1.008 (353.896)	Loss 0.331	
+Epoch: [98][400/981]	Time 1.085 (435.087)	Data 1.004 (402.674)	Loss 0.335	
+Epoch: [98][450/981]	Time 1.080 (487.297)	Data 1.000 (450.835)	Loss 0.336	
+Epoch: [98][500/981]	Time 1.076 (539.164)	Data 0.995 (498.677)	Loss 0.341	
+Epoch: [98][550/981]	Time 1.074 (592.017)	Data 0.994 (547.476)	Loss 0.344	
+Epoch: [98][600/981]	Time 1.075 (646.077)	Data 0.994 (597.478)	Loss 0.345	
+Epoch: [98][650/981]	Time 1.071 (696.983)	Data 0.990 (644.339)	Loss 0.347	
+Epoch: [98][700/981]	Time 1.068 (748.893)	Data 0.987 (692.203)	Loss 0.350	
+Epoch: [98][750/981]	Time 1.067 (801.148)	Data 0.986 (740.435)	Loss 0.354	
+Epoch: [98][800/981]	Time 1.067 (854.618)	Data 0.986 (789.856)	Loss 0.356	
+Epoch: [98][850/981]	Time 1.062 (904.100)	Data 0.982 (835.300)	Loss 0.360	
+Epoch: [98][900/981]	Time 1.061 (956.285)	Data 0.981 (883.442)	Loss 0.362	
+Epoch: [98][950/981]	Time 1.060 (1008.155)	Data 0.979 (931.254)	Loss 0.365	
+Train: [98]	Time 1039.088	Data 959.778	Loss 0.367	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [98][0/38]	Time 5.957 (5.957)	Data 5.926 (5.926)	Loss 12.4964 (12.4964)	
+Val: [98]	Time 37.755	Data 36.699	Loss 12.673	
+Best error: [4.802]	
+('Starting epoch number:', 100, 'Learning rate:', 0.0002842624120401457)
+Epoch: [99][0/981]	Time 7.262 (7.262)	Data 7.181 (7.181)	Loss 0.402	
+Epoch: [99][50/981]	Time 1.107 (56.447)	Data 1.026 (52.327)	Loss 0.311	
+Epoch: [99][100/981]	Time 1.081 (109.177)	Data 1.000 (101.034)	Loss 0.320	
+Epoch: [99][150/981]	Time 1.068 (161.320)	Data 0.988 (149.154)	Loss 0.303	
+Epoch: [99][200/981]	Time 1.067 (214.512)	Data 0.987 (198.297)	Loss 0.302	
+Epoch: [99][250/981]	Time 1.058 (265.523)	Data 0.977 (245.269)	Loss 0.309	
+Epoch: [99][300/981]	Time 1.051 (316.281)	Data 0.970 (291.977)	Loss 0.316	
+Epoch: [99][350/981]	Time 1.048 (368.018)	Data 0.968 (339.685)	Loss 0.324	
+Epoch: [99][400/981]	Time 1.048 (420.447)	Data 0.968 (388.088)	Loss 0.326	
+Epoch: [99][450/981]	Time 1.050 (473.355)	Data 0.969 (436.933)	Loss 0.328	
+Epoch: [99][500/981]	Time 1.050 (526.134)	Data 0.969 (485.691)	Loss 0.329	
+Epoch: [99][550/981]	Time 1.047 (576.983)	Data 0.966 (532.506)	Loss 0.331	
+Epoch: [99][600/981]	Time 1.046 (628.589)	Data 0.965 (580.077)	Loss 0.332	
+Epoch: [99][650/981]	Time 1.042 (678.445)	Data 0.961 (625.883)	Loss 0.336	
+Epoch: [99][700/981]	Time 1.042 (730.518)	Data 0.961 (673.909)	Loss 0.341	
+Epoch: [99][750/981]	Time 1.041 (781.468)	Data 0.960 (720.821)	Loss 0.345	
+Epoch: [99][800/981]	Time 1.043 (835.554)	Data 0.962 (770.874)	Loss 0.348	
+Epoch: [99][850/981]	Time 1.040 (885.199)	Data 0.959 (816.473)	Loss 0.352	
+Epoch: [99][900/981]	Time 1.041 (938.307)	Data 0.961 (865.550)	Loss 0.355	
+Epoch: [99][950/981]	Time 1.039 (987.864)	Data 0.958 (911.084)	Loss 0.360	
+Train: [99]	Time 1017.297	Data 938.091	Loss 0.360	
+begins
+[]
+(69, 0, 3)
+ends
+Epoch: [99][0/38]	Time 6.688 (6.688)	Data 6.660 (6.660)	Loss 15.4892 (15.4892)	
+Val: [99]	Time 40.332	Data 39.296	Loss 13.317	
+Best error: [4.802]	
+('Starting epoch number:', 101, 'Learning rate:', 0.00024718470612186585)
+Epoch: [100][0/981]	Time 8.237 (8.237)	Data 8.146 (8.146)	Loss 0.270	
+slurmstepd: *** JOB 16588 ON gnode38 CANCELLED AT 2017-11-18T00:44:21 ***

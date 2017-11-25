@@ -74,12 +74,13 @@ class Validator():
         self.criterion = criterion
         self.batch_time = AverageMeter()
         self.data_time = AverageMeter()
-        self.losses = AverageMeter()
+        self.dist = AverageMeter()
+        self.mindist = AverageMeter()
 
     def validate(self, valloader, epoch, opt):
 
         self.model.eval()
-        self.losses.reset()
+        self.dist.reset()
         self.data_time.reset()
         self.batch_time.reset()
         end = time.time()
