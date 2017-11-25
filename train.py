@@ -3,6 +3,7 @@ from utils import AverageMeter
 from copy import deepcopy
 import time
 import models.__init__ as init
+import utils
 
 class Trainer():
     def __init__(self, model, criterion, optimizer, opt):
@@ -81,27 +82,34 @@ class Validator():
 
         self.model.eval()
         self.dist.reset()
+        self.mindist.reset()
         self.data_time.reset()
         self.batch_time.reset()
         end = time.time()
 
         for i, data in enumerate(valloader, 0):
             if opt.cuda:
-                xh, xi, xp, targets, eyes, names, eyes2 = data
+                xh, xi, xp, targets, eyes, names, eyes2, glabels = data
                 xh = xh.cuda(async=True)
                 xi = xi.cuda(async=True)
                 xp = xp.cuda(async=True)
                 targets = targets.cuda(async=True).squeeze()
+                glabels = glabels.cuda()
 
             xh, xi, xp, targets = Variable(xh), Variable(xi), Variable(xp), Variable(targets)
 
             self.data_time.update(time.time() - end)
             outputs = self.model(xh, xi, xp)
 
-            loss = self.criterion(outputs, targets.max(1)[1])
-
+            ground_labels = glabels
+            pred_labels = outputs.max(1)[1]
             inputs_size = xh.size(0)
-            self.losses.update(loss.data[0], inputs_size)
+
+            distval = utils.euclid_dist(pred_labels, ground_labels)
+            mindistval = utils.euclid_mindist(pred_labels, ground_labels)
+
+            self.dist.update(distval, inputs_size)
+            self.mindist.update(mindistval, inputs_size)
 
             # measure elapsed time
             self.batch_time.update(time.time() - end)
@@ -118,8 +126,8 @@ class Validator():
         print('Val: [{0}]\t'
               'Time {batch_time.sum:.3f}\t'
               'Data {data_time.sum:.3f}\t'
-              'Loss {loss.avg:.3f}\t'.format(
+              'Dist {dist.avg:.3f}\t' 'MinDist {mindist.avg:.3f}\t'.format(
                epoch, batch_time=self.batch_time,
-               data_time= self.data_time, loss=self.losses))
+               data_time= self.data_time, dist=self.dist, mindist=self.mindist))
 
-        return self.losses.avg
+        return self.dist.avg

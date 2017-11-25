@@ -25,27 +25,10 @@ class AverageMeter():
         self.count += n
         self.avg = self.sum / self.count
 
-def visualize_gaze(images, eyes, pred_coords):
+def euclid_dist(output, target):
 
-    img = images[i].data.cpu()
-    pred = pred_coords[i].data.view(1, 225)
+def euclid_mindist(output, target):
 
-    ind = pred.max(1)[1]
-    step = 1 / 30.0
-    y = ((float(ind[0]/ 15)) / 15.0) + step
-    x = ((float(ind[0] % 15)) / 15.0) + step
-
-    to_pil = torchvision.transforms.ToPILImage()
-    im = to_pil(img)
-    eye_np = eyes[i].cpu().numpy()
-
-    print(name)
-    print(eye_np * 227)
-    print(x * 227, y * 227)
-
-    plt.plot([x* 227, eye_np[0]* 227],[y* 227, eye_np[1]* 227])
-    plt.imshow(im)
-    plt.show()
 
 def AUCaccuracy(output, target, opt):
     pass
