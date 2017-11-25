@@ -7,6 +7,7 @@ import math
 from PIL import Image
 import matplotlib
 import matplotlib.pyplot as plt
+import numpy as np
 
 class AverageMeter():
     """Computes and stores the average and current value"""
@@ -25,10 +26,40 @@ class AverageMeter():
         self.count += n
         self.avg = self.sum / self.count
 
-def euclid_dist(output, target):
+def euclid_dist(output, target, l):
+    total = 0
+    for i in range(l):
+        ground_x = target[2*i]
+        ground_y = target[2*i + 1]
 
-def euclid_mindist(output, target):
+        step = 1 / 26.0
+        pred = output[i]
+        predy = (output[i] / 13.0) + step
+        predx = (output[i] % 13) + step
 
+        temp = np.sqrt(np.power((ground_x - predx), 2) + np.power((ground_y - predy), 2))
+        total += temp
+
+    total = total / float(l * 1.0)
+    return total
+
+
+def euclid_mindist(output, target, l):
+    best = 1000000000
+    for i in range(l):
+        ground_x = target[2*i]
+        ground_y = target[2*i + 1]
+
+        step = 1 / 26.0
+        pred = output[i]
+        predy = (output[i] / 13.0) + step
+        predx = (output[i] % 13) + step
+
+        temp = np.sqrt(np.power((ground_x - predx), 2) + np.power((ground_y - predy), 2))
+        if temp < best:
+            best = temp
+
+    return best
 
 def AUCaccuracy(output, target, opt):
     pass

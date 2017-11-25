@@ -30,6 +30,9 @@ images, xis, eye_coords, pred_coords, eyes, names, eyes2 = next(iter(dataloader.
 
 images, xis, eye_coords, pred_coords = Variable(images.cuda()), Variable(xis.cuda()), Variable(eye_coords.cuda()), Variable(pred_coords.cuda())
 
+# print(eye_coords)
+print(images[0])
+exit()
 outputs = model(images, xis, eye_coords)
 
 untr = transforms.Compose([
@@ -67,9 +70,10 @@ for i in range(64):
     plt.subplot(131)
     plt.plot([x* 227, eye_np[0]* 227],[y* 227, eye_np[1]* 227])
     plt.imshow(im)
+
     plt.subplot(133)
-    plt.plot([0, eye_np2[0]*227], [0, eye_np2[1]*227])
     plt.imshow(im2)
+
     plt.subplot(132)
     plt.imshow(eye_coords[i].data.cpu().numpy())
     plt.show()

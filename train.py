@@ -26,7 +26,7 @@ class Trainer():
             self.optimizer.zero_grad()
 
             if opt.cuda:
-                xh, xi, xp, targets, eyes, names, eyes2 = data
+                xh, xi, xp, targets, eyes, names, eyes2, gcorrs = data
                 xh = xh.cuda(async=True)
                 xi = xi.cuda(async=True)
                 xp = xp.cuda(async=True)
@@ -37,8 +37,6 @@ class Trainer():
             self.data_time.update(time.time() - end)
 
             outputs = self.model(xh, xi, xp)
-            # print(outputs)
-            # print(targets)
             loss = self.criterion(outputs, targets.max(1)[1])
 
             loss.backward()
@@ -89,24 +87,24 @@ class Validator():
 
         for i, data in enumerate(valloader, 0):
             if opt.cuda:
-                xh, xi, xp, targets, eyes, names, eyes2, glabels = data
+                xh, xi, xp, targets, eyes, names, eyes2, gcorrs = data
                 xh = xh.cuda(async=True)
                 xi = xi.cuda(async=True)
                 xp = xp.cuda(async=True)
                 targets = targets.cuda(async=True).squeeze()
-                glabels = glabels.cuda()
+                gcorrs = gcorrs.cuda()
 
             xh, xi, xp, targets = Variable(xh), Variable(xi), Variable(xp), Variable(targets)
 
             self.data_time.update(time.time() - end)
             outputs = self.model(xh, xi, xp)
 
-            ground_labels = glabels
+            ground_labels = gcorrs
             pred_labels = outputs.max(1)[1]
             inputs_size = xh.size(0)
 
-            distval = utils.euclid_dist(pred_labels, ground_labels)
-            mindistval = utils.euclid_mindist(pred_labels, ground_labels)
+            distval = utils.euclid_dist(pred_labels, ground_labels, inputs_size)
+            mindistval = utils.euclid_mindist(pred_labels, ground_labels, inputs_size)
 
             self.dist.update(distval, inputs_size)
             self.mindist.update(mindistval, inputs_size)

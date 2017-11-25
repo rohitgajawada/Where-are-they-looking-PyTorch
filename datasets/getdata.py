@@ -10,7 +10,6 @@ from torch.utils.data import Dataset
 from torchvision import transforms
 import matplotlib.patches as patches
 import scipy.io as sio
-from skimage import io, transform
 
 def getCropped(img, e):
 
@@ -177,7 +176,7 @@ class GazeDataset(Dataset):
         # gaze_label = gaze_label.view(1, 225)
         gaze_label = gaze_label.view(1, 169)
 
-        sample = (img.float(), bbox.float(), eyes_loc.float(), gaze_label.float(), eyes, idx, eyes2)
+        sample = (img.float(), bbox.float(), eyes_loc.float(), gaze_label.float(), eyes, idx, eyes2, gaze)
 
         return sample
 
