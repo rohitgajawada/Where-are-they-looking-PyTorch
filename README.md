@@ -1,6 +1,4 @@
 # SMAI17
 Where are they looking? - Attention modelling + Deep Learning
 
-Euclid dist
-ShiftedGrids
-AUC Score
+Implementation of http://carlvondrick.com/gaze.pdf in PyTorch
