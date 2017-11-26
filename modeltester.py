@@ -55,8 +55,8 @@ for i in range(64):
 
     ind = pred.max(1)[1]
     step = 1 / 26.0
-    y = ((float(ind[0]/ 13)) / 13.0) + step
-    x = ((float(ind[0] % 13)) / 13.0) + step
+    y = ((float(ind[0]/ 13.0)) / 13.0) + step
+    x = ((float(ind[0] % 13.0)) / 13.0) + step
 
     to_pil = torchvision.transforms.ToPILImage()
     im = to_pil(img)

@@ -18,6 +18,7 @@ import scipy.io as sio
 from skimage import io, transform
 import numpy as np
 import glob, os
+import cv2
 
 sys.path.append('./sfd')
 
@@ -93,8 +94,8 @@ for imname in imglist:
 
         ind = pred.max(1)[1]
         step = 1 / 26.0
-        y = ((float(ind[0]/ 13)) / 13.0) + step
-        x = ((float(ind[0] % 13)) / 13.0) + step
+        y = ((float(ind[0]/ 13.0)) / 13.0) + step
+        x = ((float(ind[0] % 13.0)) / 13.0) + step
 
         to_pil = torchvision.transforms.ToPILImage()
         im = to_pil(img.float())
@@ -114,6 +115,8 @@ for imname in imglist:
         # plt.imshow(eye_coords[i].data.cpu().numpy())
 
     c += 1
+    im = np.array(im)
+    # cv2.imwrite('./output_' + str(c) + '.jpg', im)
     plt.imshow(im)
     # plt.imsave('output_' + str(c) + '.jpg', im)
     plt.show()

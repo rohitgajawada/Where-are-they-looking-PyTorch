@@ -175,8 +175,11 @@ class GazeDataset(Dataset):
         gaze_label = torch.from_numpy(gaze_label).contiguous()
         # gaze_label = gaze_label.view(1, 225)
         gaze_label = gaze_label.view(1, 169)
-
-        sample = (img.float(), bbox.float(), eyes_loc.float(), gaze_label.float(), eyes, idx, eyes2, gaze)
+        # print(gaze.shape)
+        gaze_final = np.ones(100)
+        gaze_final *= -1
+        gaze_final[:gaze.shape[0]] = gaze
+        sample = (img.float(), bbox.float(), eyes_loc.float(), gaze_label.float(), eyes, idx, eyes2, gaze_final)
 
         return sample
 

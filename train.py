@@ -103,8 +103,8 @@ class Validator():
             pred_labels = outputs.max(1)[1]
             inputs_size = xh.size(0)
 
-            distval = utils.euclid_dist(pred_labels, ground_labels, inputs_size)
-            mindistval = utils.euclid_mindist(pred_labels, ground_labels, inputs_size)
+            distval = utils.euclid_dist(pred_labels.data.cpu(), ground_labels.cpu(), inputs_size)
+            mindistval = utils.euclid_mindist(pred_labels.data.cpu(), ground_labels.cpu(), inputs_size)
 
             self.dist.update(distval, inputs_size)
             self.mindist.update(mindistval, inputs_size)
@@ -117,9 +117,11 @@ class Validator():
                 print('Epoch: [{0}][{1}/{2}]\t'
                       'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                       'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
-                      'Loss {loss.val:.4f} ({loss.avg:.4f})\t'.format(
+                      'Dist {dist.avg:.3f}\t'
+                      'MinDist {mindist.avg:.3f}\t'
+                      .format(
                        epoch, i, len(valloader), batch_time=self.batch_time,
-                       data_time= self.data_time, loss=self.losses))
+                       data_time= self.data_time, dist=self.dist, mindist=self.mindist))
 
         print('Val: [{0}]\t'
               'Time {batch_time.sum:.3f}\t'
