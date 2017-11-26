@@ -36,7 +36,8 @@ model = gazenet.Net(opt).cuda()
 model.load_state_dict(checkpoint['state_dict'])
 
 
-imglist = glob.glob('imgs/*')
+imglist = glob.glob('imgs/test/*')
+c = 0
 for imname in imglist:
 
     im = io.imread(imname)
@@ -59,7 +60,10 @@ for imname in imglist:
     img = normtransform(img)
     img = img.view(1, 3, 227, 227)
 
-    num = faces.size(0)
+    try:
+        num = faces.size(0)
+    except:
+        continue
     imgs = torch.FloatTensor()
     for i in range(num):
         imgs = torch.cat((imgs, img))
@@ -78,7 +82,6 @@ for imname in imglist:
     print(eye_coords)
 
     outputs = model(imgs, xis, eye_coords)
-    c = 0
 
     for i in range(num):
 
@@ -119,4 +122,6 @@ for imname in imglist:
     # cv2.imwrite('./output_' + str(c) + '.jpg', im)
     plt.imshow(im)
     # plt.imsave('output_' + str(c) + '.jpg', im)
+
+    plt.savefig('imgs/test/output_' + str(c) + '.jpg', bbox_inches='tight', pad_inches=0)
     plt.show()
