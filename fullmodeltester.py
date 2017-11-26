@@ -23,7 +23,7 @@ sys.path.append('./sfd')
 parser = opts.myargparser()
 opt = parser.parse_args()
 
-checkpoint = torch.load('./gazenet_gazefollow_28epoch.pth.tar')
+checkpoint = torch.load('./savedmodels/gazenet_gazefollow_28epoch.pth.tar')
 # checkpoint = torch.load('./savedmodels/adamodels/gazenet_gazefollow_99epoch.pth.tar')
 
 print("Loading our pretrained gazenet model: ")
