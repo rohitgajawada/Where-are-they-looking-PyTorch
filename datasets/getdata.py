@@ -149,7 +149,7 @@ class GazeDataset(Dataset):
 
         eyes_loc_size = 13
         # gaze_label_size = 15
-        gaze_label_size = 13
+        gaze_label_size = 5
 
         eyes_loc = np.zeros((eyes_loc_size, eyes_loc_size))
         eyes_loc[int(np.floor(eyes_loc_size * eyes[1]))][int(np.floor(eyes_loc_size * eyes[0]))] = 1
@@ -174,7 +174,7 @@ class GazeDataset(Dataset):
         eyes_loc = torch.from_numpy(eyes_loc).contiguous()
         gaze_label = torch.from_numpy(gaze_label).contiguous()
         # gaze_label = gaze_label.view(1, 225)
-        gaze_label = gaze_label.view(1, 169)
+        gaze_label = gaze_label.view(1, 25)
         # print(gaze.shape)
         gaze_final = np.ones(100)
         gaze_final *= -1
