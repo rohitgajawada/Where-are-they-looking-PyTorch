@@ -13,7 +13,7 @@ def myargparser():
     parser.add_argument('--workers', default=6, type=int, help='number of data loading workers (default: 4)')
     #default stuff
     parser.add_argument('--epochs', default=200, type=int, help='number of total epochs to run')
-    parser.add_argument('--batch-size', default=32, type=int, help='mini-batch size (default: 128)')
+    parser.add_argument('--batch-size', default=4, type=int, help='mini-batch size (default: 128)')
     parser.add_argument('--testbatchsize', default=128, type=int, help='input batch size for testing (default: 1000)')
     parser.add_argument('--printfreq', default=50, type=int, help='print frequency (default: 10)')
     parser.add_argument('--learningratescheduler', default='decayschedular', type=str, help='if lr rate scheduler should be used')
@@ -48,7 +48,7 @@ def myargparser():
     parser.add_argument('--pretrained_file', default="")
 
     #model stuff
-    parser.add_argument('--resume', default='savedmodels/adamodels/gazenet_gazefollow_99epoch.pth.tar', type=str,
+    parser.add_argument('--resume', default='none', type=str,
                         help='path to latest checkpoint (default: none)')
     parser.add_argument('--store', default='', type=str,
                         help='path to storing checkpoints (default: none)')

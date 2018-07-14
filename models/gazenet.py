@@ -15,11 +15,12 @@ class AlexSal(nn.Module):
         )
 
         self.relu = nn.ReLU()
+        self.sigmoid = nn.Sigmoid()
         self.conv6 = nn.Conv2d(256, 1, kernel_size=(1, 1), stride=(1, 1))
 
     def forward(self, x):
         x = self.relu(self.features(x))
-        x = self.relu(self.conv6(x))
+        x = self.sigmoid(self.conv6(x))
         x = x.squeeze(1)
         return x
 
@@ -35,7 +36,7 @@ class AlexGaze(nn.Module):
         self.fc2 = nn.Linear(669, 400)
         self.fc3 = nn.Linear(400, 200)
         self.fc4 = nn.Linear(200, 169)
-        self.sig = nn.Sigmoid()
+        self.sigmoid = nn.Sigmoid()
 
         self.finalconv = nn.Conv2d(1, 1, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
 
@@ -50,9 +51,10 @@ class AlexGaze(nn.Module):
         x = torch.cat((x, egrid), dim=1)
         x = self.relu(self.fc2(x))
         x = self.relu(self.fc3(x))
-        x = self.sig(self.fc4(x))
+        x = self.relu(self.fc4(x))
         x = x.view(-1, 1, 13, 13)
         x = self.finalconv(x)
+        x = self.sigmoid(x)
         x = x.squeeze(1)
         return x
 
@@ -64,7 +66,9 @@ class Net(nn.Module):
         self.gazepath = AlexGaze(opt)
         self.opt = opt
 
-        self.smax = nn.Softmax()
+        self.fc_base = nn.Linear(169, 25)
+
+        self.smax = nn.LogSoftmax(dim=1)
         self.fc_0_m1 = nn.Linear(169, 25)
         self.fc_0_1 = nn.Linear(169, 25)
         self.fc_m1_0 = nn.Linear(169, 25)
@@ -77,6 +81,7 @@ class Net(nn.Module):
         output = outxi * outxh
         output = output.view(-1, 169)
         if self.opt.shiftedflag == False:
+            output = self.smax(self.fc_base(output))
             return output
 
         else:
@@ -90,6 +95,8 @@ class Net(nn.Module):
             f_0_0 = self.smax(self.fc_0_0(output)).view(-1, 5, 5)
 
             #risky
+            #problem with variable for hm, count_hm?
+            #problem for contiguous?
             f_cell = []
             f_cell.extend([f_0_m1, f_0_1, f_m1_0, f_1_0, f_0_0])
             v_x = [0, 1, -1, 0, 0];
@@ -120,7 +127,6 @@ class Net(nn.Module):
                         if y == 4:
                             f_y = 14
 
-                        # print(hm[:, i_x:f_x + 1, i_y:f_y + 1].size())
                         a = f[:, x, y].contiguous()
                         a = a.view(output.size(0), 1, 1)
 
