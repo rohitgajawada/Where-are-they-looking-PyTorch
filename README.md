@@ -2,10 +2,10 @@
 Where are they looking? - Attention modelling + Deep Learning
 
 # Team
-Rohit Gajawada
-Haard Panchal
-Anubhab Sen
-Arun Garimella
+* Rohit Gajawada
+* Haard Panchal
+* Anubhab Sen
+* Arun Garimella
 
 
 Implementation of http://carlvondrick.com/gaze.pdf in PyTorch
