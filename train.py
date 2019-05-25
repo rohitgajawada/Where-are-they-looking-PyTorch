@@ -69,7 +69,6 @@ class Validator():
     def __init__(self, model, criterion, opt):
 
         self.model = model
-        self.realparams = deepcopy(model.parameters)
         self.criterion = criterion
         self.batch_time = AverageMeter()
         self.data_time = AverageMeter()
@@ -102,6 +101,8 @@ class Validator():
             ground_labels = gcorrs
             pred_labels = outputs.max(1)[1]
             inputs_size = xh.size(0)
+
+            #TODO: Add AUC Score
 
             distval = utils.euclid_dist(pred_labels.data.cpu(), ground_labels.cpu(), inputs_size)
             mindistval = utils.euclid_mindist(pred_labels.data.cpu(), ground_labels.cpu(), inputs_size)

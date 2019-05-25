@@ -13,7 +13,6 @@ class AlexSal(nn.Module):
         self.features = nn.Sequential(
             *list(torch.load(opt.placesmodelpath).features.children())[:-2]
         )
-
         self.relu = nn.ReLU()
         self.sigmoid = nn.Sigmoid()
         self.conv6 = nn.Conv2d(256, 1, kernel_size=(1, 1), stride=(1, 1))
@@ -31,17 +30,17 @@ class AlexGaze(nn.Module):
             *list(models.alexnet(pretrained=True).features.children())
         )
         self.relu = nn.ReLU()
+        self.sigmoid = nn.Sigmoid()
 
         self.fc1 = nn.Linear(9216, 500)
         self.fc2 = nn.Linear(669, 400)
         self.fc3 = nn.Linear(400, 200)
         self.fc4 = nn.Linear(200, 169)
-        self.sigmoid = nn.Sigmoid()
 
         self.finalconv = nn.Conv2d(1, 1, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
 
     def forward(self, x, egrid):
-        x = self.features(x)
+        x = self.relu(self.features(x))
         x = x.view(-1, 9216)
         x = self.relu(self.fc1(x))
 
@@ -94,9 +93,6 @@ class Net(nn.Module):
             f_1_0 = self.smax(self.fc_1_0(output)).view(-1, 5, 5)
             f_0_0 = self.smax(self.fc_0_0(output)).view(-1, 5, 5)
 
-            #risky
-            #problem with variable for hm, count_hm?
-            #problem for contiguous?
             f_cell = []
             f_cell.extend([f_0_m1, f_0_1, f_m1_0, f_1_0, f_0_0])
             v_x = [0, 1, -1, 0, 0];

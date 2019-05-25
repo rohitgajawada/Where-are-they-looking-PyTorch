@@ -36,7 +36,7 @@ def myargparser():
     parser.add_argument('--model_def', default='gazenet', help='Architectures to be loaded')
     parser.add_argument('--inpsize', default=227, type=int, help='Input size')
     parser.add_argument('--weight_init', action='store_false', help='Turns off weight inits')
-    parser.add_argument('--shiftedflag', default=False, help='whether shifted grids is turned on')
+    parser.add_argument('--shiftedflag', default=True, help='whether shifted grids is turned on')
 
     #default
     parser.add_argument('--cachemode', default=True, help='if cachemode')
