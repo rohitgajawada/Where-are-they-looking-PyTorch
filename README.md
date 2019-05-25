@@ -9,7 +9,7 @@ A deep neural network-based approach for gaze-following automated using a SSD fa
 
 NOTE: This was one of my first deep learning project and it has some bugs and is not updated to latest PyTorch version. I plan to fix these bugs and update to latest version in the next few weeks. Please stay updated!
 
-## Installation 
+## Installation
 
 - [Pytorch 0.3.1 & Torchvision](https://pytorch.org/previous-versions/)
 
@@ -25,4 +25,3 @@ Please do get in touch with us by email for any questions, comments, suggestions
 
 rohit.gajawada@gmail.com
 haard.panchal@students.iiit.ac.in
-
