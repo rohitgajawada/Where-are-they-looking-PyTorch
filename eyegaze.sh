@@ -7,4 +7,4 @@
 #SBATCH --time=72:00:00
 #SBATCH --mail-type=ALL
 
-python2 main.py
+python3 main.py

@@ -1,11 +1,6 @@
 import torch
 import torch.nn as nn
-from torch.autograd import Variable
 import torchvision.models as models
-
-# places_alex = torch.load('../whole_alexnet_places365.pth.tar')
-# imagenet_alex = models.alexnet(pretrained=True)
-#LRN present in previous models but not here
 
 class AlexSal(nn.Module):
     def __init__(self, opt):
@@ -19,7 +14,7 @@ class AlexSal(nn.Module):
 
     def forward(self, x):
         x = self.relu(self.features(x))
-        x = self.sigmoid(self.conv6(x))
+        x = self.relu(self.conv6(x))   #do i want to use relu here?+
         x = x.squeeze(1)
         return x
 
@@ -45,15 +40,15 @@ class AlexGaze(nn.Module):
         x = self.relu(self.fc1(x))
 
         egrid = egrid.view(-1, 169)
-        egrid = egrid * 24
+        egrid = egrid * 24  ## TODO: IS THIS CORRECT?
 
         x = torch.cat((x, egrid), dim=1)
         x = self.relu(self.fc2(x))
         x = self.relu(self.fc3(x))
-        x = self.relu(self.fc4(x))
+        x = self.sigmoid(self.fc4(x))
+
         x = x.view(-1, 1, 13, 13)
         x = self.finalconv(x)
-        x = self.sigmoid(x)
         x = x.squeeze(1)
         return x
 
@@ -65,71 +60,80 @@ class Net(nn.Module):
         self.gazepath = AlexGaze(opt)
         self.opt = opt
 
-        self.fc_base = nn.Linear(169, 25)
+        self.smax = nn.Softmax(dim=1)
 
-        self.smax = nn.LogSoftmax(dim=1)
+        self.fc_0_0 = nn.Linear(169, 25)
         self.fc_0_m1 = nn.Linear(169, 25)
         self.fc_0_1 = nn.Linear(169, 25)
         self.fc_m1_0 = nn.Linear(169, 25)
         self.fc_1_0 = nn.Linear(169, 25)
-        self.fc_0_0 = nn.Linear(169, 25)
 
     def forward(self, xi, xh, xp):
         outxi = self.salpath(xi)
         outxh = self.gazepath(xh, xp)
         output = outxi * outxh
         output = output.view(-1, 169)
+
         if self.opt.shiftedflag == False:
-            output = self.smax(self.fc_base(output))
+            output = self.smax(self.fc_0_0(output))
             return output
 
-        else:
-            hm = Variable(torch.zeros(output.size(0), 15, 15)).cuda()
-            count_hm = Variable(torch.zeros(output.size(0), 15, 15)).cuda()
+        # else:
 
-            f_0_m1 = self.smax(self.fc_0_m1(output)).view(-1, 5, 5)
-            f_0_1 = self.smax(self.fc_0_1(output)).view(-1, 5, 5)
-            f_m1_0 = self.smax(self.fc_m1_0(output)).view(-1, 5, 5)
-            f_1_0 = self.smax(self.fc_1_0(output)).view(-1, 5, 5)
-            f_0_0 = self.smax(self.fc_0_0(output)).view(-1, 5, 5)
+    def predict(self, xi, xh, xp):
+        ##Only for TESTING!!!!
 
-            f_cell = []
-            f_cell.extend([f_0_m1, f_0_1, f_m1_0, f_1_0, f_0_0])
+        outxi = self.salpath(xi)
+        outxh = self.gazepath(xh, xp)
+        output = outxi * outxh
+        output = output.view(-1, 169)
 
-            v_x = [0, 1, -1, 0, 0]
-            v_y = [0, 0, 0, -1, 1]
-            
-            # for k in range(5):  do this only while testing!!!
-            #     dx, dy = v_x[k], v_y[k]
-            #     f = f_cell[k]
-            #     for x in range(5):
-            #         for y in range(5):
+        hm = torch.zeros(output.size(0), 15, 15).cuda()
+        count_hm = torch.zeros(output.size(0), 15, 15).cuda()
 
-            #             i_x = 3*x - dx
-            #             i_x = max(i_x, 0)
-            #             if x == 0:
-            #                 i_x = 0
+        f_0_m1 = self.smax(self.fc_0_m1(output)).view(-1, 5, 5)
+        f_0_1 = self.smax(self.fc_0_1(output)).view(-1, 5, 5)
+        f_m1_0 = self.smax(self.fc_m1_0(output)).view(-1, 5, 5)
+        f_1_0 = self.smax(self.fc_1_0(output)).view(-1, 5, 5)
+        f_0_0 = self.smax(self.fc_0_0(output)).view(-1, 5, 5)
 
-            #             i_y = 3*y - dy
-            #             i_y = max(i_y, 0)
-            #             if y == 0:
-            #                 i_y = 0
+        f_cell = []
+        f_cell.extend([f_0_m1, f_0_1, f_m1_0, f_1_0, f_0_0])
 
-            #             f_x = 3*x + 2 - dx
-            #             f_x = min(14, f_x)
-            #             if x == 4:
-            #                 f_x = 14
+        v_x = [0, 1, -1, 0, 0]
+        v_y = [0, 0, 0, -1, 1]
+        
+        for k in range(5):  #do this only while testing!!!
+            dx, dy = v_x[k], v_y[k]
+            f = f_cell[k]
+            for x in range(5):
+                for y in range(5):
 
-            #             f_y = 3*y + 2 - dy
-            #             f_y = min(14, f_y)
-            #             if y == 4:
-            #                 f_y = 14
+                    i_x = 3*x - dx
+                    i_x = max(i_x, 0)
+                    if x == 0:
+                        i_x = 0
 
-            #             a = f[:, x, y].contiguous()
-            #             a = a.view(output.size(0), 1, 1)
+                    i_y = 3*y - dy
+                    i_y = max(i_y, 0)
+                    if y == 0:
+                        i_y = 0
 
-            #             hm[:, i_x: f_x+1, i_y: f_y+1] =  hm[:, i_x: f_x+1, i_y: f_y+1] + a
-            #             count_hm[:, i_x: f_x+1, i_y: f_y+1] = count_hm[:, i_x: f_x+1, i_y: f_y+1] + 1
+                    f_x = 3*x + 2 - dx
+                    f_x = min(14, f_x)
+                    if x == 4:
+                        f_x = 14
 
-            # hm_base = hm.div(count_hm)
-            # return hm_base.view(-1, 225)
+                    f_y = 3*y + 2 - dy
+                    f_y = min(14, f_y)
+                    if y == 4:
+                        f_y = 14
+
+                    a = f[:, x, y].contiguous()
+                    a = a.view(output.size(0), 1, 1)
+
+                    hm[:, i_x: f_x+1, i_y: f_y+1] =  hm[:, i_x: f_x+1, i_y: f_y+1] + a
+                    count_hm[:, i_x: f_x+1, i_y: f_y+1] = count_hm[:, i_x: f_x+1, i_y: f_y+1] + 1
+
+        hm_base = hm.div(count_hm)
+        return hm_base.view(-1, 225)
