@@ -5,6 +5,7 @@ import time
 import models.__init__ as init
 import utils
 
+
 class Trainer():
     def __init__(self, model, criterion, optimizer, opt):
         self.model = model

@@ -72,6 +72,7 @@ def getCropped(img, e):
 
 
 class GazeDataset(Dataset):
+    ##THERE IS NO FRIKKING DATA AUG IN THIS OLD CODE!!! slap the old me from 2 yrs pls
 
     def __init__(self, Data, type, path):
 
@@ -148,7 +149,6 @@ class GazeDataset(Dataset):
         bbox = transform.resize(bbox,(227, 227))
 
         eyes_loc_size = 13
-        # gaze_label_size = 15
         gaze_label_size = 5
 
         eyes_loc = np.zeros((eyes_loc_size, eyes_loc_size))
@@ -173,7 +173,7 @@ class GazeDataset(Dataset):
 
         eyes_loc = torch.from_numpy(eyes_loc).contiguous()
         gaze_label = torch.from_numpy(gaze_label).contiguous()
-        # gaze_label = gaze_label.view(1, 225)
+        
         gaze_label = gaze_label.view(1, 25)
         # print(gaze.shape)
         gaze_final = np.ones(100)

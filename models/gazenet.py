@@ -95,39 +95,41 @@ class Net(nn.Module):
 
             f_cell = []
             f_cell.extend([f_0_m1, f_0_1, f_m1_0, f_1_0, f_0_0])
-            v_x = [0, 1, -1, 0, 0];
-            v_y = [0, 0, 0, -1, 1];
-            for k in range(5):
-                dx, dy = v_x[k], v_y[k]
-                f = f_cell[k]
-                for x in range(5):
-                    for y in range(5):
 
-                        i_x = 3*x - dx
-                        i_x = max(i_x, 0)
-                        if x == 0:
-                            i_x = 0
+            v_x = [0, 1, -1, 0, 0]
+            v_y = [0, 0, 0, -1, 1]
+            
+            # for k in range(5):  do this only while testing!!!
+            #     dx, dy = v_x[k], v_y[k]
+            #     f = f_cell[k]
+            #     for x in range(5):
+            #         for y in range(5):
 
-                        i_y = 3*y - dy
-                        i_y = max(i_y, 0)
-                        if y == 0:
-                            i_y = 0
+            #             i_x = 3*x - dx
+            #             i_x = max(i_x, 0)
+            #             if x == 0:
+            #                 i_x = 0
 
-                        f_x = 3*x + 2 - dx
-                        f_x = min(14, f_x)
-                        if x == 4:
-                            f_x = 14
+            #             i_y = 3*y - dy
+            #             i_y = max(i_y, 0)
+            #             if y == 0:
+            #                 i_y = 0
 
-                        f_y = 3*y + 2 - dy
-                        f_y = min(14, f_y)
-                        if y == 4:
-                            f_y = 14
+            #             f_x = 3*x + 2 - dx
+            #             f_x = min(14, f_x)
+            #             if x == 4:
+            #                 f_x = 14
 
-                        a = f[:, x, y].contiguous()
-                        a = a.view(output.size(0), 1, 1)
+            #             f_y = 3*y + 2 - dy
+            #             f_y = min(14, f_y)
+            #             if y == 4:
+            #                 f_y = 14
 
-                        hm[:, i_x: f_x+1, i_y: f_y+1] =  hm[:, i_x: f_x+1, i_y: f_y+1] + a
-                        count_hm[:, i_x: f_x+1, i_y: f_y+1] = count_hm[:, i_x: f_x+1, i_y: f_y+1] + 1
+            #             a = f[:, x, y].contiguous()
+            #             a = a.view(output.size(0), 1, 1)
 
-            hm_base = hm.div(count_hm)
-            return hm_base.view(-1, 225)
+            #             hm[:, i_x: f_x+1, i_y: f_y+1] =  hm[:, i_x: f_x+1, i_y: f_y+1] + a
+            #             count_hm[:, i_x: f_x+1, i_y: f_y+1] = count_hm[:, i_x: f_x+1, i_y: f_y+1] + 1
+
+            # hm_base = hm.div(count_hm)
+            # return hm_base.view(-1, 225)
