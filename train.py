@@ -1,4 +1,4 @@
-from torch.autograd import Variable
+import torch
 from utils import AverageMeter
 from copy import deepcopy
 import time
@@ -28,10 +28,10 @@ class Trainer():
 
             if opt.cuda:
                 xh, xi, xp, targets, eyes, names, eyes2, gcorrs = data
-                xh = xh.cuda(async=True)
-                xi = xi.cuda(async=True)
-                xp = xp.cuda(async=True)
-                targets = targets.cuda(async=True).squeeze()
+                xh = xh.cuda()  #do to device stuff
+                xi = xi.cuda()
+                xp = xp.cuda()
+                targets = targets.cuda().squeeze()
 
             xh, xi, xp, targets = Variable(xh), Variable(xi), Variable(xp), Variable(targets)
 
@@ -85,7 +85,7 @@ class Validator():
         self.batch_time.reset()
         end = time.time()
 
-        for i, data in enumerate(valloader, 0):
+        for i, data in enumerate(valloader, 0):  #follow new practices for gradient calculation removal
             if opt.cuda:
                 xh, xi, xp, targets, eyes, names, eyes2, gcorrs = data
                 xh = xh.cuda(async=True)

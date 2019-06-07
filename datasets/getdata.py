@@ -151,6 +151,8 @@ class GazeDataset(Dataset):
         eyes_loc_size = 13
         gaze_label_size = 5
 
+        #TODO DO SHIFTED GRIDS STUFF HERE, RETURN 5 VERSIONS OF PREDICTIONS
+
         eyes_loc = np.zeros((eyes_loc_size, eyes_loc_size))
         eyes_loc[int(np.floor(eyes_loc_size * eyes[1]))][int(np.floor(eyes_loc_size * eyes[0]))] = 1
 

@@ -46,11 +46,8 @@ def resumer(opt, model, optimizer):
 
 
 def load_model(opt):
-    if opt.pretrained_file != "":
-        model = torch.load(opt.pretrained_file)
-    else:
-        if opt.model_def == 'gazenet':
-            model = gazenet.Net(opt)
-            if opt.cuda:
-                model = model.cuda()
+    if opt.model_def == 'gazenet':
+        model = gazenet.Net(opt)
+        if opt.cuda:
+            model = model.cuda()
     return model
