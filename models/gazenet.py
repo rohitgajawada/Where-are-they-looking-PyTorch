@@ -14,7 +14,7 @@ class AlexSal(nn.Module):
 
     def forward(self, x):
         x = self.relu(self.features(x))
-        x = self.relu(self.conv6(x))   #do i want to use relu here?+
+        x = self.relu(self.conv6(x))   #TODO: do i want to use relu here
         x = x.squeeze(1)
         return x
 
@@ -60,7 +60,7 @@ class Net(nn.Module):
         self.gazepath = AlexGaze(opt)
         self.opt = opt
 
-        self.smax = nn.Softmax(dim=1)
+        self.smax = nn.LogSoftmax(dim=1)
 
         self.fc_0_0 = nn.Linear(169, 25)
         self.fc_0_m1 = nn.Linear(169, 25)
@@ -69,6 +69,7 @@ class Net(nn.Module):
         self.fc_1_0 = nn.Linear(169, 25)
 
     def forward(self, xi, xh, xp):
+
         outxi = self.salpath(xi)
         outxh = self.gazepath(xh, xp)
         output = outxi * outxh
@@ -76,12 +77,19 @@ class Net(nn.Module):
 
         if self.opt.shiftedflag == False:
             output = self.smax(self.fc_0_0(output))
-            return output
+            return [output]
 
-        # else:
+        else:
+            out_0_0 = self.smax(self.fc_0_0(output))
+            out_1_0 = self.smax(self.fc_1_0(output))
+            out_m1_0 = self.smax(self.fc_m1_0(output))
+            out_0_m1 = self.smax(self.fc_0_m1(output))
+            out_0_1 = self.smax(self.fc_0_1(output))
+
+            return [out_0_0, out_1_0, out_m1_0, out_0_m1, out_0_1]
+
 
     def predict(self, xi, xh, xp):
-        ##Only for TESTING!!!!
 
         outxi = self.salpath(xi)
         outxh = self.gazepath(xh, xp)
@@ -91,11 +99,11 @@ class Net(nn.Module):
         hm = torch.zeros(output.size(0), 15, 15).cuda()
         count_hm = torch.zeros(output.size(0), 15, 15).cuda()
 
+        f_0_0 = self.smax(self.fc_0_0(output)).view(-1, 5, 5)
+        f_1_0 = self.smax(self.fc_1_0(output)).view(-1, 5, 5)
+        f_m1_0 = self.smax(self.fc_m1_0(output)).view(-1, 5, 5)
         f_0_m1 = self.smax(self.fc_0_m1(output)).view(-1, 5, 5)
         f_0_1 = self.smax(self.fc_0_1(output)).view(-1, 5, 5)
-        f_m1_0 = self.smax(self.fc_m1_0(output)).view(-1, 5, 5)
-        f_1_0 = self.smax(self.fc_1_0(output)).view(-1, 5, 5)
-        f_0_0 = self.smax(self.fc_0_0(output)).view(-1, 5, 5)
 
         f_cell = []
         f_cell.extend([f_0_m1, f_0_1, f_m1_0, f_1_0, f_0_0])
@@ -103,7 +111,7 @@ class Net(nn.Module):
         v_x = [0, 1, -1, 0, 0]
         v_y = [0, 0, 0, -1, 1]
         
-        for k in range(5):  #do this only while testing!!!
+        for k in range(5): 
             dx, dy = v_x[k], v_y[k]
             f = f_cell[k]
             for x in range(5):

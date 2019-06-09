@@ -7,9 +7,7 @@ import models.gazenet as gazenet
 
 def setup(model, opt):
 
-    if opt.criterion == "mse":
-        criterion = nn.MSELoss().cuda()
-    elif opt.criterion == "crossentropy":
+    if opt.criterion == "crossentropy":
         criterion = nn.NLLLoss().cuda()
 
     if opt.optimType == 'sgd':

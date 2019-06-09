@@ -13,7 +13,7 @@ from torchvision import transforms
 import matplotlib.pyplot as plt
 import matplotlib
 import sys
-import sfd.tester as facedetect
+import ssd_detector.tester as facedetect
 import scipy.io as sio
 from skimage import io, transform
 import numpy as np

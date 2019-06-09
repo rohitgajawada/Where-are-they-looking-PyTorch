@@ -38,13 +38,17 @@ class Trainer():
             self.data_time.update(time.time() - end)
 
             outputs = self.model(xh, xi, xp)
-            loss = self.criterion(outputs, targets.max(1)[1])
+            total_loss = self.criterion(outputs[0], targets.max(1)[1])
+            for i in range(1, len(outputs)):
+                total_loss += self.criterion(outputs[i], targets.max(1)[1])
+            
+            total_loss = total_loss / (len(outputs) * 1.0)
 
-            loss.backward()
+            total_loss.backward()
             self.optimizer.step()
 
             inputs_size = xh.size(0)
-            self.losses.update(loss.item(), inputs_size)
+            self.losses.update(total_loss.item(), inputs_size)
             self.batch_time.update(time.time() - end)
             end = time.time()
 
@@ -83,47 +87,48 @@ class Validator():
         self.batch_time.reset()
         end = time.time()
 
-        for i, data in enumerate(valloader, 0):  #follow new practices for gradient calculation removal
-            if opt.cuda:
-                xh, xi, xp, targets, eyes, names, eyes2, gcorrs = data
-                xh = xh.cuda()
-                xi = xi.cuda()
-                xp = xp.cuda()
-                targets = targets.cuda().squeeze()
-                gcorrs = gcorrs.cuda()
+        with torch.no_grad():
+            for i, data in enumerate(valloader, 0): 
+                if opt.cuda:
+                    xh, xi, xp, targets, eyes, names, eyes2, gcorrs = data
+                    xh = xh.cuda()
+                    xi = xi.cuda()
+                    xp = xp.cuda()
+                    targets = targets.cuda().squeeze()
+                    gcorrs = gcorrs.cuda()
 
-            xh, xi, xp, targets = xh, xi, xp, targets
+                xh, xi, xp, targets = xh, xi, xp, targets
 
-            self.data_time.update(time.time() - end)
-            outputs = self.model.predict(xh, xi, xp)
+                self.data_time.update(time.time() - end)
+                outputs = self.model.predict(xh, xi, xp)
 
-            ground_labels = gcorrs
-            pred_labels = outputs.max(1)[1]
-            inputs_size = xh.size(0)
+                ground_labels = gcorrs
+                pred_labels = outputs.max(1)[1]
+                inputs_size = xh.size(0)
 
-            distval = utils.euclid_dist(pred_labels.data.cpu(), ground_labels.cpu(), inputs_size)
-            mindistval = utils.euclid_mindist(pred_labels.data.cpu(), ground_labels.cpu(), inputs_size)
+                distval = utils.euclid_dist(pred_labels.data.cpu(), ground_labels.cpu(), inputs_size)
+                mindistval = utils.euclid_mindist(pred_labels.data.cpu(), ground_labels.cpu(), inputs_size)
 
-            self.dist.update(distval, inputs_size)
-            self.mindist.update(mindistval, inputs_size)
-            self.batch_time.update(time.time() - end)
-            end = time.time()
+                self.dist.update(distval, inputs_size)
+                self.mindist.update(mindistval, inputs_size)
+                self.batch_time.update(time.time() - end)
+                end = time.time()
 
-            if i % opt.printfreq == 0 and opt.verbose == True:
-                print('Epoch: [{0}][{1}/{2}]\t'
-                      'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
-                      'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
-                      'Dist {dist.avg:.3f}\t'
-                      'MinDist {mindist.avg:.3f}\t'
-                      .format(
-                       epoch, i, len(valloader), batch_time=self.batch_time,
-                       data_time= self.data_time, dist=self.dist, mindist=self.mindist))
+                if i % opt.printfreq == 0 and opt.verbose == True:
+                    print('Epoch: [{0}][{1}/{2}]\t'
+                            'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
+                            'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
+                            'Dist {dist.avg:.3f}\t'
+                            'MinDist {mindist.avg:.3f}\t'
+                            .format(
+                            epoch, i, len(valloader), batch_time=self.batch_time,
+                            data_time= self.data_time, dist=self.dist, mindist=self.mindist))
 
-        print('Val: [{0}]\t'
-              'Time {batch_time.sum:.3f}\t'
-              'Data {data_time.sum:.3f}\t'
-              'Dist {dist.avg:.3f}\t' 'MinDist {mindist.avg:.3f}\t'.format(
-               epoch, batch_time=self.batch_time,
-               data_time= self.data_time, dist=self.dist, mindist=self.mindist))
+            print('Val: [{0}]\t'
+                    'Time {batch_time.sum:.3f}\t'
+                    'Data {data_time.sum:.3f}\t'
+                    'Dist {dist.avg:.3f}\t' 'MinDist {mindist.avg:.3f}\t'.format(
+                    epoch, batch_time=self.batch_time,
+                    data_time= self.data_time, dist=self.dist, mindist=self.mindist))
 
         return self.dist.avg
