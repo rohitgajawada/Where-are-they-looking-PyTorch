@@ -1,12 +1,14 @@
 import os
+import torch
 import torch.backends.cudnn as cudnn
 import opts
 import train
 import utils
 import models.__init__ as init
-import datasets.getdata as ld
+import getdata as ld
+import random
 
-parser = opts.myargparser()
+parser = opts.optionargparser()
 
 def main():
     global opt, best_err1
@@ -20,6 +22,10 @@ def main():
 
     trainer = train.Trainer(model, criterion, optimizer, opt)
     validator = train.Validator(model, criterion, opt)
+
+    random.seed(opt.seed)
+    torch.manual_seed(opt.seed)
+    cudnn.deterministic = True
 
     if opt.resume:
         if os.path.isfile(opt.resume):
@@ -36,7 +42,7 @@ def main():
 
     for epoch in range(opt.start_epoch, opt.epochs):
         utils.adjust_learning_rate(opt, optimizer, epoch)
-        print("Starting epoch number:",epoch+1,"Learning rate:", optimizer.param_groups[0]["lr"])
+        print("Starting epoch number:", epoch+1, "Learning rate:", optimizer.param_groups[0]["lr"])
 
         if opt.testOnly == False:
             trainer.train(train_loader, epoch, opt)

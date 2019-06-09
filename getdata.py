@@ -72,7 +72,7 @@ def getCropped(img, e):
 
 
 class GazeDataset(Dataset):
-    ##THERE IS NO FRIKKING DATA AUG IN THIS OLD CODE!!! slap the old me from 2 yrs pls
+    ##THERE IS NO FRIKKING DATA AUG IN THIS OLD CODE!!! slap the old me from 2 yrs pls TODO
 
     def __init__(self, Data, type, path):
 
@@ -178,7 +178,7 @@ class GazeDataset(Dataset):
         
         gaze_label = gaze_label.view(1, 25)
         # print(gaze.shape)
-        gaze_final = np.ones(100)
+        gaze_final = np.ones(100)   ##TODO, what is this 100?
         gaze_final *= -1
         gaze_final[:gaze.shape[0]] = gaze
         sample = (img.float(), bbox.float(), eyes_loc.float(), gaze_label.float(), eyes, idx, eyes2, gaze_final)

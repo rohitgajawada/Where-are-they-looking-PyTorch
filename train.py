@@ -28,12 +28,12 @@ class Trainer():
 
             if opt.cuda:
                 xh, xi, xp, targets, eyes, names, eyes2, gcorrs = data
-                xh = xh.cuda()  #do to device stuff
+                xh = xh.cuda()  
                 xi = xi.cuda()
                 xp = xp.cuda()
                 targets = targets.cuda().squeeze()
 
-            xh, xi, xp, targets = Variable(xh), Variable(xi), Variable(xp), Variable(targets)
+            xh, xi, xp, targets = xh, xi, xp, targets
 
             self.data_time.update(time.time() - end)
 
@@ -44,9 +44,7 @@ class Trainer():
             self.optimizer.step()
 
             inputs_size = xh.size(0)
-            self.losses.update(loss.data[0], inputs_size)
-
-            # measure elapsed time
+            self.losses.update(loss.item(), inputs_size)
             self.batch_time.update(time.time() - end)
             end = time.time()
 
@@ -88,30 +86,26 @@ class Validator():
         for i, data in enumerate(valloader, 0):  #follow new practices for gradient calculation removal
             if opt.cuda:
                 xh, xi, xp, targets, eyes, names, eyes2, gcorrs = data
-                xh = xh.cuda(async=True)
-                xi = xi.cuda(async=True)
-                xp = xp.cuda(async=True)
-                targets = targets.cuda(async=True).squeeze()
+                xh = xh.cuda()
+                xi = xi.cuda()
+                xp = xp.cuda()
+                targets = targets.cuda().squeeze()
                 gcorrs = gcorrs.cuda()
 
-            xh, xi, xp, targets = Variable(xh), Variable(xi), Variable(xp), Variable(targets)
+            xh, xi, xp, targets = xh, xi, xp, targets
 
             self.data_time.update(time.time() - end)
-            outputs = self.model(xh, xi, xp)
+            outputs = self.model.predict(xh, xi, xp)
 
             ground_labels = gcorrs
             pred_labels = outputs.max(1)[1]
             inputs_size = xh.size(0)
-
-            #TODO: Add AUC Score
 
             distval = utils.euclid_dist(pred_labels.data.cpu(), ground_labels.cpu(), inputs_size)
             mindistval = utils.euclid_mindist(pred_labels.data.cpu(), ground_labels.cpu(), inputs_size)
 
             self.dist.update(distval, inputs_size)
             self.mindist.update(mindistval, inputs_size)
-
-            # measure elapsed time
             self.batch_time.update(time.time() - end)
             end = time.time()
 

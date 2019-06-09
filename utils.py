@@ -9,93 +9,6 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
-class AverageMeter():
-    """Computes and stores the average and current value"""
-    def __init__(self):
-        self.reset()
-
-    def reset(self):
-        self.val = 0
-        self.avg = 0
-        self.sum = 0
-        self.count = 0
-
-    def update(self, val, n=1):
-        self.val = val
-        self.sum += val * n
-        self.count += n
-        self.avg = self.sum / self.count
-
-def euclid_dist(output, target, l):
-    total = 0
-    fulltotal = 0
-    # print(output)
-    # print(target)
-
-    output = output.float()
-    target = target.float()
-    for i in range(l):
-
-        step = 1 / 26.0
-        pred = output[i]
-        # print(pred)
-        predy = ((pred / 13.0) / 13.0) + step
-        predx = ((pred % 13.0) / 13.0) + step
-
-        ct = 0
-        for j in range(100):
-            ground_x = target[i][2*j]
-            ground_y = target[i][2*j + 1]
-            if ground_x == -1 or ground_y == -1:
-                break
-
-            temp = np.sqrt(np.power((ground_x - predx), 2) + np.power((ground_y - predy), 2))
-            total += temp
-            ct += 1
-
-        total = total / float(ct * 1.0)
-        fulltotal += total
-
-    fulltotal = fulltotal / float(l * 1.0)
-
-    return fulltotal
-
-
-def euclid_mindist(output, target, l):
-
-    fulltotal = 0
-    output = output.float()
-    target = target.float()
-    for i in range(l):
-
-        best = 1000000000
-        step = 1 / 26.0
-        pred = output[i]
-        predy = ((output[i] / 13.0) / 13.0) + step
-        predx = ((output[i] % 13.0) / 13.0) + step
-
-        ct = 0
-        for j in range(100):
-            ground_x = target[i][2*j]
-            ground_y = target[i][2*j + 1]
-            if ground_x == -1 or ground_y == -1:
-                break
-
-            temp = np.sqrt(np.power((ground_x - predx), 2) + np.power((ground_y - predy), 2))
-
-            if temp < best:
-                best = temp
-            ct += 1
-
-        fulltotal += best
-
-    fulltotal = fulltotal / float(l * 1.0)
-    return fulltotal
-
-
-def AUCaccuracy(output, target, opt):
-    pass
-
 def adjust_learning_rate(opt, optimizer, epoch):
     epoch = copy.deepcopy(epoch)
     lr = opt.maxlr
@@ -125,3 +38,91 @@ def get_mean_and_std(dataloader):
     mean.div_(len_dataset)
     std.div_(len_dataset)
     return mean, std
+
+class AverageMeter():
+    """Computes and stores the average and current value"""
+    def __init__(self):
+        self.reset()
+
+    def reset(self):
+        self.val = 0
+        self.avg = 0
+        self.sum = 0
+        self.count = 0
+
+    def update(self, val, n=1):
+        self.val = val
+        self.sum += val * n
+        self.count += n
+        self.avg = self.sum / self.count
+
+
+#Metric functions 
+def euclid_dist(output, target, l):
+    total = 0
+    fulltotal = 0
+
+    output = output.float()
+    target = target.float()
+    for i in range(l):
+
+        step = 1 / 10.0
+        pred = output[i]
+        predy = ((pred / 5.0) / 5.0) + step
+        predx = ((pred % 5.0) / 5.0) + step
+
+        ct = 0
+        for j in range(100):
+            ground_x = target[i][2*j]
+            ground_y = target[i][2*j + 1]
+            if ground_x == -1 or ground_y == -1:
+                break
+
+            temp = np.sqrt(np.power((ground_x - predx), 2) + np.power((ground_y - predy), 2))
+            total += temp
+            ct += 1
+
+        total = total / float(ct * 1.0)
+        fulltotal += total
+
+    fulltotal = fulltotal / float(l * 1.0)
+
+    return fulltotal
+
+
+def euclid_mindist(output, target, l):
+
+    fulltotal = 0
+    output = output.float()
+    target = target.float()
+    for i in range(l):
+
+        best = 1000000000
+        step = 1 / 10.0
+        pred = output[i]
+        predy = ((output[i] / 5.0) / 5.0) + step
+        predx = ((output[i] % 5.0) / 5.0) + step
+
+        ct = 0
+        for j in range(100):
+            ground_x = target[i][2*j]
+            ground_y = target[i][2*j + 1]
+            if ground_x == -1 or ground_y == -1:
+                break
+
+            temp = np.sqrt(np.power((ground_x - predx), 2) + np.power((ground_y - predy), 2))
+
+            if temp < best:
+                best = temp
+            ct += 1
+
+        fulltotal += best
+
+    fulltotal = fulltotal / float(l * 1.0)
+    return fulltotal
+
+
+def AUCaccuracy(output, target, opt):
+    pass
+
+

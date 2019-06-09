@@ -2,7 +2,7 @@ import argparse
 
 optim_choices = ['sgd','adam']
 
-def myargparser():
+def optionargparser():
     parser = argparse.ArgumentParser(description='GazeNet Training')
 
     #data stuff
@@ -10,7 +10,7 @@ def myargparser():
     parser.add_argument('--data_dir', default='../data/', type=str, help='chosen data directory')
     parser.add_argument('--placesmodelpath', default='../whole_alexnet_places365.pth.tar', type=str, help='chosen data directory')
     parser.add_argument('--verbose', default=True)
-    parser.add_argument('--workers', default=6, type=int, help='number of data loading workers (default: 4)')
+    parser.add_argument('--workers', default=8, type=int, help='number of data loading workers (default: 4)')
     #default stuff
     parser.add_argument('--epochs', default=200, type=int, help='number of total epochs to run')
     parser.add_argument('--batch-size', default=50, type=int, help='mini-batch size (default: 128)')
@@ -33,14 +33,11 @@ def myargparser():
     parser.add_argument('--weightDecay', default=1e-6, type=float, help='weight decay (Default: 1e-4)')
 
     #extra model stuff
-    parser.add_argument('--model_def', default='gazenet', help='Architectures to be loaded')
     parser.add_argument('--inpsize', default=227, type=int, help='Input size')
     parser.add_argument('--shiftedflag', default=True, help='whether shifted grids is turned on')
 
     #default
-    parser.add_argument('--cachemode', default=True, help='if cachemode')
-    parser.add_argument('--cuda',  default=True, help='if cuda is available')
-    parser.add_argument('--manualSeed',  default=123, help='fixed seed for experiments')
+    parser.add_argument('--seed',  default=123, help='fixed seed for experiments')
     parser.add_argument('--testOnly', default=False, type=bool, help='run on validation set only')
     parser.add_argument('--start-epoch', default=0, type=int,help='manual epoch number (useful on restarts)')
 
