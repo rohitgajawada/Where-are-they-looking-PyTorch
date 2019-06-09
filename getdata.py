@@ -64,7 +64,7 @@ def getCropped(img, e):
         x = transform.resize(x,(227, 227))
         return x
     except:
-        print('begins')
+        print('begins') #TODO, what happened here?
         print(x)
         print(x.shape)
         print('ends')

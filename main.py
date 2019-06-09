@@ -7,8 +7,10 @@ import utils
 import models.__init__ as init
 import getdata as ld
 import random
+from tensorboardX import SummaryWriter
 
 parser = opts.optionargparser()
+writer = SummaryWriter()
 
 def main():
     global opt, best_err1
@@ -20,8 +22,8 @@ def main():
     model, criterion, optimizer = init.setup(model,opt)
     print(model)
 
-    trainer = train.Trainer(model, criterion, optimizer, opt)
-    validator = train.Validator(model, criterion, opt)
+    trainer = train.Trainer(model, criterion, optimizer, opt, writer)
+    validator = train.Validator(model, criterion, opt, writer)
 
     random.seed(opt.seed)
     torch.manual_seed(opt.seed)

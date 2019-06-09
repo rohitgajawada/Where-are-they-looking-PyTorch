@@ -7,13 +7,14 @@ import utils
 
 
 class Trainer():
-    def __init__(self, model, criterion, optimizer, opt):
+    def __init__(self, model, criterion, optimizer, opt, writer):
         self.model = model
         self.criterion = criterion
         self.optimizer = optimizer
         self.batch_time = AverageMeter()
         self.data_time = AverageMeter()
         self.losses = AverageMeter()
+        self.writer = writer
 
     def train(self, trainloader, epoch, opt):
         self.data_time.reset()
@@ -60,6 +61,8 @@ class Trainer():
                        epoch, i, len(trainloader), batch_time=self.batch_time,
                        data_time= self.data_time, loss=self.losses))
 
+
+        self.writer.add_scalar('Train Loss', self.losses.avg, epoch)
         print('Train: [{0}]\t'
               'Time {batch_time.sum:.3f}\t'
               'Data {data_time.sum:.3f}\t'
@@ -69,7 +72,7 @@ class Trainer():
 
 
 class Validator():
-    def __init__(self, model, criterion, opt):
+    def __init__(self, model, criterion, opt, writer):
 
         self.model = model
         self.criterion = criterion
@@ -77,6 +80,7 @@ class Validator():
         self.data_time = AverageMeter()
         self.dist = AverageMeter()
         self.mindist = AverageMeter()
+        self.writer = writer
 
     def validate(self, valloader, epoch, opt):
 
@@ -123,6 +127,10 @@ class Validator():
                             .format(
                             epoch, i, len(valloader), batch_time=self.batch_time,
                             data_time= self.data_time, dist=self.dist, mindist=self.mindist))
+
+
+            self.writer.add_scalar('Val Dist', self.dist.avg, epoch)
+            self.writer.add_scalar('Val Min Dist', self.mindist.avg, epoch)
 
             print('Val: [{0}]\t'
                     'Time {batch_time.sum:.3f}\t'
