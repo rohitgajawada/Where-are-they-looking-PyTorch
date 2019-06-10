@@ -6,34 +6,27 @@ import numpy as np
 import matplotlib.pyplot as plt
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms, utils
+import random
 
 class RandomHorizontalFlip(object):
 
     def __init__(self, output_size):
-        assert isinstance(output_size, (int, tuple))
         self.output_size = output_size
 
-    def __call__(self, sample):
-        image, landmarks = sample['image'], sample['landmarks']
+    def __call__(self, image, bbox, eyes, eyes_bbox, gaze):
 
         h, w = image.shape[:2]
-        if isinstance(self.output_size, int):
-            if h > w:
-                new_h, new_w = self.output_size * h / w, self.output_size
-            else:
-                new_h, new_w = self.output_size, self.output_size * w / h
-        else:
-            new_h, new_w = self.output_size
+        h_bbox, w_bbox = bbox.shape[:-2]
 
-        new_h, new_w = int(new_h), int(new_w)
+        if random.random() > 0.5:
 
-        img = transform.resize(image, (new_h, new_w))
+            image = image[:, ::-1]
+            bbox = bbox[:, ::-1]
+            eyes[0] = w - eyes[0]
+            eyes_bbox[0] = w - eyes_bbox[0]
+            gaze[0] = w - gaze[0]
 
-        # h and w are swapped for landmarks because for images,
-        # x and y axes are axis 1 and 0 respectively
-        landmarks = landmarks * [new_w / w, new_h / h]
-
-        return {'image': img, 'landmarks': landmarks}
+        return image, bbox, eyes, eyes_bbox, gaze
 
 
 class RandomCrop(object):
@@ -46,32 +39,21 @@ class RandomCrop(object):
             assert len(output_size) == 2
             self.output_size = output_size
 
-    def __call__(self, sample):
-        image, landmarks = sample['image'], sample['landmarks']
+    def __call__(self, image, bbox, eyes, eyes_bbox, gaze):
 
-        h, w = image.shape[:2]
-        new_h, new_w = self.output_size
+        if random.random() > 0.5:
 
-        top = np.random.randint(0, h - new_h)
-        left = np.random.randint(0, w - new_w)
+            h, w = image.shape[:2]
+            new_h, new_w = self.output_size
 
-        image = image[top: top + new_h,
-                      left: left + new_w]
+            top = np.random.randint(0, h - new_h)
+            left = np.random.randint(0, w - new_w)
 
-        landmarks = landmarks - [left, top]
+            image = image[top: top + new_h, left: left + new_w]
 
-        return {'image': image, 'landmarks': landmarks}
+            eyes = eyes - [left, top]
+            eyes_bbox = eyes_bbox - [left, top]
+            eyes_bbox = eyes_bbox - [left, top]
+            gaze = gaze - [left, top]
 
-
-class ToTensor(object):
-    """Convert ndarrays in sample to Tensors."""
-
-    def __call__(self, sample):
-        image, landmarks = sample['image'], sample['landmarks']
-
-        # swap color axis because
-        # numpy image: H x W x C
-        # torch image: C X H X W
-        image = image.transpose((2, 0, 1))
-        return {'image': torch.from_numpy(image),
-                'landmarks': torch.from_numpy(landmarks)}
+        return image, bbox, eyes, eyes_bbox, gaze

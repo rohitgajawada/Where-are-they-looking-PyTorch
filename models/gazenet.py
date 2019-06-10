@@ -5,8 +5,11 @@ import torchvision.models as models
 class AlexSal(nn.Module):
     def __init__(self, opt):
         super(AlexSal, self).__init__()
+
+        places_net = 
+
         self.features = nn.Sequential(
-            *list(torch.load(opt.placesmodelpath).features.children())[:-2]
+            *list(torch.load(opt.placesmodelpath).state_dict().features.children())[:-2]
         )
         self.relu = nn.ReLU()
         self.sigmoid = nn.Sigmoid()
@@ -53,7 +56,7 @@ class AlexGaze(nn.Module):
         return x
 
 
-class Net(nn.Module):
+class Net(nn.Module):  #TODO, check biases in network, each conv in gaze and sal networks have different biases!!
     def __init__(self, opt):
         super(Net, self).__init__()
         self.salpath = AlexSal(opt)
@@ -144,4 +147,8 @@ class Net(nn.Module):
                     count_hm[:, i_x: f_x+1, i_y: f_y+1] = count_hm[:, i_x: f_x+1, i_y: f_y+1] + 1
 
         hm_base = hm.div(count_hm)
+
+        ##TODO!! resize the image to 227 x 227 by bicubic before returning
+        ##then obtain the coordinates by taking argmax
+
         return hm_base.view(-1, 225)

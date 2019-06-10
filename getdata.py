@@ -129,13 +129,10 @@ class GazeDataset(Dataset):
 
         # plt.imshow(img)
         # plt.show()
-        # plt.imshow(img + self.places_mean)
-        # plt.show()
         # exit()
 
         gaze = self.gaze_list[idx]
         eyes = self.eyes_list[idx]
-
         eyes2 = (eyes - bbox_corr[:2])/bbox_corr[2:]
 
         if len(img.shape) == 2:
@@ -151,6 +148,13 @@ class GazeDataset(Dataset):
         eyes_loc_size = 13
         gaze_label_size = 5
 
+        ######DO DATA AUG HERE###########
+
+
+
+
+        
+
         #TODO DO SHIFTED GRIDS STUFF HERE, RETURN 5 VERSIONS OF PREDICTIONS
 
         eyes_loc = np.zeros((eyes_loc_size, eyes_loc_size))
@@ -159,6 +163,16 @@ class GazeDataset(Dataset):
         gaze_label = np.zeros((gaze_label_size,gaze_label_size))
 
         gaze_label[int(np.floor(gaze_label_size * gaze[1]))][int(np.floor(gaze_label_size * gaze[0]))] = 1
+
+        eyes_loc = torch.from_numpy(eyes_loc).contiguous()
+        gaze_label = torch.from_numpy(gaze_label).contiguous()
+        
+        gaze_label = gaze_label.view(1, 25)
+        gaze_final = np.ones(100)   ##TODO, what is this 100?
+        gaze_final *= -1
+        gaze_final[:gaze.shape[0]] = gaze  ##HUGE BLUNDER, THE SCALE MIGHT NOT BE FROM 0 TO 5 etc when directly taken
+
+        #image to torch and normalize
 
         img = img.transpose((2, 0, 1))
         img = torch.from_numpy(img).contiguous()
@@ -173,14 +187,8 @@ class GazeDataset(Dataset):
         img = normtransform(img)
         bbox = normtransform(bbox)
 
-        eyes_loc = torch.from_numpy(eyes_loc).contiguous()
-        gaze_label = torch.from_numpy(gaze_label).contiguous()
-        
-        gaze_label = gaze_label.view(1, 25)
-        # print(gaze.shape)
-        gaze_final = np.ones(100)   ##TODO, what is this 100?
-        gaze_final *= -1
-        gaze_final[:gaze.shape[0]] = gaze
+        ############################
+
         sample = (img.float(), bbox.float(), eyes_loc.float(), gaze_label.float(), eyes, idx, eyes2, gaze_final)
 
         return sample
