@@ -4,6 +4,7 @@ from copy import deepcopy
 import time
 import models.__init__ as init
 import utils
+import sys
 
 
 class Trainer():
@@ -25,14 +26,15 @@ class Trainer():
         end = time.time()
         for i, data in enumerate(trainloader, 0):
 
+            print(i)
+
             self.optimizer.zero_grad()
 
-            if opt.cuda:
-                xh, xi, xp, targets, eyes, names, eyes2, gcorrs = data
-                xh = xh.cuda()  
-                xi = xi.cuda()
-                xp = xp.cuda()
-                targets = targets.cuda().squeeze()
+            xh, xi, xp, targets, eyes, names, eyes2, gcorrs = data
+            xh = xh.cuda()  
+            xi = xi.cuda()
+            xp = xp.cuda()
+            targets = targets.cuda().squeeze()
 
             xh, xi, xp, targets = xh, xi, xp, targets
 
@@ -60,6 +62,8 @@ class Trainer():
                       'Loss {loss.avg:.3f}\t'.format(
                        epoch, i, len(trainloader), batch_time=self.batch_time,
                        data_time= self.data_time, loss=self.losses))
+
+            sys.stdout.flush()
 
 
         self.writer.add_scalar('Train Loss', self.losses.avg, epoch)
@@ -93,13 +97,13 @@ class Validator():
 
         with torch.no_grad():
             for i, data in enumerate(valloader, 0): 
-                if opt.cuda:
-                    xh, xi, xp, targets, eyes, names, eyes2, gcorrs = data
-                    xh = xh.cuda()
-                    xi = xi.cuda()
-                    xp = xp.cuda()
-                    targets = targets.cuda().squeeze()
-                    gcorrs = gcorrs.cuda()
+
+                xh, xi, xp, targets, eyes, names, eyes2, gcorrs = data
+                xh = xh.cuda()
+                xi = xi.cuda()
+                xp = xp.cuda()
+                targets = targets.cuda().squeeze()
+                gcorrs = gcorrs.cuda()
 
                 xh, xi, xp, targets = xh, xi, xp, targets
 
@@ -127,6 +131,8 @@ class Validator():
                             .format(
                             epoch, i, len(valloader), batch_time=self.batch_time,
                             data_time= self.data_time, dist=self.dist, mindist=self.mindist))
+
+                sys.stdout.flush()
 
 
             self.writer.add_scalar('Val Dist', self.dist.avg, epoch)
