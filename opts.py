@@ -7,8 +7,8 @@ def optionargparser():
 
     #data stuff
     parser.add_argument('--dataset', default='gazefollow', type=str, help='chosen dataset')
-    parser.add_argument('--data_dir', default='../data/', type=str, help='chosen data directory')
-    parser.add_argument('--placesmodelpath', default='./alexnet_places365.pth.tar', type=str, help='chosen data directory')
+    parser.add_argument('--data_dir', default='../', type=str, help='chosen data directory')
+    parser.add_argument('--placesmodelpath', default='./whole_alexnet_places365.pth', type=str, help='chosen data directory')
     parser.add_argument('--verbose', default=True)
     parser.add_argument('--workers', default=8, type=int, help='number of data loading workers (default: 4)')
     #default stuff

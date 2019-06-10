@@ -6,10 +6,8 @@ class AlexSal(nn.Module):
     def __init__(self, opt):
         super(AlexSal, self).__init__()
 
-        places_net = 
-
         self.features = nn.Sequential(
-            *list(torch.load(opt.placesmodelpath).state_dict().features.children())[:-2]
+            *list(torch.load(opt.placesmodelpath).features.children())[:-2]
         )
         self.relu = nn.ReLU()
         self.sigmoid = nn.Sigmoid()

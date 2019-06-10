@@ -153,7 +153,7 @@ class GazeDataset(Dataset):
 
 
 
-        
+
 
         #TODO DO SHIFTED GRIDS STUFF HERE, RETURN 5 VERSIONS OF PREDICTIONS
 
@@ -184,8 +184,8 @@ class GazeDataset(Dataset):
 				transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
 			])
 
-        img = normtransform(img)
-        bbox = normtransform(bbox)
+        img = normtransform(img.float())
+        bbox = normtransform(bbox.float())
 
         ############################
 
