@@ -90,6 +90,8 @@ class GazeDataset(Dataset):
             data_meta = Data['test_meta'][0]
             data_path = Data['test_path']
 
+        self.grid_offsets = [-2,-1,0,1,2]
+
         for i in range(data_path.shape[0]):
             data_path[i] = data_path[i][0]
         data_path = data_path.flatten()
@@ -152,6 +154,17 @@ class GazeDataset(Dataset):
         gaze_label_size = 5
 
         #TODO DO SHIFTED GRIDS STUFF HERE, RETURN 5 VERSIONS OF PREDICTIONS
+
+        shifted_grids = np.zeros((gaze_label_size,gaze_label_size, len(self.grid_offsets)))
+        for i in range(len(self.grid_offsets)):
+            x_pix = gaze[1] * img.shape[0]
+            y_pix = gaze[0] * img.shape[1]
+            x_grid = int((x_pix - self.grid_offsets[i])/gaze_label_size)
+            y_grid = int((y_pix)/gaze_label_size)
+            shifted_grids[x_grid][y_grid] = 1
+            
+
+
 
         eyes_loc = np.zeros((eyes_loc_size, eyes_loc_size))
         eyes_loc[int(np.floor(eyes_loc_size * eyes[1]))][int(np.floor(eyes_loc_size * eyes[0]))] = 1
