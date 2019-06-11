@@ -73,8 +73,8 @@ def euclid_dist(output, target, l):
 
         ct = 0
         for j in range(100):
-            ground_x = target[i][2*j]
-            ground_y = target[i][2*j + 1]
+            ground_x = target[i][2*j + 1]
+            ground_y = target[i][2*j]
             if ground_x == -1 or ground_y == -1:
                 break
 
@@ -105,8 +105,8 @@ def euclid_mindist(output, target, l):
 
         ct = 0
         for j in range(100):
-            ground_x = target[i][2*j]
-            ground_y = target[i][2*j + 1]
+            ground_x = target[i][2*j + 1]
+            ground_y = target[i][2*j]
             if ground_x == -1 or ground_y == -1:
                 break
 
