@@ -10,6 +10,7 @@ from torch.utils.data import Dataset
 from torchvision import transforms
 import matplotlib.patches as patches
 import scipy.io as sio
+from customtransforms import RandomHorizontalFlip, RandomCrop
 
 def getCropped(img, e):
 
@@ -72,7 +73,6 @@ def getCropped(img, e):
 
 
 class GazeDataset(Dataset):
-    ##THERE IS NO FRIKKING DATA AUG IN THIS OLD CODE!!! slap the old me from 2 yrs pls TODO
 
     def __init__(self, Data, type, path):
 
@@ -133,7 +133,7 @@ class GazeDataset(Dataset):
 
         gaze = self.gaze_list[idx]
         eyes = self.eyes_list[idx]
-        eyes2 = (eyes - bbox_corr[:2])/bbox_corr[2:]
+        eyes_bbox = (eyes - bbox_corr[:2])/bbox_corr[2:]
 
         if len(img.shape) == 2:
             img = np.stack((img,)*3, axis=-1)
@@ -141,7 +141,7 @@ class GazeDataset(Dataset):
         if len(bbox.shape) == 2:
             bbox = np.stack((bbox,) * 3, axis=-1)
 
-        bbox = getCropped(bbox, eyes2)
+        bbox = getCropped(bbox, eyes_bbox)
         bbox = np.ascontiguousarray(bbox)
         bbox = transform.resize(bbox,(227, 227))
 
@@ -150,27 +150,37 @@ class GazeDataset(Dataset):
 
         ######DO DATA AUG HERE###########
 
-
-
-
-
+        composed = transforms.Compose([RandomHorizontalFlip(), RandomCrop(210, 227)])
+        img, bbox, eyes, eyes_bbox, gaze = composed(img, bbox, eyes, eyes_bbox, gaze)
 
         #TODO DO SHIFTED GRIDS STUFF HERE, RETURN 5 VERSIONS OF PREDICTIONS
 
         eyes_loc = np.zeros((eyes_loc_size, eyes_loc_size))
         eyes_loc[int(np.floor(eyes_loc_size * eyes[1]))][int(np.floor(eyes_loc_size * eyes[0]))] = 1
 
-        gaze_label = np.zeros((gaze_label_size,gaze_label_size))
+        grid_size = 5
 
-        gaze_label[int(np.floor(gaze_label_size * gaze[1]))][int(np.floor(gaze_label_size * gaze[0]))] = 1
+        v_x = [0, 1, -1, 0, 0]
+        v_y = [0, 0, 0, -1, 1]
+
+        shifted_grids = np.zeros((gaze_label_size, gaze_label_size, grid_size)) #TODO!!!
+        for i in range(5):
+            x_pix = gaze[1] 
+            y_pix = gaze[0] 
+            x_grid = int(np.floor(gaze_label_size * gaze[1]) + (v_x[i] * (1/ (grid_size * 3.0))) ) 
+            y_grid = int(np.floor(gaze_label_size * gaze[0]) + (v_y[i] * (1/ (grid_size * 3.0))) )
+            shifted_grids[x_grid][y_grid][i] = 1
+
+        # gaze_label = np.zeros((gaze_label_size,gaze_label_size))
+        # gaze_label[int(np.floor(gaze_label_size * gaze[1]))][int(np.floor(gaze_label_size * gaze[0]))] = 1
 
         eyes_loc = torch.from_numpy(eyes_loc).contiguous()
         gaze_label = torch.from_numpy(gaze_label).contiguous()
         
         gaze_label = gaze_label.view(1, 25)
-        gaze_final = np.ones(100)   ##TODO, what is this 100?
+        gaze_final = np.ones(100) 
         gaze_final *= -1
-        gaze_final[:gaze.shape[0]] = gaze  ##HUGE BLUNDER, THE SCALE MIGHT NOT BE FROM 0 TO 5 etc when directly taken
+        gaze_final[:gaze.shape[0]] = gaze  ##HUGE BLUNDER, THE SCALE MIGHT NOT BE FROM 0 TO 1 etc when directly taken
 
         #image to torch and normalize
 
@@ -189,7 +199,7 @@ class GazeDataset(Dataset):
 
         ############################
 
-        sample = (img.float(), bbox.float(), eyes_loc.float(), gaze_label.float(), eyes, idx, eyes2, gaze_final)
+        sample = (img.float(), bbox.float(), eyes_loc.float(), gaze_label.float(), eyes, idx, eyes_bbox, gaze_final)
 
         return sample
 

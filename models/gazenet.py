@@ -15,7 +15,7 @@ class AlexSal(nn.Module):
 
     def forward(self, x):
         x = self.relu(self.features(x))
-        x = self.relu(self.conv6(x))   #TODO: do i want to use relu here
+        x = self.relu(self.conv6(x))  
         x = x.squeeze(1)
         return x
 

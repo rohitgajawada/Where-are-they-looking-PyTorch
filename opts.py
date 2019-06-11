@@ -44,7 +44,7 @@ def optionargparser():
     #model stuff
     parser.add_argument('--resume', default='none', type=str,
                         help='path to latest checkpoint (default: none)')
-    parser.add_argument('--store', default='', type=str,
+    parser.add_argument('--store', default='./savedmodels/', type=str,
                         help='path to storing checkpoints (default: none)')
 
 

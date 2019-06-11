@@ -1,6 +1,5 @@
 import torch
 from utils import AverageMeter
-from copy import deepcopy
 import time
 import models.__init__ as init
 import utils
@@ -25,8 +24,6 @@ class Trainer():
 
         end = time.time()
         for i, data in enumerate(trainloader, 0):
-
-            print(i)
 
             self.optimizer.zero_grad()
 
@@ -55,7 +52,7 @@ class Trainer():
             self.batch_time.update(time.time() - end)
             end = time.time()
 
-            if i % opt.printfreq == 0 and opt.verbose == True:
+            if i % opt.printfreq == 0:
                 print('Epoch: [{0}][{1}/{2}]\t'
                       'Time {batch_time.avg:.3f} ({batch_time.sum:.3f})\t'
                       'Data {data_time.avg:.3f} ({data_time.sum:.3f})\t'
@@ -98,31 +95,29 @@ class Validator():
         with torch.no_grad():
             for i, data in enumerate(valloader, 0): 
 
-                xh, xi, xp, targets, eyes, names, eyes2, gcorrs = data
+                xh, xi, xp, targets, eyes, names, eyes2, ground_labels = data
                 xh = xh.cuda()
                 xi = xi.cuda()
                 xp = xp.cuda()
                 targets = targets.cuda().squeeze()
-                gcorrs = gcorrs.cuda()
 
                 xh, xi, xp, targets = xh, xi, xp, targets
 
                 self.data_time.update(time.time() - end)
                 outputs = self.model.predict(xh, xi, xp)
 
-                ground_labels = gcorrs
                 pred_labels = outputs.max(1)[1]
                 inputs_size = xh.size(0)
 
-                distval = utils.euclid_dist(pred_labels.data.cpu(), ground_labels.cpu(), inputs_size)
-                mindistval = utils.euclid_mindist(pred_labels.data.cpu(), ground_labels.cpu(), inputs_size)
+                distval = utils.euclid_dist(pred_labels.data.cpu(), ground_labels, inputs_size)
+                mindistval = utils.euclid_mindist(pred_labels.data.cpu(), ground_labels, inputs_size)
 
                 self.dist.update(distval, inputs_size)
                 self.mindist.update(mindistval, inputs_size)
                 self.batch_time.update(time.time() - end)
                 end = time.time()
 
-                if i % opt.printfreq == 0 and opt.verbose == True:
+                if i % opt.printfreq == 0:
                     print('Epoch: [{0}][{1}/{2}]\t'
                             'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                             'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
