@@ -35,10 +35,12 @@ class Trainer():
 
             self.data_time.update(time.time() - end)
 
+            # print("shifted size in train ", shifted_targets.size())
+
             outputs = self.model(xh, xi, xp)
-            total_loss = self.criterion(outputs[0], shifted_targets[:][0][:].max(1)[1])
+            total_loss = self.criterion(outputs[0], shifted_targets[:, 0, :].max(1)[1])
             for j in range(1, len(outputs)):
-                total_loss += self.criterion(outputs[i], shifted_targets[:][j][:].max(1)[1])
+                total_loss += self.criterion(outputs[j], shifted_targets[:, j, :].max(1)[1])
             
             total_loss = total_loss / (len(outputs) * 1.0)
 

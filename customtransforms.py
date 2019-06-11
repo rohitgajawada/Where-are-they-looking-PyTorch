@@ -64,9 +64,9 @@ class RandomCrop(object):
             image = image[top: top + new_h, left: left + new_w]
             image = transform.resize(image, (orig_h, orig_w))
 
-            eyes = eyes - [top, left]
-            eyes_bbox = eyes_bbox - [top, left]
-            gaze = gaze - [top, left]
+            eyes = (eyes * orig_w - [top, left]) / (1.0 * orig_w)   ##assuming that orig_w is equal to orig_h
+            eyes_bbox = (eyes_bbox * orig_w - [top, left]) / (1.0 * orig_w)
+            gaze = (gaze * orig_w - [top, left]) / (1.0 * orig_w)
 
         sample = {'img': image, 'bbox': bbox, 'eyes': eyes, 'eyes_bbox': eyes_bbox, 'gaze': gaze}
 

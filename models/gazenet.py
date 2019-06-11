@@ -76,18 +76,18 @@ class Net(nn.Module):  #TODO, check biases in network, each conv in gaze and sal
         output = outxi * outxh
         output = output.view(-1, 169)
 
-        if self.opt.shiftedflag == False:
-            output = self.smax(self.fc_0_0(output))
-            return [output]
+        # if self.opt.shiftedflag == False:
+        #     output = self.smax(self.fc_0_0(output))
+        #     return [output]
 
-        else:
-            out_0_0 = self.smax(self.fc_0_0(output))
-            out_1_0 = self.smax(self.fc_1_0(output))
-            out_m1_0 = self.smax(self.fc_m1_0(output))
-            out_0_m1 = self.smax(self.fc_0_m1(output))
-            out_0_1 = self.smax(self.fc_0_1(output))
+        # else:
+        out_0_0 = self.smax(self.fc_0_0(output))
+        out_1_0 = self.smax(self.fc_1_0(output))
+        out_m1_0 = self.smax(self.fc_m1_0(output))
+        out_0_m1 = self.smax(self.fc_0_m1(output))
+        out_0_1 = self.smax(self.fc_0_1(output))
 
-            return [out_0_0, out_1_0, out_m1_0, out_0_m1, out_0_1]
+        return [out_0_0, out_1_0, out_m1_0, out_0_m1, out_0_1]
 
 
     def predict(self, xi, xh, xp):
