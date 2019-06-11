@@ -52,7 +52,7 @@ class RandomCrop(object):
         eyes_bbox = sample['eyes_bbox']
         gaze = sample['gaze']
 
-        if random.random() > 0.1:
+        if random.random() > 0.05:
 
             h, w = image.shape[:2]
             new_h, new_w = self.crop_size

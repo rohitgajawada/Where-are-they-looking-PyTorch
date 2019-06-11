@@ -61,7 +61,7 @@ class Net(nn.Module):  #TODO, check biases in network, each conv in gaze and sal
         self.gazepath = AlexGaze(opt)
         self.opt = opt
 
-        self.smax = nn.LogSoftmax(dim=1)
+        self.smax = nn.LogSoftmax(dim=1)  #Should we be using softmax instead
 
         self.fc_0_0 = nn.Linear(169, 25)
         self.fc_0_m1 = nn.Linear(169, 25)
@@ -76,11 +76,6 @@ class Net(nn.Module):  #TODO, check biases in network, each conv in gaze and sal
         output = outxi * outxh
         output = output.view(-1, 169)
 
-        # if self.opt.shiftedflag == False:
-        #     output = self.smax(self.fc_0_0(output))
-        #     return [output]
-
-        # else:
         out_0_0 = self.smax(self.fc_0_0(output))
         out_1_0 = self.smax(self.fc_1_0(output))
         out_m1_0 = self.smax(self.fc_m1_0(output))

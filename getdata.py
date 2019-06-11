@@ -76,6 +76,7 @@ class GazeDataset(Dataset):
 
     def __init__(self, Data, type, path):
 
+        self.type = type
         if type == 'train':
             data_bbox = Data['train_bbox'][0]
             data_eyes = Data['train_eyes'][0]
@@ -150,17 +151,19 @@ class GazeDataset(Dataset):
 
         ######DO DATA AUG HERE###########
 
-        composed = transforms.Compose([RandomHorizontalFlip(), RandomCrop(210, 227)])
-        sample = {'img': img, 'bbox': bbox, 'eyes': eyes, 'eyes_bbox': eyes_bbox, 'gaze': gaze}
-        sample = composed(sample)
+        if self.type == 'train':
 
-        img = sample['img']
-        bbox = sample['bbox']
-        eyes = sample['eyes']
-        eyes_bbox = sample['eyes_bbox']
-        gaze = sample['gaze']
+            composed = transforms.Compose([RandomHorizontalFlip(), RandomCrop(210, 227)])
+            sample = {'img': img, 'bbox': bbox, 'eyes': eyes, 'eyes_bbox': eyes_bbox, 'gaze': gaze}
+            sample = composed(sample)
 
-        #DO SHIFTED GRIDS STUFF HERE, RETURN 5 VERSIONS OF PREDICTIONS
+            img = sample['img']
+            bbox = sample['bbox']
+            eyes = sample['eyes']
+            eyes_bbox = sample['eyes_bbox']
+            gaze = sample['gaze']
+
+        #DO SHIFTED GRIDS STUFF HERE, RETURN 5 VERSIONS OF PREDICTIONS, don't need to do this during testing
 
         eyes_loc = np.zeros((eyes_loc_size, eyes_loc_size))
         eyes_loc[int(np.floor(eyes_loc_size * eyes[1]))][int(np.floor(eyes_loc_size * eyes[0]))] = 1

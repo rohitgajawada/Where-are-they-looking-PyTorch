@@ -3,3 +3,4 @@ models/__pycache__/
 runs/
 whole_alexnet_places365.pth
 slurm*
+savedmodels/

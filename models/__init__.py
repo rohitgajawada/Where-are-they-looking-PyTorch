@@ -25,7 +25,7 @@ def save_checkpoint(opt, model, optimizer, best_err, epoch):
         'optimizer' : optimizer.state_dict(),
     }
     epochnum = str(epoch)
-    filename = opt.store + "gazenet" + '_' + opt.dataset + '_' + epochnum + 'epoch.pth.tar'
+    filename = opt.exp + '_' + opt.store + "gazenet" + '_' + opt.dataset + '_' + epochnum + 'epoch.pth.tar'
     torch.save(state, filename)
 
 def resumer(opt, model, optimizer):
