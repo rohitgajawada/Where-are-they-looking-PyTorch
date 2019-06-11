@@ -14,7 +14,7 @@ NOTE: This was one of my first deep learning projects and it has some bugs. The 
 
 ## Usage
 
-python3 main.py --data_dir='<location to gazefollow dataset>' --placesmodelpath='<location to places365 alexnet model>' 
+python3 main.py --data_dir=`location to gazefollow dataset` --placesmodelpath=`location to places365 alexnet model`
 
 
 * Please check out opts.py for other parameter changing.
