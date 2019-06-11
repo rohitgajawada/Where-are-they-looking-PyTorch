@@ -31,3 +31,8 @@ Please do get in touch with us by email for any questions, comments, suggestions
 
 * rohit.gajawada@gmail.com
 * haard.panchal@students.iiit.ac.in
+
+## References
+
+* We use sfzhang15's SFD detector for our face detection (https://github.com/sfzhang15/SFD).
+* Link to the NIPS 2015 paper from MIT: http://people.csail.mit.edu/khosla/papers/nips2015_recasens.pdf. Please cite them if you decide to use this project for your research.
