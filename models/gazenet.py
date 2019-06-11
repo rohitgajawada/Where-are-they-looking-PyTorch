@@ -41,7 +41,7 @@ class AlexGaze(nn.Module):
         x = self.relu(self.fc1(x))
 
         egrid = egrid.view(-1, 169)
-        egrid = egrid * 24  ## TODO: IS THIS CORRECT?
+        egrid = egrid * 24  
 
         x = torch.cat((x, egrid), dim=1)
         x = self.relu(self.fc2(x))

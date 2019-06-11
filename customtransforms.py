@@ -13,20 +13,28 @@ class RandomHorizontalFlip(object):
     def __init__(self):
         pass
 
-    def __call__(self, image, bbox, eyes, eyes_bbox, gaze):
+    def __call__(self, sample):
+
+        image = sample['img']
+        bbox = sample['bbox']
+        eyes = sample['eyes']
+        eyes_bbox = sample['eyes_bbox']
+        gaze = sample['gaze']
 
         h, w = image.shape[:2]
-        h_bbox, w_bbox = bbox.shape[:-2]
+        h_bbox, w_bbox = bbox.shape[:2]
 
         if random.random() > 0.5:
 
             image = image[:, ::-1]
             bbox = bbox[:, ::-1]
-            eyes[0] = w - eyes[0]
-            eyes_bbox[0] = w - eyes_bbox[0]
-            gaze[0] = w - gaze[0]
+            eyes[1] = 1 - eyes[1]
+            eyes_bbox[1] = 1 - eyes_bbox[1]
+            gaze[1] = 1 - gaze[1]
 
-        return image, bbox, eyes, eyes_bbox, gaze
+        sample = {'img': image, 'bbox': bbox, 'eyes': eyes, 'eyes_bbox': eyes_bbox, 'gaze': gaze}
+
+        return sample
 
 
 class RandomCrop(object):
@@ -36,7 +44,13 @@ class RandomCrop(object):
         self.crop_size = (crop_size, crop_size)
         self.orig_size = (orig_size, orig_size)
 
-    def __call__(self, image, bbox, eyes, eyes_bbox, gaze):
+    def __call__(self, sample):
+
+        image = sample['img']
+        bbox = sample['bbox']
+        eyes = sample['eyes']
+        eyes_bbox = sample['eyes_bbox']
+        gaze = sample['gaze']
 
         if random.random() > 0.5:
 
@@ -50,9 +64,10 @@ class RandomCrop(object):
             image = image[top: top + new_h, left: left + new_w]
             image = transform.resize(image, (orig_h, orig_w))
 
-            eyes = eyes - [left, top]
-            eyes_bbox = eyes_bbox - [left, top]
-            eyes_bbox = eyes_bbox - [left, top]
-            gaze = gaze - [left, top]
+            eyes = eyes - [top, left]
+            eyes_bbox = eyes_bbox - [top, left]
+            gaze = gaze - [top, left]
 
-        return image, bbox, eyes, eyes_bbox, gaze
+        sample = {'img': image, 'bbox': bbox, 'eyes': eyes, 'eyes_bbox': eyes_bbox, 'gaze': gaze}
+
+        return sample

@@ -27,20 +27,18 @@ class Trainer():
 
             self.optimizer.zero_grad()
 
-            xh, xi, xp, targets, eyes, names, eyes2, gcorrs = data
+            xh, xi, xp, shifted_targets, eyes, names, eyes2, gcorrs = data
             xh = xh.cuda()  
             xi = xi.cuda()
             xp = xp.cuda()
-            targets = targets.cuda().squeeze()
-
-            xh, xi, xp, targets = xh, xi, xp, targets
+            shifted_targets = shifted_targets.cuda().squeeze()
 
             self.data_time.update(time.time() - end)
 
             outputs = self.model(xh, xi, xp)
-            total_loss = self.criterion(outputs[0], targets.max(1)[1])
-            for i in range(1, len(outputs)):
-                total_loss += self.criterion(outputs[i], targets.max(1)[1])
+            total_loss = self.criterion(outputs[0], shifted_targets[:][0][:].max(1)[1])
+            for j in range(1, len(outputs)):
+                total_loss += self.criterion(outputs[i], shifted_targets[:][j][:].max(1)[1])
             
             total_loss = total_loss / (len(outputs) * 1.0)
 
@@ -99,9 +97,6 @@ class Validator():
                 xh = xh.cuda()
                 xi = xi.cuda()
                 xp = xp.cuda()
-                targets = targets.cuda().squeeze()
-
-                xh, xi, xp, targets = xh, xi, xp, targets
 
                 self.data_time.update(time.time() - end)
                 outputs = self.model.predict(xh, xi, xp)

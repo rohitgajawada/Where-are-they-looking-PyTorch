@@ -151,9 +151,16 @@ class GazeDataset(Dataset):
         ######DO DATA AUG HERE###########
 
         composed = transforms.Compose([RandomHorizontalFlip(), RandomCrop(210, 227)])
-        img, bbox, eyes, eyes_bbox, gaze = composed(img, bbox, eyes, eyes_bbox, gaze)
+        sample = {'img': img, 'bbox': bbox, 'eyes': eyes, 'eyes_bbox': eyes_bbox, 'gaze': gaze}
+        sample = composed(sample)
 
-        #TODO DO SHIFTED GRIDS STUFF HERE, RETURN 5 VERSIONS OF PREDICTIONS
+        img = sample['img']
+        bbox = sample['bbox']
+        eyes = sample['eyes']
+        eyes_bbox = sample['eyes_bbox']
+        gaze = sample['gaze']
+
+        #DO SHIFTED GRIDS STUFF HERE, RETURN 5 VERSIONS OF PREDICTIONS
 
         eyes_loc = np.zeros((eyes_loc_size, eyes_loc_size))
         eyes_loc[int(np.floor(eyes_loc_size * eyes[1]))][int(np.floor(eyes_loc_size * eyes[0]))] = 1
@@ -163,32 +170,29 @@ class GazeDataset(Dataset):
         v_x = [0, 1, -1, 0, 0]
         v_y = [0, 0, 0, -1, 1]
 
-        shifted_grids = np.zeros((gaze_label_size, gaze_label_size, grid_size)) #TODO!!!
+        shifted_grids = np.zeros((grid_size, gaze_label_size, gaze_label_size)) #TODO!!!
         for i in range(5):
             x_pix = gaze[1] 
             y_pix = gaze[0] 
             x_grid = int(np.floor(gaze_label_size * gaze[1]) + (v_x[i] * (1/ (grid_size * 3.0))) ) 
             y_grid = int(np.floor(gaze_label_size * gaze[0]) + (v_y[i] * (1/ (grid_size * 3.0))) )
-            shifted_grids[x_grid][y_grid][i] = 1
-
-        # gaze_label = np.zeros((gaze_label_size,gaze_label_size))
-        # gaze_label[int(np.floor(gaze_label_size * gaze[1]))][int(np.floor(gaze_label_size * gaze[0]))] = 1
+            shifted_grids[i][x_grid][y_grid] = 1
 
         eyes_loc = torch.from_numpy(eyes_loc).contiguous()
-        gaze_label = torch.from_numpy(gaze_label).contiguous()
+        shifted_grids = torch.from_numpy(shifted_grids).contiguous()
         
-        gaze_label = gaze_label.view(1, 25)
+        shifted_grids = shifted_grids.view(1, 5, 25)
         gaze_final = np.ones(100) 
         gaze_final *= -1
-        gaze_final[:gaze.shape[0]] = gaze  ##HUGE BLUNDER, THE SCALE MIGHT NOT BE FROM 0 TO 1 etc when directly taken
+        gaze_final[:gaze.shape[0]] = gaze  
 
         #image to torch and normalize
 
         img = img.transpose((2, 0, 1))
-        img = torch.from_numpy(img).contiguous()
+        img = torch.from_numpy(img.copy()).contiguous()
 
         bbox = bbox.transpose((2, 0, 1))
-        bbox = torch.from_numpy(bbox).contiguous()
+        bbox = torch.from_numpy(bbox.copy()).contiguous()
 
         normtransform = transforms.Compose([
 				transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
@@ -199,7 +203,7 @@ class GazeDataset(Dataset):
 
         ############################
 
-        sample = (img.float(), bbox.float(), eyes_loc.float(), gaze_label.float(), eyes, idx, eyes_bbox, gaze_final)
+        sample = (img.float(), bbox.float(), eyes_loc.float(), shifted_grids.float(), eyes, idx, eyes_bbox, gaze_final)
 
         return sample
 
@@ -216,4 +220,4 @@ class GazeFollow():
 
         self.val_gaze = GazeDataset(Test_Ann, 'test', opt.data_dir)
         self.val_loader = torch.utils.data.DataLoader(self.val_gaze,
-        batch_size=opt.testbatchsize, shuffle=True, num_workers=opt.workers)
+        batch_size=opt.testbatchsize, shuffle=False, num_workers=opt.workers)
