@@ -62,7 +62,8 @@ class Net(nn.Module):  #TODO, check biases in network, each conv in gaze and sal
         self.gazepath = AlexGaze(opt)
         self.opt = opt
 
-        self.smax = nn.Softmax(dim=1)  
+        self.smax = nn.LogSoftmax(dim=1)  
+        self.nolog_smax = nn.Softmax(dim=1)
 
         self.fc_0_0 = nn.Linear(169, 25)
         self.fc_0_m1 = nn.Linear(169, 25)
@@ -96,11 +97,11 @@ class Net(nn.Module):  #TODO, check biases in network, each conv in gaze and sal
         hm = torch.zeros(output.size(0), 15, 15).cuda()
         count_hm = torch.zeros(output.size(0), 15, 15).cuda()
 
-        f_0_0 = self.smax(self.fc_0_0(output)).view(-1, 5, 5)
-        f_1_0 = self.smax(self.fc_1_0(output)).view(-1, 5, 5)
-        f_m1_0 = self.smax(self.fc_m1_0(output)).view(-1, 5, 5)
-        f_0_m1 = self.smax(self.fc_0_m1(output)).view(-1, 5, 5)
-        f_0_1 = self.smax(self.fc_0_1(output)).view(-1, 5, 5)
+        f_0_0 = self.nolog_smax(self.fc_0_0(output)).view(-1, 5, 5)
+        f_1_0 = self.nolog_smax(self.fc_1_0(output)).view(-1, 5, 5)
+        f_m1_0 = self.nolog_smax(self.fc_m1_0(output)).view(-1, 5, 5)
+        f_0_m1 = self.nolog_smax(self.fc_0_m1(output)).view(-1, 5, 5)
+        f_0_1 = self.nolog_smax(self.fc_0_1(output)).view(-1, 5, 5)
 
         f_cell = []
         f_cell.extend([f_0_m1, f_0_1, f_m1_0, f_1_0, f_0_0])

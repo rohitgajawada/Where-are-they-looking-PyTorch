@@ -8,10 +8,10 @@ import models.gazenet as gazenet
 def setup(model, opt):
 
     if opt.criterion == "crossentropy":
-        criterion = nn.CrossEntropyLoss().cuda()
+        criterion = nn.NLLLoss().cuda()
 
     if opt.optimType == 'sgd':
-        optimizer = optim.SGD(model.parameters(), lr = opt.lr, momentum = opt.momentum, nesterov = opt.nesterov, weight_decay = opt.weightDecay)
+        optimizer = optim.SGD(model.parameters(), lr=opt.maxlr, momentum=opt.momentum, weight_decay=opt.weightDecay)
     elif opt.optimType == 'adam':
         optimizer = optim.Adam(model.parameters(), lr = opt.maxlr, weight_decay = opt.weightDecay)
 

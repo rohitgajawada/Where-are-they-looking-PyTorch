@@ -4,28 +4,36 @@ import opts
 import train
 import utils
 import models.__init__ as init
-import datasets.getdata as ld
-import matplotlib
-import matplotlib.pyplot as plt
+import getdata as ld
+#import matplotlib
+#import matplotlib.pyplot as plt
 import torchvision
 from torchvision import transforms
-import scipy.io as sio
+#import scipy.io as sio
 import torch
 
-parser = opts.myargparser()
+parser = opts.optionargparser()
 
 global opt
 opt = parser.parse_args()
 dataloader = ld.GazeFollow(opt)
-images, xis, eye_coords, pred_coords, eyes, names, eyes2, gaze2 = next(iter(dataloader.val_loader))
+images, bbox, eye_coords, shifted_grids, eyes2, idx, eyes_bbox, gaze, gaze2 = next(iter(dataloader.train_gaze))
 
 untr = transforms.Compose([
         transforms.Normalize([0, 0, 0], [1/(0.229), 1/(0.224), 1/(0.225)])])
 untr2 = transforms.Compose([
         transforms.Normalize([-0.485, -0.456, -0.406], [1, 1, 1])])
 
-for i in range(64):
-
+for i in range(1):
+#    print(images, bbox, eye_coords, shifted_grids, eyes2, idx, eyes_bbox, gaze, gaze2)
+    image = images[i]
+    print(image.shape)
+    to_pil = torchvision.transforms.ToPILImage()
+    img = untr(image)
+    image = to_pil(image)
+    
+    
+    """
     name = names[i]
     img = untr(images[i])
     img2 = untr(xis[i])
@@ -59,4 +67,5 @@ for i in range(64):
     plt.imshow(im2)
     plt.subplot(132)
     plt.imshow(eye_coords[i].cpu().numpy())
-    plt.show()
+    plt.savefig("outputs/" + "test" + str(i) + ".jpeg")
+    """

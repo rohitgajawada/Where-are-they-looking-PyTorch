@@ -91,7 +91,7 @@ def euclid_dist(output, target, l):
 
         total = total / float(ct * 1.0)
         # print(total)
-        exit()
+        # exit()
         fulltotal += total
 
     fulltotal = fulltotal / float(l * 1.0)
