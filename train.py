@@ -50,7 +50,7 @@ class Trainer():
             self.batch_time.update(time.time() - end)
             end = time.time()
 
-            if i % opt.printfreq == 0:
+            if i % opt.printfreq == 0 and opt.verbose:
                 print('Epoch: [{0}][{1}/{2}]\t'
                       'Time {batch_time.avg:.3f} ({batch_time.sum:.3f})\t'
                       'Data {data_time.avg:.3f} ({data_time.sum:.3f})\t'
@@ -112,7 +112,7 @@ class Validator():
                 self.batch_time.update(time.time() - end)
                 end = time.time()
 
-                if i % opt.printfreq == 0:
+                if i % opt.printfreq == 0 and opt.verbose:
                     print('Epoch: [{0}][{1}/{2}]\t'
                             'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                             'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'

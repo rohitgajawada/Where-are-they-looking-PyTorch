@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torchvision.models as models
+import torch.nn.functional as F
 
 class AlexSal(nn.Module):
     def __init__(self, opt):
@@ -141,7 +142,13 @@ class Net(nn.Module):  #TODO, check biases in network, each conv in gaze and sal
 
         hm_base = hm.div(count_hm)
 
+        hm_base = hm_base.unsqueeze(1)
+
+        hm_base = F.interpolate(input = hm_base, size = (227, 227), mode='bilinear', align_corners=True)
+
+        hm_base = hm_base.squeeze(1)
+
         ##TODO!! resize the image to 227 x 227 by bicubic before returning
         ##then obtain the coordinates by taking argmax
 
-        return hm_base.view(-1, 225)
+        return hm_base.view(-1, 227 * 227)

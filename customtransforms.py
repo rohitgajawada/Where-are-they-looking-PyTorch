@@ -28,16 +28,16 @@ class RandomHorizontalFlip(object):
 
             image = image[:, ::-1]
             bbox = bbox[:, ::-1]
-            eyes[1] = 1 - eyes[1]
-            eyes_bbox[1] = 1 - eyes_bbox[1]
-            gaze[1] = 1 - gaze[1]
+            eyes[0] = 1 - eyes[0]
+            eyes_bbox[0] = 1 - eyes_bbox[0]
+            gaze[0] = 1 - gaze[0]
 
         sample = {'img': image, 'bbox': bbox, 'eyes': eyes, 'eyes_bbox': eyes_bbox, 'gaze': gaze}
 
         return sample
 
 
-class RandomCrop(object):
+class RandomCrop(object):  ##TODO!!
 
     def __init__(self, crop_size, orig_size):
 
@@ -64,9 +64,11 @@ class RandomCrop(object):
             image = image[top: top + new_h, left: left + new_w]
             image = transform.resize(image, (orig_h, orig_w))
 
-            eyes = (eyes * orig_w - [top, left]) / (1.0 * orig_w)   ##assuming that orig_w is equal to orig_h
-            eyes_bbox = (eyes_bbox * orig_w - [top, left]) / (1.0 * orig_w)
-            gaze = (gaze * orig_w - [top, left]) / (1.0 * orig_w)
+            #Have to resize values also
+
+            eyes = (eyes * orig_w - [left, top]) / (1.0 * orig_w)   ##assuming that orig_w is equal to orig_h
+            eyes_bbox = (eyes_bbox * orig_w - [left, top]) / (1.0 * orig_w)
+            gaze = (gaze * orig_w - [left, top]) / (1.0 * orig_w)
 
         sample = {'img': image, 'bbox': bbox, 'eyes': eyes, 'eyes_bbox': eyes_bbox, 'gaze': gaze}
 

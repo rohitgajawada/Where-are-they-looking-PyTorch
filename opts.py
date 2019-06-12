@@ -9,7 +9,7 @@ def optionargparser():
     parser.add_argument('--dataset', default='gazefollow', type=str, help='chosen dataset')
     parser.add_argument('--data_dir', default='../', type=str, help='chosen data directory')
     parser.add_argument('--placesmodelpath', default='./whole_alexnet_places365.pth', type=str, help='chosen data directory')
-    parser.add_argument('--verbose', default=True)
+    parser.add_argument('--verbose', default=False)
     parser.add_argument('--workers', default=8, type=int, help='number of data loading workers (default: 4)')
     #default stuff
     parser.add_argument('--epochs', default=200, type=int, help='number of total epochs to run')
@@ -39,6 +39,9 @@ def optionargparser():
     parser.add_argument('--seed',  default=123, help='fixed seed for experiments')
     parser.add_argument('--testOnly', default=False, type=bool, help='run on validation set only')
     parser.add_argument('--start-epoch', default=0, type=int,help='manual epoch number (useful on restarts)')
+
+    parser.add_argument('--withaug', default=True, type=bool, help='run on validation set only')
+    parser.add_argument('--shiftedgrids', default=True, type=bool, help='run on validation set only')
 
     #model stuff
     parser.add_argument('--exp', default='good', type=str,

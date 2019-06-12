@@ -66,15 +66,14 @@ def euclid_dist(output, target, l):
     target = target.float()
     for i in range(l):
 
-        step = 1 / 30.0
-        pred = output[i]
-        predy = ((pred / 15) / 15.0) + step
-        predx = ((pred % 15) / 15.0) + step
+        predy = ((output[i] / 227) / 227.0) 
+        predx = ((output[i] % 227) / 227.0) 
 
         ct = 0
         for j in range(100):
-            ground_x = target[i][2*j + 1]
-            ground_y = target[i][2*j]
+            ground_x = target[i][2*j]
+            ground_y = target[i][2*j + 1]
+
             if ground_x == -1 or ground_y == -1:
                 break
 
@@ -98,15 +97,14 @@ def euclid_mindist(output, target, l):
     for i in range(l):
 
         best = 1000000000
-        step = 1 / 30.0
-        pred = output[i]
-        predy = ((output[i] / 15) / 15.0) + step
-        predx = ((output[i] % 15) / 15.0) + step
+        
+        predy = ((output[i] / 227) / 227.0) 
+        predx = ((output[i] % 227) / 227.0) 
 
         ct = 0
         for j in range(100):
-            ground_x = target[i][2*j + 1]
-            ground_y = target[i][2*j]
+            ground_x = target[i][2*j]
+            ground_y = target[i][2*j + 1]
             if ground_x == -1 or ground_y == -1:
                 break
 

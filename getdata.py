@@ -74,9 +74,11 @@ def getCropped(img, e):
 
 class GazeDataset(Dataset):
 
-    def __init__(self, Data, type, path):
+    def __init__(self, Data, type, path, opt):
 
         self.type = type
+        self.opt = opt
+
         if type == 'train':
             data_bbox = Data['train_bbox'][0]
             data_eyes = Data['train_eyes'][0]
@@ -129,8 +131,7 @@ class GazeDataset(Dataset):
         img = transform.resize(img,(227, 227))
 
         # plt.imshow(img)
-        # plt.show()
-        # exit()
+        # plt.savefig('a.jpg')
 
         gaze = self.gaze_list[idx]
         eyes = self.eyes_list[idx]
@@ -149,11 +150,15 @@ class GazeDataset(Dataset):
         eyes_loc_size = 13
         gaze_label_size = 5
 
+        # print(eyes)
+        # print(gaze)
+        # print("before_aug")
+
         ######DO DATA AUG HERE###########
 
-        if self.type == 'train':
+        if self.type == 'train' and self.opt.withaug == True:
 
-            composed = transforms.Compose([RandomHorizontalFlip(), RandomCrop(210, 227)])
+            composed = transforms.Compose([RandomHorizontalFlip()])
             sample = {'img': img, 'bbox': bbox, 'eyes': eyes, 'eyes_bbox': eyes_bbox, 'gaze': gaze}
             sample = composed(sample)
 
@@ -165,6 +170,9 @@ class GazeDataset(Dataset):
 
         #DO SHIFTED GRIDS STUFF HERE, RETURN 5 VERSIONS OF PREDICTIONS, don't need to do this during testing
 
+        # plt.imshow(bbox)
+        # plt.savefig('a_head.jpg')
+
         eyes_loc = np.zeros((eyes_loc_size, eyes_loc_size))
         eyes_loc[int(np.floor(eyes_loc_size * eyes[1]))][int(np.floor(eyes_loc_size * eyes[0]))] = 1
 
@@ -173,13 +181,26 @@ class GazeDataset(Dataset):
         v_x = [0, 1, -1, 0, 0]
         v_y = [0, 0, 0, -1, 1]
 
+        # print(eyes)
+        # print(gaze)
+
+        x_pix = gaze[0] 
+        y_pix = gaze[1] 
+        # print(x_pix, y_pix)
+
         shifted_grids = np.zeros((grid_size, gaze_label_size, gaze_label_size)) #TODO!!!
         for i in range(5):
-            x_pix = gaze[1] 
-            y_pix = gaze[0] 
-            x_grid = int(np.floor(gaze_label_size * gaze[1]) + (v_x[i] * (1/ (grid_size * 3.0))) ) 
-            y_grid = int(np.floor(gaze_label_size * gaze[0]) + (v_y[i] * (1/ (grid_size * 3.0))) )
-            shifted_grids[i][x_grid][y_grid] = 1
+
+            x_grid = int(np.floor(gaze_label_size * gaze[0]) + (v_x[i] * (1/ (grid_size * 3.0))) ) 
+            y_grid = int(np.floor(gaze_label_size * gaze[1]) + (v_y[i] * (1/ (grid_size * 3.0))) )
+
+            # print(x_grid, y_grid)
+
+            shifted_grids[i][y_grid][x_grid] = 1
+
+        # print(shifted_grids)
+        # print("------------------")
+        # exit()
 
         eyes_loc = torch.from_numpy(eyes_loc).contiguous()
         shifted_grids = torch.from_numpy(shifted_grids).contiguous()
@@ -205,8 +226,10 @@ class GazeDataset(Dataset):
         bbox = normtransform(bbox.float())
 
         ############################
-
         # print("shifted size  ", shifted_grids.size())
+
+        # print(shifted_grids)
+        # exit()
 
         sample = (img.float(), bbox.float(), eyes_loc.float(), shifted_grids.float(), eyes, idx, eyes_bbox, gaze_final)
 
@@ -219,10 +242,10 @@ class GazeFollow():
         Train_Ann = sio.loadmat(opt.data_dir + 'train_annotations.mat')
         Test_Ann = sio.loadmat(opt.data_dir + 'test_annotations.mat')
 
-        self.train_gaze = GazeDataset(Train_Ann, 'train', opt.data_dir)
+        self.train_gaze = GazeDataset(Train_Ann, 'train', opt.data_dir, opt)
         self.x = self.train_gaze[1]
         self.train_loader = torch.utils.data.DataLoader(self.train_gaze, batch_size=opt.batch_size, shuffle=True, num_workers=opt.workers)
 
-        self.val_gaze = GazeDataset(Test_Ann, 'test', opt.data_dir)
+        self.val_gaze = GazeDataset(Test_Ann, 'test', opt.data_dir, opt)
         self.val_loader = torch.utils.data.DataLoader(self.val_gaze,
         batch_size=opt.testbatchsize, shuffle=False, num_workers=opt.workers)
