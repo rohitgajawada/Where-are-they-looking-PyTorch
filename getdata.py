@@ -242,6 +242,7 @@ class GazeDataset(Dataset):
         # print(shifted_grids)
         # exit()
 	# print(img.shape)
+	print("Main file: Image size: ",img.shape)
         sample = (img.float(), bbox.float(), eyes_loc.float(), shifted_grids.float(), eyes, idx, eyes_bbox, gaze, gaze_final)
 
         return sample

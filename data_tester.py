@@ -1,12 +1,14 @@
 import os
+import matplotlib as mpl
+mpl.use('Agg')
+print("MPL done")
+import matplotlib.pyplot as plt
 import torch.backends.cudnn as cudnn
 import opts
 import train
 import utils
 import models.__init__ as init
 import getdata as ld
-#import matplotlib
-#import matplotlib.pyplot as plt
 import torchvision
 from torchvision import transforms
 #import scipy.io as sio
@@ -17,7 +19,7 @@ parser = opts.optionargparser()
 global opt
 opt = parser.parse_args()
 dataloader = ld.GazeFollow(opt)
-images, bbox, eye_coords, shifted_grids, eyes2, idx, eyes_bbox, gaze, gaze2 = next(iter(dataloader.train_gaze))
+#images, bbox, eye_coords, shifted_grids, eyes2, idx, eyes_bbox, gaze, gaze2 = next(iter(dataloader.train_gaze))
 
 untr = transforms.Compose([
         transforms.Normalize([0, 0, 0], [1/(0.229), 1/(0.224), 1/(0.225)])])
@@ -26,11 +28,17 @@ untr2 = transforms.Compose([
 
 for i in range(1):
 #    print(images, bbox, eye_coords, shifted_grids, eyes2, idx, eyes_bbox, gaze, gaze2)
-    image = images[i]
+    image, bbox, eye_coords, shifted_grids, eyes2, idx, eyes_bbox, gaze, gaze2 = next(iter(dataloader.train_gaze))
     print(image.shape)
     to_pil = torchvision.transforms.ToPILImage()
     img = untr(image)
+    image = untr2(image)
     image = to_pil(image)
+    
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.imshow(image)
+    fig.savefig("outputs/" + "test" + str(i) + ".jpeg")
     
     
     """
