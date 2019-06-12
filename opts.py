@@ -44,7 +44,7 @@ def optionargparser():
     parser.add_argument('--shiftedgrids', default=True, type=bool, help='run on validation set only')
 
     #model stuff
-    parser.add_argument('--exp', default='good', type=str,
+    parser.add_argument('--exp', default='bicubic', type=str,
                         help='name of experiment')
     parser.add_argument('--resume', default='none', type=str,
                         help='path to latest checkpoint (default: none)')

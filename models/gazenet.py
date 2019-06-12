@@ -144,7 +144,7 @@ class Net(nn.Module):  #TODO, check biases in network, each conv in gaze and sal
 
         hm_base = hm_base.unsqueeze(1)
 
-        hm_base = F.interpolate(input = hm_base, size = (227, 227), mode='bilinear', align_corners=True)
+        hm_base = F.interpolate(input = hm_base, size = (227, 227), mode='bicubic', align_corners=True)
 
         hm_base = hm_base.squeeze(1)
 
