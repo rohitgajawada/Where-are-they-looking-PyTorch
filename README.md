@@ -6,8 +6,6 @@ This repository contains an implementation of the "Where are they looking?" pape
 
 A deep neural network-based approach for gaze-following automated using a SSD face detector.
 
-NOTE: This was one of my first deep learning projects and it has some bugs. The problems are currently being fixed so that the results in the paper can be attained. Please stay tuned! Thanks!
-
 ## Installation
 
 - [Pytorch 1.1 & Torchvision](https://pytorch.org/)
@@ -19,12 +17,6 @@ python3 main.py --data_dir=`location to gazefollow dataset` --placesmodelpath=`l
 
 * Please check out opts.py for other parameter changing.
 
-### Results on GazeDataset
-
-* Min Euclidean Distance:
-* Euclidean Distance:
-* AUC Score:
-
 ## Contact
 
 Please do get in touch with us by email for any questions, comments, suggestions you have!
@@ -34,5 +26,5 @@ Please do get in touch with us by email for any questions, comments, suggestions
 
 ## References
 
-* We use sfzhang15's SFD detector for our face detection (https://github.com/sfzhang15/SFD).
+* sfzhang15's SFD detector is used for face detection (https://github.com/sfzhang15/SFD).
 * Link to the NIPS 2015 paper from MIT: http://people.csail.mit.edu/khosla/papers/nips2015_recasens.pdf. Please cite them if you decide to use this project for your research.

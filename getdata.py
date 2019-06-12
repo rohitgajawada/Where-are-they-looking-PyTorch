@@ -156,9 +156,9 @@ class GazeDataset(Dataset):
 
         ######DO DATA AUG HERE###########
 
-        if self.type == 'train' and self.opt.withaug == True:
+        if self.type == 'train':
 
-            composed = transforms.Compose([RandomHorizontalFlip()])
+            composed = transforms.Compose([RandomCrop(), RandomHorizontalFlip()])
             sample = {'img': img, 'bbox': bbox, 'eyes': eyes, 'eyes_bbox': eyes_bbox, 'gaze': gaze}
             sample = composed(sample)
 
@@ -168,10 +168,11 @@ class GazeDataset(Dataset):
             eyes_bbox = sample['eyes_bbox']
             gaze = sample['gaze']
 
-        #DO SHIFTED GRIDS STUFF HERE, RETURN 5 VERSIONS OF PREDICTIONS, don't need to do this during testing
+        #SHIFTED GRIDS STUFF
 
-        # plt.imshow(bbox)
-        # plt.savefig('a_head.jpg')
+        # print("eyes: ", eyes)
+        # print("eyes_bbox: ", eyes_bbox)
+        # print("gaze: ", gaze)
 
         eyes_loc = np.zeros((eyes_loc_size, eyes_loc_size))
         eyes_loc[int(np.floor(eyes_loc_size * eyes[1]))][int(np.floor(eyes_loc_size * eyes[0]))] = 1
@@ -188,15 +189,25 @@ class GazeDataset(Dataset):
         y_pix = gaze[1] 
         # print(x_pix, y_pix)
 
-        shifted_grids = np.zeros((grid_size, gaze_label_size, gaze_label_size)) #TODO!!!
+        shifted_grids = np.zeros((grid_size, gaze_label_size, gaze_label_size)) 
         for i in range(5):
 
             x_grid = int(np.floor(gaze_label_size * gaze[0]) + (v_x[i] * (1/ (grid_size * 3.0))) ) 
             y_grid = int(np.floor(gaze_label_size * gaze[1]) + (v_y[i] * (1/ (grid_size * 3.0))) )
 
-            # print(x_grid, y_grid)
+            # print("grid vals: ", x_grid, y_grid)
 
-            shifted_grids[i][y_grid][x_grid] = 1
+            try:
+                shifted_grids[i][y_grid][x_grid] = 1
+            except:
+                print("**************")
+                print("eyes: ", eyes)
+                print("eyes_bbox: ", eyes_bbox)
+                print("gaze: ", gaze)
+                print("grid vals: ", x_grid, y_grid)
+                plt.imshow(img)
+                plt.savefig('a.jpg')
+                exit()
 
         # print(shifted_grids)
         # print("------------------")

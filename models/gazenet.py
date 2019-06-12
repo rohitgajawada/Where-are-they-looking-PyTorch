@@ -62,7 +62,7 @@ class Net(nn.Module):  #TODO, check biases in network, each conv in gaze and sal
         self.gazepath = AlexGaze(opt)
         self.opt = opt
 
-        self.smax = nn.LogSoftmax(dim=1)  #Should we be using softmax instead
+        self.smax = nn.Softmax(dim=1)  #Should we be using softmax instead
 
         self.fc_0_0 = nn.Linear(169, 25)
         self.fc_0_m1 = nn.Linear(169, 25)
@@ -144,11 +144,8 @@ class Net(nn.Module):  #TODO, check biases in network, each conv in gaze and sal
 
         hm_base = hm_base.unsqueeze(1)
 
-        hm_base = F.interpolate(input = hm_base, size = (227, 227), mode='bicubic', align_corners=True)
+        hm_base = F.interpolate(input = hm_base, size = (227, 227), mode='bicubic')
 
         hm_base = hm_base.squeeze(1)
-
-        ##TODO!! resize the image to 227 x 227 by bicubic before returning
-        ##then obtain the coordinates by taking argmax
 
         return hm_base.view(-1, 227 * 227)

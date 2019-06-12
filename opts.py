@@ -10,7 +10,7 @@ def optionargparser():
     parser.add_argument('--data_dir', default='../', type=str, help='chosen data directory')
     parser.add_argument('--placesmodelpath', default='./whole_alexnet_places365.pth', type=str, help='chosen data directory')
     parser.add_argument('--verbose', default=False)
-    parser.add_argument('--workers', default=8, type=int, help='number of data loading workers (default: 4)')
+    parser.add_argument('--workers', default=1, type=int, help='number of data loading workers (default: 4)')
     #default stuff
     parser.add_argument('--epochs', default=200, type=int, help='number of total epochs to run')
     parser.add_argument('--batch-size', default=128, type=int, help='mini-batch size (default: 128)')
@@ -19,8 +19,8 @@ def optionargparser():
     parser.add_argument('--learningratescheduler', default='decayschedular', type=str, help='if lr rate scheduler should be used')
 
     #optimizer/criterion stuff
-    parser.add_argument('--decayinterval', default=10, type=int, help='decays by a power of decay_var in these epochs')
-    parser.add_argument('--decaylevel', default=1.15, type=int, help='decays by a power of decaylevel')
+    parser.add_argument('--decayinterval', default=4, type=int, help='decays by a power of decay_var in these epochs')
+    parser.add_argument('--decaylevel', default=1.1, type=int, help='decays by a power of decaylevel')
     parser.add_argument('--criterion', default='crossentropy', help='Criterion')
     parser.add_argument('--optimType', default='adam', choices=optim_choices, type=str, help='Optimizers. Options:'+str(optim_choices))
 

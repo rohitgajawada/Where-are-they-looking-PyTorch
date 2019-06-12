@@ -37,12 +37,12 @@ class RandomHorizontalFlip(object):
         return sample
 
 
-class RandomCrop(object):  ##TODO!!
+class RandomCrop(object): 
 
-    def __init__(self, crop_size, orig_size):
+    def __init__(self):
 
-        self.crop_size = (crop_size, crop_size)
-        self.orig_size = (orig_size, orig_size)
+        self.scale_size = (256, 256)
+        self.orig_size = (227, 227)
 
     def __call__(self, sample):
 
@@ -52,23 +52,50 @@ class RandomCrop(object):  ##TODO!!
         eyes_bbox = sample['eyes_bbox']
         gaze = sample['gaze']
 
-        if random.random() > 0.05:
+        h, w = image.shape[:2]
 
-            h, w = image.shape[:2]
-            new_h, new_w = self.crop_size
-            orig_h, orig_w = self.orig_size
+        scale_h, scale_w = self.scale_size
+        new_h, new_w = self.orig_size
 
-            top = np.random.randint(0, h - new_h)
-            left = np.random.randint(0, w - new_w)
+        image = transform.resize(image, (scale_h, scale_w))
 
-            image = image[top: top + new_h, left: left + new_w]
-            image = transform.resize(image, (orig_h, orig_w))
+        top = np.random.randint(0, scale_h - new_h)
+        left = np.random.randint(0, scale_w - new_w)
 
-            #Have to resize values also
+        image = image[top: top + new_h, left: left + new_w]
 
-            eyes = (eyes * orig_w - [left, top]) / (1.0 * orig_w)   ##assuming that orig_w is equal to orig_h
-            eyes_bbox = (eyes_bbox * orig_w - [left, top]) / (1.0 * orig_w)
-            gaze = (gaze * orig_w - [left, top]) / (1.0 * orig_w)
+        #Have to resize values also
+
+        eyes = (eyes * 227 - [left, top]) / (1.0 * 227)   ##assuming that w is equal to h
+        eyes_bbox = (eyes_bbox * 227- [left, top]) / (1.0 * 227)
+        gaze = (gaze * 227 - [left, top]) / (1.0 * 227)
+
+        if eyes[0] < 0:
+            eyes[0] = 0.05
+        if eyes[1] < 0:
+            eyes[1] = 0.05
+        if eyes[0] > 1:
+            eyes[0] = 0.95
+        if eyes[1] > 1:
+            eyes[1] = 0.95
+
+        if eyes_bbox[0] < 0:
+            eyes_bbox[0] = 0.05
+        if eyes_bbox[1] < 0:
+            eyes_bbox[1] = 0.05
+        if eyes_bbox[0] > 1:
+            eyes_bbox[0] = 0.95
+        if eyes_bbox[1] > 1:
+            eyes_bbox[1] = 0.95
+
+        if gaze[0] < 0:
+            gaze[0] = 0.05
+        if gaze[1] < 0:
+            gaze[1] = 0.05
+        if gaze[0] > 1:
+            gaze[0] = 0.95
+        if gaze[1] > 1:
+            gaze[1] = 0.95
 
         sample = {'img': image, 'bbox': bbox, 'eyes': eyes, 'eyes_bbox': eyes_bbox, 'gaze': gaze}
 
