@@ -64,8 +64,6 @@ class RandomCrop(object):
 
         image = image[top: top + new_h, left: left + new_w]
 
-        #Have to resize values also
-
         eyes = (eyes * 227 - [left, top]) / (1.0 * 227)   ##assuming that w is equal to h
         eyes_bbox = (eyes_bbox * 227- [left, top]) / (1.0 * 227)
         gaze = (gaze * 227 - [left, top]) / (1.0 * 227)

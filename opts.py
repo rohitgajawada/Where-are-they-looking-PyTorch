@@ -10,7 +10,7 @@ def optionargparser():
     parser.add_argument('--data_dir', default='../', type=str, help='chosen data directory')
     parser.add_argument('--placesmodelpath', default='./whole_alexnet_places365.pth', type=str, help='chosen data directory')
     parser.add_argument('--verbose', default=False)
-    parser.add_argument('--workers', default=1, type=int, help='number of data loading workers (default: 4)')
+    parser.add_argument('--workers', default=12, type=int, help='number of data loading workers (default: 4)')
     #default stuff
     parser.add_argument('--epochs', default=200, type=int, help='number of total epochs to run')
     parser.add_argument('--batch-size', default=128, type=int, help='mini-batch size (default: 128)')

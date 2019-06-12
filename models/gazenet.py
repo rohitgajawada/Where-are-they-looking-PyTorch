@@ -62,7 +62,7 @@ class Net(nn.Module):  #TODO, check biases in network, each conv in gaze and sal
         self.gazepath = AlexGaze(opt)
         self.opt = opt
 
-        self.smax = nn.Softmax(dim=1)  #Should we be using softmax instead
+        self.smax = nn.Softmax(dim=1)  
 
         self.fc_0_0 = nn.Linear(169, 25)
         self.fc_0_m1 = nn.Linear(169, 25)

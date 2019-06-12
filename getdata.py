@@ -131,7 +131,7 @@ class GazeDataset(Dataset):
         img = transform.resize(img,(227, 227))
 
         # plt.imshow(img)
-        # plt.savefig('a.jpg')
+        plt.savefig('outputs/a.jpg')
 
         gaze = self.gaze_list[idx]
         eyes = self.eyes_list[idx]
@@ -259,4 +259,4 @@ class GazeFollow():
 
         self.val_gaze = GazeDataset(Test_Ann, 'test', opt.data_dir, opt)
         self.val_loader = torch.utils.data.DataLoader(self.val_gaze,
-        batch_size=opt.testbatchsize, shuffle=False, num_workers=opt.workers)
+        batch_size = opt.testbatchsize, shuffle=False, num_workers=opt.workers)
