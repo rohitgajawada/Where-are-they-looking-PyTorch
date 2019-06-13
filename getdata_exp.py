@@ -155,8 +155,6 @@ class GazeDataset(Dataset):
         ######DO DATA AUG HERE###########
 
         if self.type == 'train':
-            gaze = (gaze*227)/s[:2]
-            print("Image shape from getdata: ", s)
             composed = transforms.Compose([RandomCrop(), RandomHorizontalFlip()])
             sample = {'img': img, 'bbox': bbox, 'eyes': eyes, 'eyes_bbox': eyes_bbox, 'gaze': gaze}
             sample = composed(sample)
