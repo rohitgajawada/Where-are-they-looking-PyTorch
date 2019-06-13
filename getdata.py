@@ -65,7 +65,7 @@ def getCropped(img, e):
         x = transform.resize(x,(227, 227))
         return x
     except:
-        print('begins') #TODO, what happened here?
+        print('begins') #TODO, are there corrupt images?
         print(x)
         print(x.shape)
         print('ends')
@@ -150,10 +150,6 @@ class GazeDataset(Dataset):
         eyes_loc_size = 13
         gaze_label_size = 5
 
-        # print(eyes)
-        # print(gaze)
-        # print("before_aug")
-
         ######DO DATA AUG HERE###########
 
         if self.type == 'train':
@@ -170,10 +166,6 @@ class GazeDataset(Dataset):
 
         #SHIFTED GRIDS STUFF
 
-        # print("eyes: ", eyes)
-        # print("eyes_bbox: ", eyes_bbox)
-        # print("gaze: ", gaze)
-
         eyes_loc = np.zeros((eyes_loc_size, eyes_loc_size))
         eyes_loc[int(np.floor(eyes_loc_size * eyes[1]))][int(np.floor(eyes_loc_size * eyes[0]))] = 1
 
@@ -182,20 +174,14 @@ class GazeDataset(Dataset):
         v_x = [0, 1, -1, 0, 0]
         v_y = [0, 0, 0, -1, 1]
 
-        # print(eyes)
-        # print(gaze)
-
         x_pix = gaze[0] 
         y_pix = gaze[1] 
-        # print(x_pix, y_pix)
 
         shifted_grids = np.zeros((grid_size, gaze_label_size, gaze_label_size)) 
         for i in range(5):
 
             x_grid = int(np.floor(gaze_label_size * gaze[0]) + (v_x[i] * (1/ (grid_size * 3.0))) ) 
             y_grid = int(np.floor(gaze_label_size * gaze[1]) + (v_y[i] * (1/ (grid_size * 3.0))) )
-
-            # print("grid vals: ", x_grid, y_grid)
 
             try:
                 shifted_grids[i][y_grid][x_grid] = 1
@@ -208,10 +194,6 @@ class GazeDataset(Dataset):
                 plt.imshow(img)
                 plt.savefig('a.jpg')
                 exit()
-
-        # print(shifted_grids)
-        # print("------------------")
-        # exit()
 
         eyes_loc = torch.from_numpy(eyes_loc).contiguous()
         shifted_grids = torch.from_numpy(shifted_grids).contiguous()
@@ -236,14 +218,7 @@ class GazeDataset(Dataset):
         img = normtransform(img.float())
         bbox = normtransform(bbox.float())
 
-        ############################
-        # print("shifted size  ", shifted_grids.size())
-
-        # print(shifted_grids)
-        # exit()
-	# print(img.shape)
-	print("Main file: Image size: ",img.shape)
-        sample = (img.float(), bbox.float(), eyes_loc.float(), shifted_grids.float(), eyes, idx, eyes_bbox, gaze, gaze_final)
+        sample = (img.float(), bbox.float(), eyes_loc.float(), shifted_grids.float(), eyes, idx, eyes_bbox, gaze_final)
 
         return sample
 
