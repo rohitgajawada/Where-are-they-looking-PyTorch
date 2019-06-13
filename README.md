@@ -12,7 +12,7 @@ A deep neural network-based approach for gaze-following automated using a SSD fa
 
 ## Pretrained Models
 
-* Pretrained Places365 AlexNet model: https://drive.google.com/file/d/13h7bYEht2poZ7vD_HgzA7ggSPi0cmSBg/view?usp=sharing 
+* Pretrained Places365 AlexNet model: https://urlzs.com/ytKK3
 * Pretrained Complete GazeNet model: Coming soon!
 
 
