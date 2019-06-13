@@ -134,6 +134,7 @@ class GazeDataset(Dataset):
         # plt.savefig('a.jpg')
 
         gaze = self.gaze_list[idx]
+
         eyes = self.eyes_list[idx]
         eyes_bbox = (eyes - bbox_corr[:2])/bbox_corr[2:]
 

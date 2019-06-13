@@ -30,7 +30,7 @@ for i in range(10):
     image, bbox, eye_coords, shifted_grids, eyes2, idx, eyes_bbox, gaze, gaze2 = next(iter(dataloader.train_gaze))
     print(image.shape)
     to_pil = torchvision.transforms.ToPILImage()
-    img = untr(image)
+    image = untr(image)
     image = untr2(image)
     image = to_pil(image)
     
