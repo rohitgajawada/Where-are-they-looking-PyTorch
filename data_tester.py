@@ -8,7 +8,7 @@ import opts
 import train
 import utils
 import models.__init__ as init
-import getdata as ld
+import getdata_exp as ld
 import torchvision
 from torchvision import transforms
 #import scipy.io as sio
@@ -24,16 +24,20 @@ untr = transforms.Compose([
         transforms.Normalize([0, 0, 0], [1/(0.229), 1/(0.224), 1/(0.225)])])
 untr2 = transforms.Compose([
         transforms.Normalize([-0.485, -0.456, -0.406], [1, 1, 1])])
-
-for i in range(10):
+it = iter(dataloader.train_gaze)
+for i in range(100):
 #    print(images, bbox, eye_coords, shifted_grids, eyes2, idx, eyes_bbox, gaze, gaze2)
-    image, bbox, eye_coords, shifted_grids, eyes2, idx, eyes_bbox, gaze, gaze2 = next(iter(dataloader.train_gaze))
+    image, bbox, eye_coords, shifted_grids, eyes2, idx, eyes_bbox, gaze, gaze2 = next(it)
     print(image.shape)
     to_pil = torchvision.transforms.ToPILImage()
+    
     image = untr(image)
     image = untr2(image)
-    image = to_pil(image)
-    
+    image = image.numpy()
+    image = image.transpose((2, 0, 1))
+    image = image.transpose((2, 0, 1))
+    print(image.shape)
+
     bbox = untr(bbox)
     bbox = untr2(bbox)
     bbox = to_pil(bbox)
@@ -43,7 +47,8 @@ for i in range(10):
     # gaze = gaze
     gaze2 = [int(gaze2[0] * 227), int(gaze2[1] * 227)]
     print("Eye: ",eyes2," Gaze: ", gaze2)
-
+    # print(image)
+    # print(bbox)
     fig = plt.figure()
     ax = fig.add_subplot(121)
     ax.imshow(image)
@@ -51,7 +56,7 @@ for i in range(10):
     ax = fig.add_subplot(122)
     ax.imshow(bbox)
     fig.savefig("outputs/" + "test" + str(i) + ".jpeg")
-    # plt.clr()
+    plt.close()
     fig.clf()
     ax.cla()
     
