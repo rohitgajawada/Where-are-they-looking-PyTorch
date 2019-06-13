@@ -19,14 +19,13 @@ parser = opts.optionargparser()
 global opt
 opt = parser.parse_args()
 dataloader = ld.GazeFollow(opt)
-#images, bbox, eye_coords, shifted_grids, eyes2, idx, eyes_bbox, gaze, gaze2 = next(iter(dataloader.train_gaze))
 
 untr = transforms.Compose([
         transforms.Normalize([0, 0, 0], [1/(0.229), 1/(0.224), 1/(0.225)])])
 untr2 = transforms.Compose([
         transforms.Normalize([-0.485, -0.456, -0.406], [1, 1, 1])])
 
-for i in range(1):
+for i in range(10):
 #    print(images, bbox, eye_coords, shifted_grids, eyes2, idx, eyes_bbox, gaze, gaze2)
     image, bbox, eye_coords, shifted_grids, eyes2, idx, eyes_bbox, gaze, gaze2 = next(iter(dataloader.train_gaze))
     print(image.shape)
@@ -35,11 +34,26 @@ for i in range(1):
     image = untr2(image)
     image = to_pil(image)
     
+    bbox = untr(bbox)
+    bbox = untr2(bbox)
+    bbox = to_pil(bbox)
+    eyes2 = eyes2 * 227
+    # eyes2 = eyes2.numpy()
+    # eyes2 = eyes2 * 227
+    # gaze = gaze
+    gaze2 = [int(gaze2[0] * 227), int(gaze2[1] * 227)]
+    print("Eye: ",eyes2," Gaze: ", gaze2)
+
     fig = plt.figure()
-    ax = fig.add_subplot(111)
+    ax = fig.add_subplot(121)
     ax.imshow(image)
+    ax.plot([gaze2[0], int(eyes2[0])], [gaze2[1], int(eyes2[1])])
+    ax = fig.add_subplot(122)
+    ax.imshow(bbox)
     fig.savefig("outputs/" + "test" + str(i) + ".jpeg")
-    
+    # plt.clr()
+    fig.clf()
+    ax.cla()
     
     """
     name = names[i]

@@ -218,7 +218,7 @@ class GazeDataset(Dataset):
         img = normtransform(img.float())
         bbox = normtransform(bbox.float())
 
-        sample = (img.float(), bbox.float(), eyes_loc.float(), shifted_grids.float(), eyes, idx, eyes_bbox, gaze_final)
+        sample = (img.float(), bbox.float(), eyes_loc.float(), shifted_grids.float(), eyes, idx, eyes_bbox, gaze, gaze_final)
 
         return sample
 
