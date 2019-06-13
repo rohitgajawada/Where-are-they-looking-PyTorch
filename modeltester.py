@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.autograd import Variable
-import datasets.getdata as ld
+import getdata as ld
 import utils
 import os
 import opts
@@ -13,67 +13,65 @@ from torchvision import transforms
 import matplotlib.pyplot as plt
 import matplotlib
 
-parser = opts.myargparser()
+parser = opts.optionargparser()
 opt = parser.parse_args()
 
-checkpoint = torch.load('./savedmodels/adamodels/gazenet_gazefollow_99epoch.pth.tar')
+checkpoint = torch.load('./savedmodels/gazenet_gazefollow_sgd_30epoch.pth.tar')
 print("Loading pretrained model: ")
 start_epoch = checkpoint['epoch']
-best_err = checkpoint['best_prec1']
+best_err = checkpoint['best_err']
 
 model = gazenet.Net(opt).cuda()
 model.load_state_dict(checkpoint['state_dict'])
 
 dataloader = ld.GazeFollow(opt)
 
-images, xis, eye_coords, pred_coords, eyes, names, eyes2 = next(iter(dataloader.val_loader))
+images, xis, eye_coords, pred_coords, eyes, names, eyes2, gaze_final = next(iter(dataloader.val_loader))
 
-images, xis, eye_coords, pred_coords = Variable(images.cuda()), Variable(xis.cuda()), Variable(eye_coords.cuda()), Variable(pred_coords.cuda())
+images, xis, eye_coords, pred_coords, gaze_final = images.cuda(), xis.cuda(), eye_coords.cuda(), pred_coords.cuda(), gaze_final.cuda()
 
-# print(eye_coords)
-print(images[0])
-exit()
-outputs = model(images, xis, eye_coords)
+outputs = model.predict(images, xis, eye_coords)
 
 untr = transforms.Compose([
         transforms.Normalize([0, 0, 0], [1/(0.229), 1/(0.224), 1/(0.225)])])
 untr2 = transforms.Compose([
         transforms.Normalize([-0.485, -0.456, -0.406], [1, 1, 1])])
 
-for i in range(64):
+to_pil = torchvision.transforms.ToPILImage()
+
+for i in range(8):
 
     name = names[i]
     img = untr(images[i].data.contiguous().cpu())
-    img2 = untr(xis[i].data.contiguous().cpu())
-
     img = untr2(img)
-    img2 = untr2(img2)
 
-    ey = eyes2[i]
-    eye = eye_coords[i].view(1, 169)
-    pred = outputs[i].data.view(1, 169)
+    print(torch.max(outputs[i]))
 
+    heat_in = torch.clamp(outputs[i].data.cpu(), 0, 1)
+
+    heatmap = to_pil(heat_in)
+    plt.imshow(heatmap)
+    plt.savefig('./model_outputs/' + str(i) + '_heat.jpg')
+    plt.clf()
+
+
+    pred = outputs[i].data.view(1, 227 * 227)
     ind = pred.max(1)[1]
-    step = 1 / 26.0
-    y = ((float(ind[0]/ 13.0)) / 13.0) + step
-    x = ((float(ind[0] % 13.0)) / 13.0) + step
 
-    to_pil = torchvision.transforms.ToPILImage()
+    y = ((float(ind[0]/ 227.0)) / 227.0)
+    x = ((float(ind[0] % 227.0)) / 227.0)
+
+    print(x, y)
+
     im = to_pil(img)
-    im2 = to_pil(img2)
     eye_np = eyes[i].cpu().numpy()
-    eye_np2 = eyes2[i].cpu().numpy()
-    print(name)
+
     print(eye_np)
     print(x * 227, y * 227)
 
-    plt.subplot(131)
     plt.plot([x* 227, eye_np[0]* 227],[y* 227, eye_np[1]* 227])
     plt.imshow(im)
+    plt.savefig('./model_outputs/' + str(i) + '.jpg')
+    plt.clf()
 
-    plt.subplot(133)
-    plt.imshow(im2)
-
-    plt.subplot(132)
-    plt.imshow(eye_coords[i].data.cpu().numpy())
-    plt.show()
+#     exit()

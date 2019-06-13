@@ -27,7 +27,7 @@ class Trainer():
 
             self.optimizer.zero_grad()
 
-            xh, xi, xp, shifted_targets, eyes, names, eyes2, crap, gcorrs = data
+            xh, xi, xp, shifted_targets, eyes, names, eyes2, gcorrs = data
             xh = xh.cuda()  
             xi = xi.cuda()
             xp = xp.cuda()
@@ -93,7 +93,7 @@ class Validator():
         with torch.no_grad():
             for i, data in enumerate(valloader, 0): 
 
-                xh, xi, xp, targets, eyes, names, eyes2, crap, ground_labels = data
+                xh, xi, xp, targets, eyes, names, eyes2, ground_labels = data
                 xh = xh.cuda()
                 xi = xi.cuda()
                 xp = xp.cuda()

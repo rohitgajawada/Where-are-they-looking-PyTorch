@@ -66,8 +66,8 @@ def euclid_dist(output, target, l):
     target = target.float()
     for i in range(l):
 
-        predy = ((output[i] / 227) / 227.0) 
-        predx = ((output[i] % 227) / 227.0) 
+        predy = ((output[i] / 227.0) / 227.0) 
+        predx = ((output[i] % 227.0) / 227.0) 
 
         # print("network predictions")
         # print(predx, predy)
@@ -108,8 +108,8 @@ def euclid_mindist(output, target, l):
 
         best = 1000000000
         
-        predy = ((output[i] / 227) / 227.0) 
-        predx = ((output[i] % 227) / 227.0) 
+        predy = ((output[i] / 227.0) / 227.0) 
+        predx = ((output[i] % 227.0) / 227.0) 
 
         ct = 0
         for j in range(100):

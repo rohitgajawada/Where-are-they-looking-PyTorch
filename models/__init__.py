@@ -34,7 +34,7 @@ def resumer(opt, model, optimizer):
         print("=> loading checkpoint '{}'".format(opt.resume))
         checkpoint = torch.load(opt.resume)
         opt.start_epoch = checkpoint['epoch']
-        best_err = checkpoint['best_prec1']
+        best_err = checkpoint['best_err']
         model.load_state_dict(checkpoint['state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer'])
         print("=> loaded checkpoint '{}' (epoch {})".format(opt.resume, checkpoint['epoch']))
