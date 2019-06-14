@@ -10,7 +10,7 @@ from torch.utils.data import Dataset
 from torchvision import transforms
 import matplotlib.patches as patches
 import scipy.io as sio
-from customtransforms_exp import RandomHorizontalFlip, RandomCrop
+from customtransforms_exp import RandomHorizontalFlip, RandomCrop, RandomVerticalFlip
 
 def getCropped(img, e):
 
@@ -156,7 +156,7 @@ class GazeDataset(Dataset):
 
         if self.type == 'train':
             print("Image shape from getdata: ", s)
-            composed = transforms.Compose([RandomCrop(), RandomHorizontalFlip()])
+            composed = transforms.Compose([RandomCrop(), RandomHorizontalFlip(), RandomVerticalFlip()])
             sample = {'img': img, 'bbox': bbox, 'eyes': eyes, 'eyes_bbox': eyes_bbox, 'gaze': gaze}
             sample = composed(sample)
 

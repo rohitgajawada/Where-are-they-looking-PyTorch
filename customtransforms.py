@@ -36,6 +36,33 @@ class RandomHorizontalFlip(object):
 
         return sample
 
+class RandomVerticalFlip(object):
+
+    def __init__(self):
+        pass
+
+    def __call__(self, sample):
+
+        image = sample['img']
+        bbox = sample['bbox']
+        eyes = sample['eyes']
+        eyes_bbox = sample['eyes_bbox']
+        gaze = sample['gaze']
+
+        h, w = image.shape[:2]
+        h_bbox, w_bbox = bbox.shape[:2]
+
+        if random.random() > 0.5:
+
+            image = image[::-1, :]
+            bbox = bbox[::-1, :]
+            eyes[1] = 1 - eyes[1]
+            eyes_bbox[1] = 1 - eyes_bbox[1]
+            gaze[1] = 1 - gaze[1]
+
+        sample = {'img': image, 'bbox': bbox, 'eyes': eyes, 'eyes_bbox': eyes_bbox, 'gaze': gaze}
+
+        return sample
 
 class RandomCrop(object): 
 
