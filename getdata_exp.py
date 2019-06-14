@@ -200,7 +200,7 @@ class GazeDataset(Dataset):
         eyes_loc = torch.from_numpy(eyes_loc).contiguous()
         shifted_grids = torch.from_numpy(shifted_grids).contiguous()
         
-        shifted_grids = shifted_grids.view(1, 5, 25)
+        # shifted_grids = shifted_grids.view(1, 5, 25)
         gaze_final = np.ones(100) 
         gaze_final *= -1
         gaze_final[:gaze.shape[0]] = gaze  
