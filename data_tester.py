@@ -62,16 +62,16 @@ for i in range(8):
     ax.imshow(shifted_grids[0])
 
     ax = fig.add_subplot(334)
-    ax.imshow(shifted_grids[0])
+    ax.imshow(shifted_grids[1])
 
     ax = fig.add_subplot(335)
-    ax.imshow(shifted_grids[0])
+    ax.imshow(shifted_grids[2])
 
     ax = fig.add_subplot(336)
-    ax.imshow(shifted_grids[0])
+    ax.imshow(shifted_grids[3])
 
     ax = fig.add_subplot(337)
-    ax.imshow(shifted_grids[0])
+    ax.imshow(shifted_grids[4])
 
     fig.savefig("outputs/" + "test" + str(i) + ".jpeg")
     plt.close()
