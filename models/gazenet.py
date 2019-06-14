@@ -149,6 +149,6 @@ class Net(nn.Module):  #TODO, check biases in network, each conv in gaze and sal
 
         hm_base = hm_base.squeeze(1)
 
-        # return hm_base
+        return hm_base
 
-        return hm_base.view(-1, 227 * 227)
+        # return hm_base.view(-1, 227 * 227)

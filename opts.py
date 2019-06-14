@@ -24,7 +24,7 @@ def optionargparser():
     parser.add_argument('--criterion', default='crossentropy', help='Criterion')
     parser.add_argument('--optimType', default='sgd', choices=optim_choices, type=str, help='Optimizers. Options:'+str(optim_choices))
 
-    parser.add_argument('--maxlr', default=0.1, type=float, help='initial learning rate')
+    parser.add_argument('--maxlr', default=0.01, type=float, help='initial learning rate')
     parser.add_argument('--lr', type=float, help='initial learning rate')
     parser.add_argument('--minlr', default=0.0001, type=float, help='initial learning rate')
 
@@ -44,7 +44,7 @@ def optionargparser():
     parser.add_argument('--shiftedgrids', default=True, type=bool, help='run on validation set only')
 
     #model stuff
-    parser.add_argument('--exp', default='softmaxnesterovsgd_highlr01', type=str,
+    parser.add_argument('--exp', default='softmaxnesterovsgd', type=str,
                         help='name of experiment')
     parser.add_argument('--resume', default='none', type=str,
                         help='path to latest checkpoint (default: none)')

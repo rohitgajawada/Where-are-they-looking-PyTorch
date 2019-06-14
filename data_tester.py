@@ -25,7 +25,7 @@ untr = transforms.Compose([
 untr2 = transforms.Compose([
         transforms.Normalize([-0.485, -0.456, -0.406], [1, 1, 1])])
 it = iter(dataloader.train_gaze)
-for i in range(100):
+for i in range(8):
 #    print(images, bbox, eye_coords, shifted_grids, eyes2, idx, eyes_bbox, gaze, gaze2)
     image, bbox, eye_coords, shifted_grids, eyes2, idx, eyes_bbox, gaze, gaze2 = next(it)
     print(image.shape)

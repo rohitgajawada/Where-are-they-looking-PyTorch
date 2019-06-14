@@ -16,7 +16,7 @@ import matplotlib
 parser = opts.optionargparser()
 opt = parser.parse_args()
 
-checkpoint = torch.load('./savedmodels/gazenet_gazefollow_sgd_30epoch.pth.tar')
+checkpoint = torch.load('./savedmodels/gazenet_gazefollow_sgd_60epoch.pth.tar')
 print("Loading pretrained model: ")
 start_epoch = checkpoint['epoch']
 best_err = checkpoint['best_err']
@@ -39,7 +39,7 @@ untr2 = transforms.Compose([
 
 to_pil = torchvision.transforms.ToPILImage()
 
-for i in range(8):
+for i in range(16):
 
     name = names[i]
     img = untr(images[i].data.contiguous().cpu())

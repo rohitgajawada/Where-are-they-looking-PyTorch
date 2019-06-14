@@ -5,3 +5,5 @@ whole_alexnet_places365.pth
 slurm*
 savedmodels/
 outputs/*
+getdata_exp.py
+customtransforms_exp.py

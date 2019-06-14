@@ -65,10 +65,10 @@ def getCropped(img, e):
         x = transform.resize(x,(227, 227))
         return x
     except:
-        print('begins') #TODO, are there corrupt images?
-        print(x)
-        print(x.shape)
-        print('ends')
+        # print('begins') #TODO, are there corrupt images?
+        # print(x)
+        # print(x.shape)
+        # print('ends')
         return img
 
 
@@ -129,9 +129,6 @@ class GazeDataset(Dataset):
 
         img = np.ascontiguousarray(img)
         img = transform.resize(img,(227, 227))
-
-        # plt.imshow(img)
-        # plt.savefig('a.jpg')
 
         gaze = self.gaze_list[idx]
 

@@ -69,15 +69,10 @@ def euclid_dist(output, target, l):
         predy = ((output[i] / 227.0) / 227.0) 
         predx = ((output[i] % 227.0) / 227.0) 
 
-        # print("network predictions")
-        # print(predx, predy)
-
         ct = 0
         for j in range(100):
             ground_x = target[i][2*j]
             ground_y = target[i][2*j + 1]
-
-            # print(ground_x, ground_y)
 
             if ground_x == -1 or ground_y == -1:
                 break
@@ -86,12 +81,8 @@ def euclid_dist(output, target, l):
             total += temp
             ct += 1
 
-        # print(total)
-        # print(ct)
-
         total = total / float(ct * 1.0)
-        # print(total)
-        # exit()
+
         fulltotal += total
 
     fulltotal = fulltotal / float(l * 1.0)
