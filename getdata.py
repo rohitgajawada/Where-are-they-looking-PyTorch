@@ -178,8 +178,17 @@ class GazeDataset(Dataset):
         shifted_grids = np.zeros((grid_size, gaze_label_size, gaze_label_size)) 
         for i in range(5):
 
-            x_grid = int(gaze_label_size * gaze[0] + (v_x[i] * (1/ (grid_size * 3.0))) ) 
-            y_grid = int(gaze_label_size * gaze[1] + (v_y[i] * (1/ (grid_size * 3.0))) )
+            x_grid = int(np.floor( gaze_label_size * gaze[0] + (v_x[i] * (1/ (grid_size * 3.0))) ) ) 
+            y_grid = int(np.floor( gaze_label_size * gaze[1] + (v_y[i] * (1/ (grid_size * 3.0))) ) )
+ 
+            if x_grid < 0:
+                x_grid = 0
+            elif x_grid > 4:
+                x_grid = 4
+            if y_grid < 0:
+                y_grid = 0
+            elif y_grid > 4:
+                y_grid = 4
 
             try:
                 shifted_grids[i][y_grid][x_grid] = 1
