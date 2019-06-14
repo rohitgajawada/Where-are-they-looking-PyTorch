@@ -10,7 +10,7 @@ from torch.utils.data import Dataset
 from torchvision import transforms
 import matplotlib.patches as patches
 import scipy.io as sio
-from customtransforms import RandomHorizontalFlip, RandomHorizontalFlip, RandomCrop
+from customtransforms import RandomHorizontalFlip, RandomVerticalFlip, RandomCrop
 
 def getCropped(img, e):
 
