@@ -6,4 +6,4 @@
 #SBATCH --mem-per-cpu=2048
 #SBATCH --time=72:00:00
 
-python3 main.py 
+python3 -W ignore main.py 
