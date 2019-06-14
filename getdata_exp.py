@@ -173,8 +173,8 @@ class GazeDataset(Dataset):
 
         grid_size = 5
 
-        v_x = [0, 1, -1, 0, 0]
-        v_y = [0, 0, 0, -1, 1]
+        v_x = [0, 10, -10, 0, 0]
+        v_y = [0, 0, 0, -10, 10]
 
         x_pix = gaze[0] 
         y_pix = gaze[1] 
@@ -182,9 +182,19 @@ class GazeDataset(Dataset):
         shifted_grids = np.zeros((grid_size, gaze_label_size, gaze_label_size)) 
         for i in range(5):
 
-            x_grid = int(np.floor(gaze_label_size * gaze[0]) + (v_x[i] * (1/ (grid_size * 3.0))) ) 
-            y_grid = int(np.floor(gaze_label_size * gaze[1]) + (v_y[i] * (1/ (grid_size * 3.0))) )
-
+            x_grid = int(np.floor(gaze_label_size * gaze[0] + (v_x[i] * (1/ (grid_size * 3.0)))) ) 
+            y_grid = int(np.floor(gaze_label_size * gaze[1] + (v_y[i] * (1/ (grid_size * 3.0)))) )
+            
+            print("i: ", i, "sf grid x: ", np.floor(gaze_label_size * gaze[0] + (v_x[i] * (1/ (grid_size * 3.0)))), "x_grid: ", x_grid)
+            
+            if x_grid < 0:
+                x_grid = 0
+            elif x_grid > 4:
+                x_grid = 4
+            if y_grid < 0:
+                y_grid = 0
+            elif y_grid > 4:
+                y_grid = 4
             try:
                 shifted_grids[i][y_grid][x_grid] = 1
             except:
@@ -200,7 +210,7 @@ class GazeDataset(Dataset):
         eyes_loc = torch.from_numpy(eyes_loc).contiguous()
         shifted_grids = torch.from_numpy(shifted_grids).contiguous()
         
-        shifted_grids = shifted_grids.view(1, 5, 25)
+        # shifted_grids = shifted_grids.view(1, 5, 25)
         gaze_final = np.ones(100) 
         gaze_final *= -1
         gaze_final[:gaze.shape[0]] = gaze  

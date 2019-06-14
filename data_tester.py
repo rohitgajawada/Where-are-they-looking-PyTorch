@@ -42,6 +42,8 @@ for i in range(8):
     bbox = untr2(bbox)
     bbox = to_pil(bbox)
     eyes2 = eyes2 * 227
+
+    shifted_grids = shifted_grids.numpy()
     # eyes2 = eyes2.numpy()
     # eyes2 = eyes2 * 227
     # gaze = gaze
@@ -50,11 +52,27 @@ for i in range(8):
     # print(image)
     # print(bbox)
     fig = plt.figure()
-    ax = fig.add_subplot(121)
+    ax = fig.add_subplot(331)
     ax.imshow(image)
     ax.plot([gaze2[0], int(eyes2[0])], [gaze2[1], int(eyes2[1])])
-    ax = fig.add_subplot(122)
+    ax = fig.add_subplot(332)
     ax.imshow(bbox)
+    
+    ax = fig.add_subplot(333)
+    ax.imshow(shifted_grids[0])
+
+    ax = fig.add_subplot(334)
+    ax.imshow(shifted_grids[1])
+
+    ax = fig.add_subplot(335)
+    ax.imshow(shifted_grids[2])
+
+    ax = fig.add_subplot(336)
+    ax.imshow(shifted_grids[3])
+
+    ax = fig.add_subplot(337)
+    ax.imshow(shifted_grids[4])
+
     fig.savefig("outputs/" + "test" + str(i) + ".jpeg")
     plt.close()
     fig.clf()
