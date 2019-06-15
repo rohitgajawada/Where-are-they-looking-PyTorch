@@ -68,7 +68,7 @@ class RandomCrop(object):
 
     def __init__(self):
 
-        self.scale_size = (256, 256)
+        self.scale_size = (299, 299)
         self.orig_size = (227, 227)
 
     def __call__(self, sample):

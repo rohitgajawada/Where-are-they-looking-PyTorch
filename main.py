@@ -46,13 +46,14 @@ def main():
         utils.adjust_learning_rate(opt, optimizer, epoch)
         print("Starting epoch number:", epoch+1, "Learning rate:", optimizer.param_groups[0]["lr"])
 
-        err = validator.validate(val_loader, epoch, opt)
-        best_err1 = min(err, best_err1)
-        if epoch % 10 == 0:
-            init.save_checkpoint(opt, model, optimizer, best_err1, epoch)
-
         if opt.testOnly == False:
             trainer.train(train_loader, epoch, opt)
+
+        err = validator.validate(val_loader, epoch, opt)
+        best_err1 = min(err, best_err1)
+
+        if epoch % 10 == 0:
+            init.save_checkpoint(opt, model, optimizer, best_err1, epoch)
 
         print('Best error: [{0:.3f}]\t'.format(best_err1))
 

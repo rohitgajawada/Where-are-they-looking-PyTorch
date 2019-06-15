@@ -69,6 +69,7 @@ def getCropped(img, e):
         # print(x)
         # print(x.shape)
         # print('ends')
+        print('corruption')
         return img
 
 
@@ -136,9 +137,11 @@ class GazeDataset(Dataset):
         eyes_bbox = (eyes - bbox_corr[:2])/bbox_corr[2:]
 
         if len(img.shape) == 2:
+            print('stacking')
             img = np.stack((img,)*3, axis=-1)
 
         if len(bbox.shape) == 2:
+            print('stacking bbox')
             bbox = np.stack((bbox,) * 3, axis=-1)
 
         bbox = getCropped(bbox, eyes_bbox)

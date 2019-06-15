@@ -19,24 +19,24 @@ def optionargparser():
     parser.add_argument('--learningratescheduler', default='decayschedular', type=str, help='if lr rate scheduler should be used')
 
     #optimizer/criterion stuff
-    parser.add_argument('--decayinterval', default=7, type=int, help='decays by a power of decay_var in these epochs')
-    parser.add_argument('--decaylevel', default=1.1, type=int, help='decays by a power of decaylevel')
+    parser.add_argument('--decayinterval', default=5, type=int, help='decays by a power of decay_var in these epochs')
+    parser.add_argument('--decaylevel', default=1.15, type=int, help='decays by a power of decaylevel')
     parser.add_argument('--criterion', default='crossentropy', help='Criterion')
     parser.add_argument('--optimType', default='sgd', choices=optim_choices, type=str, help='Optimizers. Options:'+str(optim_choices))
 
-    parser.add_argument('--maxlr', default=0.01, type=float, help='initial learning rate')
+    parser.add_argument('--maxlr', default=0.03, type=float, help='initial learning rate')
     parser.add_argument('--lr', type=float, help='initial learning rate')
     parser.add_argument('--minlr', default=0.0001, type=float, help='initial learning rate')
 
     parser.add_argument('--nesterov', default=True, type=bool, help='nesterov momentum')
     parser.add_argument('--momentum', default=0.9, type=float, help='momentum (Default: 0.9)')
-    parser.add_argument('--weightDecay', default=1e-6, type=float, help='weight decay (Default: 1e-4)')
+    parser.add_argument('--weightDecay', default=0.0, type=float, help='weight decay (Default: 1e-4)')
 
     #extra model stuff
     parser.add_argument('--inpsize', default=227, type=int, help='Input size')
 
     #default
-    parser.add_argument('--seed',  default=123, help='fixed seed for experiments')
+    parser.add_argument('--seed',  default=235, help='fixed seed for experiments')
     parser.add_argument('--testOnly', default=False, type=bool, help='run on validation set only')
     parser.add_argument('--start-epoch', default=0, type=int,help='manual epoch number (useful on restarts)')
 
@@ -44,7 +44,7 @@ def optionargparser():
     parser.add_argument('--shiftedgrids', default=True, type=bool, help='run on validation set only')
 
     #model stuff
-    parser.add_argument('--exp', default='softmaxnesterovsgd', type=str,
+    parser.add_argument('--exp', default='highcrop_Hope', type=str,
                         help='name of experiment')
     parser.add_argument('--resume', default='none', type=str,
                         help='path to latest checkpoint (default: none)')
