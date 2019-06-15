@@ -55,7 +55,7 @@ class AlexGaze(nn.Module):
         return x
 
 
-class Net(nn.Module):  #TODO, check biases in network, each conv in gaze and sal networks have different biases!!
+class Net(nn.Module):  
     def __init__(self, opt):
         super(Net, self).__init__()
         self.salpath = AlexSal(opt)

@@ -210,8 +210,6 @@ class GazeDataset(Dataset):
         gaze_final *= -1
         gaze_final[:gaze.shape[0]] = gaze  
 
-        #image to torch and normalize
-
         img = img.transpose((2, 0, 1))
         img = torch.from_numpy(img.copy()).contiguous()
 
