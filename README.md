@@ -10,15 +10,11 @@ A deep neural network-based approach for gaze-following automated using a SSD fa
 
 - [Pytorch 1.1 & Torchvision](https://pytorch.org/)
 
-## Pretrained Models
-
-* Pretrained Places365 AlexNet model: https://urlzs.com/ytKK3
-* Pretrained Complete GazeNet model: Coming soon!
-
-
 ## Usage
 
-python3 main.py --data_dir=`location to gazefollow dataset` --placesmodelpath=`location to places365 alexnet model`
+* First, download pretrained Places365 AlexNet model: https://urlzs.com/ytKK3
+
+* Then run: python3 main.py --data_dir=`location to gazefollow dataset` --placesmodelpath=`location to places365 alexnet model`
 
 
 * Please check out opts.py for other parameter changing.

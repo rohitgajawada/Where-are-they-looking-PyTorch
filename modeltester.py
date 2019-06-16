@@ -16,7 +16,9 @@ import matplotlib
 parser = opts.optionargparser()
 opt = parser.parse_args()
 
-checkpoint = torch.load('./savedmodels/gazenet_gazefollow_sgd_60epoch.pth.tar')
+opt.testbatchsize = 16
+
+checkpoint = torch.load('./savedmodels/gazenet_gazefollow_softmaxnesterovsgd_70epoch.pth.tar')
 print("Loading pretrained model: ")
 start_epoch = checkpoint['epoch']
 best_err = checkpoint['best_err']

@@ -30,7 +30,7 @@ def optionargparser():
 
     parser.add_argument('--nesterov', default=True, type=bool, help='nesterov momentum')
     parser.add_argument('--momentum', default=0.9, type=float, help='momentum (Default: 0.9)')
-    parser.add_argument('--weightDecay', default=0.0, type=float, help='weight decay (Default: 1e-4)')
+    parser.add_argument('--weightDecay', default=1e-6, type=float, help='weight decay (Default: 1e-4)')
 
     #extra model stuff
     parser.add_argument('--inpsize', default=227, type=int, help='Input size')
