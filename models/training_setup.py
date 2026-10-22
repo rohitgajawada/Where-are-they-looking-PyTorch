@@ -18,6 +18,9 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import os
+import random
+import shutil
+import numpy as np
 from pathlib import Path
 from device_and_initialization import resolve_device
 import models.gaze_following_network as gaze_network
@@ -31,9 +34,21 @@ def setup(
     if options.criterion == "crossentropy":
         loss_function = nn.NLLLoss().to(next(gaze_model.parameters()).device)
 
+    pretrained_parameters = []
+    new_parameters = []
+    for name, parameter in gaze_model.named_parameters():
+        (pretrained_parameters if ".features." in name else new_parameters).append(parameter)
+    parameter_groups = [
+        {
+            "params": pretrained_parameters,
+            "lr_scale": getattr(options, "pretrained_lr_scale", 0.1),
+            "lr": options.maxlr * getattr(options, "pretrained_lr_scale", 0.1),
+        },
+        {"params": new_parameters, "lr_scale": 1.0, "lr": options.maxlr},
+    ]
     if options.optimType == "sgd":
         optimizer = optim.SGD(
-            gaze_model.parameters(),
+            parameter_groups,
             lr=options.maxlr,
             momentum=options.momentum,
             weight_decay=options.weightDecay,
@@ -41,7 +56,7 @@ def setup(
         )
     elif options.optimType == "adam":
         optimizer = optim.Adam(
-            gaze_model.parameters(), lr=options.maxlr, weight_decay=options.weightDecay
+            parameter_groups, lr=options.maxlr, weight_decay=options.weightDecay
         )
 
     return gaze_model, loss_function, optimizer
@@ -60,6 +75,17 @@ def save_checkpoint(
         "state_dict": gaze_model.state_dict(),
         "best_err": best_validation_distance,
         "optimizer": optimizer.state_dict(),
+        "configuration": vars(options),
+        "torch_rng_state": torch.get_rng_state(),
+        "cuda_rng_states": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else [],
+        "python_rng_state": random.getstate(),
+        "numpy_rng_state": {
+            "name": np.random.get_state()[0],
+            "keys": torch.tensor(np.random.get_state()[1].astype("int64")),
+            "position": np.random.get_state()[2],
+            "has_gauss": np.random.get_state()[3],
+            "cached_gaussian": np.random.get_state()[4],
+        },
     }
     epoch_label = str(epoch)
     Path(options.store).mkdir(parents=True, exist_ok=True)
@@ -73,7 +99,10 @@ def save_checkpoint(
         + epoch_label
         + "epoch.pth.tar"
     )
-    torch.save(checkpoint_state, checkpoint_path)
+    temporary_path = str(checkpoint_path) + ".tmp"
+    torch.save(checkpoint_state, temporary_path)
+    os.replace(temporary_path, checkpoint_path)
+    shutil.copyfile(checkpoint_path, Path(options.store) / "last.pth.tar")
 
 
 def resumer(
@@ -96,7 +125,26 @@ def resumer(
         best_validation_distance = checkpoint["best_err"]
         gaze_model.load_state_dict(checkpoint["state_dict"])
         optimizer.load_state_dict(checkpoint["optimizer"])
-        print("=> loaded checkpoint '{}' (epoch {})".format(options.resume, checkpoint["epoch"]))
+        if "torch_rng_state" in checkpoint:
+            torch.set_rng_state(checkpoint["torch_rng_state"].cpu())
+            if torch.cuda.is_available() and checkpoint["cuda_rng_states"]:
+                torch.cuda.set_rng_state_all(
+                    [state.cpu() for state in checkpoint["cuda_rng_states"]]
+                )
+            random.setstate(checkpoint["python_rng_state"])
+            numpy_state = checkpoint["numpy_rng_state"]
+            np.random.set_state(
+                (
+                    numpy_state["name"],
+                    numpy_state["keys"].cpu().numpy().astype("uint32"),
+                    numpy_state["position"],
+                    numpy_state["has_gauss"],
+                    numpy_state["cached_gaussian"],
+                )
+            )
+        print(
+            "=> loaded checkpoint '{}' (epoch {})".format(options.resume, checkpoint["epoch"])
+        )
 
         return gaze_model, optimizer, options, best_validation_distance
 

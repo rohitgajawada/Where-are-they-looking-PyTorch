@@ -35,8 +35,11 @@ def load_checkpoint(options: Options) -> tuple[Net, torch.device]:
     device = resolve_device(options.device)
     # A complete trained checkpoint supplies both backbones: no download required.
     options.random_init = True
-    model = Net(options).to(device)
     checkpoint = torch.load(options.resume, map_location=device, weights_only=True)
+    for name in ("architecture", "backbone"):
+        if name in checkpoint.get("configuration", {}):
+            setattr(options, name, checkpoint["configuration"][name])
+    model = Net(options).to(device)
     model.load_state_dict(checkpoint.get("state_dict", checkpoint))
     return model.eval(), device
 
@@ -44,7 +47,9 @@ def load_checkpoint(options: Options) -> tuple[Net, torch.device]:
 def display_image(normalized_image: torch.Tensor) -> ImageArray:
     """Undo ImageNet normalization on a 3×H×W tensor and return a CPU H×W×3 RGB array."""
     channel_means = normalized_image.new_tensor([0.485, 0.456, 0.406])[:, None, None]
-    channel_standard_deviations = normalized_image.new_tensor([0.229, 0.224, 0.225])[:, None, None]
+    channel_standard_deviations = normalized_image.new_tensor([0.229, 0.224, 0.225])[
+        :, None, None
+    ]
     return (
         (normalized_image * channel_standard_deviations + channel_means)
         .clamp(0, 1)
@@ -62,8 +67,8 @@ def main() -> None:
     model, device = load_checkpoint(options)
     options.device = str(device)
     dataset_loaders = gazefollow_dataset.GazeFollow(options)
-    scene_images, head_images, eye_position_grids, _, eye_positions, sample_indices, _, _ = next(
-        iter(dataset_loaders.test_loader)
+    scene_images, head_images, eye_position_grids, _, eye_positions, sample_indices, _, _ = (
+        next(iter(dataset_loaders.test_loader))
     )
     with torch.inference_mode():
         heatmaps = model.predict(

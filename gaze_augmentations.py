@@ -1,185 +1,104 @@
-"""Apply historical image flips and random scene crops to gaze-training samples.
+"""Transform scenes and gaze annotations without altering stored dataset arrays.
 
-Each transform accepts and returns a TransformSample dictionary containing the
-scene image, head image, scene eye position, head-relative eye position, and gaze
-coordinates. Horizontal/vertical flips mirror the corresponding image axes and
-coordinates with probability one half. RandomCrop resizes the scene to 240x240
-and chooses a 227x227 window; the separately supplied head image is not cropped.
-
-This module documents existing behavior rather than fixing it: flip coordinates
-can alias dataset storage, crop coordinate scaling incorrectly uses 227 instead
-of 240, head-local eyes are adjusted without cropping the head, and excluded
-points are clamped. These defects must be repaired before relying on augmented
-training for a paper-faithful reproduction.
+Flips mirror both images and all corresponding coordinates on the selected axis.
+Scene crops resize to 240x240 before sampling a valid 227x227 window. All scene
+annotations and the eye must remain inside the crop; if no such window exists,
+the original sample is returned. Head-local coordinates stay unchanged when
+only the scene is cropped. Each transform owns copies of its coordinate arrays.
+Vertical flips remain available as an explicit experimental option.
 """
 
 from __future__ import annotations
-from type_definitions import TransformSample
-from skimage import transform
-import numpy as np
 import random
+import numpy as np
+from skimage import transform
+from type_definitions import TransformSample
 
 
-class RandomHorizontalFlip(object):
-    """Mirror RGB images and normalized eye/gaze x coordinates together."""
+def copy_sample(sample: TransformSample) -> TransformSample:
+    """Copy mutable coordinates while sharing images that transforms only read."""
+    return {
+        "img": sample["img"],
+        "bbox": sample["bbox"],
+        "eyes": sample["eyes"].copy(),
+        "eyes_bbox": sample["eyes_bbox"].copy(),
+        "gaze": sample["gaze"].copy(),
+    }
 
-    def __init__(self) -> None:
-        """Create a horizontal flip with probability one half."""
-        pass
+
+class RandomHorizontalFlip:
+    """Mirror scene/head images and every normalized x coordinate together."""
 
     def __call__(self, sample: TransformSample) -> TransformSample:
-        """Optionally mirror scene/head images and x coordinates.
-
-        Coordinate arrays are currently modified in place and may alias stored
-        dataset annotations. This known defect is documented, not repaired here.
-        """
-
-        scene_image = sample["img"]
-        head_image = sample["bbox"]
-        eye_position = sample["eyes"]
-        head_eye_position = sample["eyes_bbox"]
-        gaze_points = sample["gaze"]
-
-        scene_height, scene_width = scene_image.shape[:2]
-        head_height, head_width = head_image.shape[:2]
-
+        """Return a copied sample, horizontally flipped with probability one half."""
+        sample = copy_sample(sample)
         if random.random() > 0.5:
-
-            scene_image = scene_image[:, ::-1]
-            head_image = head_image[:, ::-1]
-            eye_position[0] = 1 - eye_position[0]
-            head_eye_position[0] = 1 - head_eye_position[0]
-            gaze_points[0] = 1 - gaze_points[0]
-
-        sample = {
-            "img": scene_image,
-            "bbox": head_image,
-            "eyes": eye_position,
-            "eyes_bbox": head_eye_position,
-            "gaze": gaze_points,
-        }
-
+            sample["img"] = sample["img"][:, ::-1]
+            sample["bbox"] = sample["bbox"][:, ::-1]
+            sample["eyes"][0] = 1 - sample["eyes"][0]
+            sample["eyes_bbox"][0] = 1 - sample["eyes_bbox"][0]
+            sample["gaze"][0::2] = 1 - sample["gaze"][0::2]
         return sample
 
 
-class RandomVerticalFlip(object):
-    """Mirror RGB images and normalized eye/gaze y coordinates together."""
-
-    def __init__(self) -> None:
-        """Create a vertical flip with probability one half."""
-        pass
+class RandomVerticalFlip:
+    """Mirror scene/head images and every normalized y coordinate together."""
 
     def __call__(self, sample: TransformSample) -> TransformSample:
-        """Optionally mirror scene/head images and y coordinates.
-
-        Coordinate arrays are currently modified in place and may alias stored
-        dataset annotations. This known defect is documented, not repaired here.
-        """
-
-        scene_image = sample["img"]
-        head_image = sample["bbox"]
-        eye_position = sample["eyes"]
-        head_eye_position = sample["eyes_bbox"]
-        gaze_points = sample["gaze"]
-
-        scene_height, scene_width = scene_image.shape[:2]
-        head_height, head_width = head_image.shape[:2]
-
+        """Return a copied sample, vertically flipped with probability one half."""
+        sample = copy_sample(sample)
         if random.random() > 0.5:
-
-            scene_image = scene_image[::-1, :]
-            head_image = head_image[::-1, :]
-            eye_position[1] = 1 - eye_position[1]
-            head_eye_position[1] = 1 - head_eye_position[1]
-            gaze_points[1] = 1 - gaze_points[1]
-
-        sample = {
-            "img": scene_image,
-            "bbox": head_image,
-            "eyes": eye_position,
-            "eyes_bbox": head_eye_position,
-            "gaze": gaze_points,
-        }
-
+            sample["img"] = sample["img"][::-1]
+            sample["bbox"] = sample["bbox"][::-1]
+            sample["eyes"][1] = 1 - sample["eyes"][1]
+            sample["eyes_bbox"][1] = 1 - sample["eyes_bbox"][1]
+            sample["gaze"][1::2] = 1 - sample["gaze"][1::2]
         return sample
 
 
-class RandomCrop(object):
-    """Apply the original scene crop, retaining known coordinate defects for now."""
+class RandomCrop:
+    """Sample only scene crops that retain the eye and every gaze annotation."""
 
     def __init__(self) -> None:
-        """Configure a 240×240 scene resize followed by a random 227×227 crop."""
-
+        """Configure the resized scene dimensions and output crop dimensions."""
         self.scale_size: tuple[int, int] = (240, 240)
         self.crop_size: tuple[int, int] = (227, 227)
 
     def __call__(self, sample: TransformSample) -> TransformSample:
-        """Apply the historical scene crop and coordinate adjustment.
+        """Transform normalized scene coordinates with resized dimensions and crop offsets.
 
-        Known defects remain: coordinate scaling uses 227 despite resizing to 240,
-        head-local eyes are changed without cropping the head image, and excluded
-        points are clamped to arbitrary coordinates. This is not corrected geometry.
+        Coordinates use (position*resized_size-offset)/crop_size. Head-local
+        coordinates do not change because the head image itself is not cropped.
+        There is no coordinate clamping that could invent a new target location.
         """
-
-        scene_image = sample["img"]
-        head_image = sample["bbox"]
-        eye_position = sample["eyes"]
-        head_eye_position = sample["eyes_bbox"]
-        gaze_points = sample["gaze"]
-
-        scene_height, scene_width = scene_image.shape[:2]
-
+        sample = copy_sample(sample)
         resized_height, resized_width = self.scale_size
         crop_height, crop_width = self.crop_size
-
-        scene_image = transform.resize(scene_image, (resized_height, resized_width))
-
-        crop_top = np.random.randint(0, resized_height - crop_height)
-        crop_left = np.random.randint(0, resized_width - crop_width)
-
-        scene_image = scene_image[
+        points = np.concatenate((sample["eyes"].reshape(-1, 2), sample["gaze"].reshape(-1, 2)))
+        pixel_points = points * [resized_width, resized_height]
+        smallest_offset = np.maximum(
+            0, np.ceil(pixel_points.max(0) - [crop_width, crop_height])
+        ).astype(int)
+        largest_offset = np.minimum(
+            [resized_width - crop_width, resized_height - crop_height],
+            np.floor(pixel_points.min(0)),
+        ).astype(int)
+        if (smallest_offset > largest_offset).any():
+            return sample
+        crop_left = np.random.randint(smallest_offset[0], largest_offset[0] + 1)
+        crop_top = np.random.randint(smallest_offset[1], largest_offset[1] + 1)
+        scene = transform.resize(sample["img"], self.scale_size, anti_aliasing=True)
+        sample["img"] = scene[
             crop_top : crop_top + crop_height, crop_left : crop_left + crop_width
         ]
-
-        eye_position = (eye_position * 227 - [crop_left, crop_top]) / (
-            1.0 * 227
-        )  ##assuming that w is equal to h
-        head_eye_position = (head_eye_position * 227 - [crop_left, crop_top]) / (1.0 * 227)
-        gaze_points = (gaze_points * 227 - [crop_left, crop_top]) / (1.0 * 227)
-
-        if eye_position[0] < 0:
-            eye_position[0] = 0.05
-        if eye_position[1] < 0:
-            eye_position[1] = 0.05
-        if eye_position[0] > 1:
-            eye_position[0] = 0.95
-        if eye_position[1] > 1:
-            eye_position[1] = 0.95
-
-        if head_eye_position[0] < 0:
-            head_eye_position[0] = 0.05
-        if head_eye_position[1] < 0:
-            head_eye_position[1] = 0.05
-        if head_eye_position[0] > 1:
-            head_eye_position[0] = 0.95
-        if head_eye_position[1] > 1:
-            head_eye_position[1] = 0.95
-
-        if gaze_points[0] < 0:
-            gaze_points[0] = 0.05
-        if gaze_points[1] < 0:
-            gaze_points[1] = 0.05
-        if gaze_points[0] > 1:
-            gaze_points[0] = 0.95
-        if gaze_points[1] > 1:
-            gaze_points[1] = 0.95
-
-        sample = {
-            "img": scene_image,
-            "bbox": head_image,
-            "eyes": eye_position,
-            "eyes_bbox": head_eye_position,
-            "gaze": gaze_points,
-        }
-
+        sample["eyes"] = (
+            sample["eyes"] * [resized_width, resized_height] - [crop_left, crop_top]
+        ) / [crop_width, crop_height]
+        sample["gaze"] = (
+            (
+                sample["gaze"].reshape(-1, 2) * [resized_width, resized_height]
+                - [crop_left, crop_top]
+            )
+            / [crop_width, crop_height]
+        ).reshape(-1)
         return sample

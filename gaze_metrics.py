@@ -8,12 +8,11 @@ wrappers average one of those metrics over the batch and return a Python float.
 
 Distance to the mean location is different from averaging individual distances.
 The calculation runs on detached CPU tensors and does not contribute to the
-training loss. AUCaccuracy remains an explicit unimplemented placeholder; this
-module does not claim that the original-paper AUC evaluator has been reproduced.
+training loss. Angular error follows eye-to-mean gaze directions. Fixation AUC
+uses an explicit 64x64 raster protocol; exact 2015 evaluator parity is unverified.
 """
 
 from __future__ import annotations
-from typing import NoReturn
 import torch
 from type_definitions import Options
 
@@ -112,6 +111,80 @@ def euclid_mindist(
 
 def AUCaccuracy(
     predicted_heatmaps: torch.Tensor, gaze_annotations: torch.Tensor, options: Options
-) -> NoReturn:
-    """Raise NotImplementedError; the original-paper AUC protocol is not implemented."""
-    raise NotImplementedError("Original-paper AUC protocol has not yet been implemented")
+) -> float:
+    """Compute explicitly configured fixation AUC; exact 2015 evaluator parity is unverified."""
+    return fixation_auc(
+        predicted_heatmaps, gaze_annotations, getattr(options, "auc_resolution", 64)
+    )
+
+
+def angular_error(
+    predicted_flat_indices: torch.Tensor,
+    gaze_annotations: torch.Tensor,
+    eye_positions: torch.Tensor,
+) -> float:
+    """Return mean angle in degrees from eye-to-prediction versus eye-to-mean fixation.
+
+    Zero-length vectors have undefined angle and are excluded from the mean.
+    NaN is returned when every vector is undefined, rather than inventing an angle.
+    """
+    indices = torch.as_tensor(predicted_flat_indices).detach().cpu().long()
+    points = (
+        torch.as_tensor(gaze_annotations).detach().cpu().float().reshape(len(indices), -1, 2)
+    )
+    valid = (points >= 0).all(-1) & torch.isfinite(points).all(-1)
+    means = points.masked_fill(~valid[..., None], 0).sum(1) / valid.sum(1, keepdim=True)
+    predicted = torch.stack((indices % 227, indices // 227), dim=-1).float() / 227
+    eyes = torch.as_tensor(eye_positions).detach().cpu().float()
+    predicted_vectors, true_vectors = predicted - eyes, means - eyes
+    products = predicted_vectors.norm(dim=-1) * true_vectors.norm(dim=-1)
+    defined = products > 1e-12
+    if not defined.any():
+        return float("nan")
+    cosines = (predicted_vectors * true_vectors).sum(-1)[defined] / products[defined]
+    return torch.rad2deg(torch.acos(cosines.clamp(-1, 1))).mean().item()
+
+
+def fixation_auc(
+    predicted_heatmaps: torch.Tensor, gaze_annotations: torch.Tensor, resolution: int = 64
+) -> float:
+    """Average tie-correct ROC AUC using all annotated fixation pixels on a fixed grid.
+
+    Each image contributes equally. Heatmaps are bilinearly sampled at resolution
+    and annotations become a multi-hot binary map. This explicit auc_64 protocol
+    has not been verified against the unavailable original 2015 evaluator.
+    """
+    import numpy as np
+
+    heatmaps = torch.nn.functional.interpolate(
+        predicted_heatmaps.detach().cpu().float()[:, None],
+        size=(resolution, resolution),
+        mode="bilinear",
+        align_corners=False,
+    )[:, 0]
+    annotation_batches = (
+        torch.as_tensor(gaze_annotations).detach().cpu().float().reshape(len(heatmaps), -1, 2)
+    )
+    values: list[float] = []
+    for heatmap, points in zip(heatmaps, annotation_batches):
+        valid = (points >= 0).all(-1) & torch.isfinite(points).all(-1)
+        pixels = (points[valid] * resolution).floor().clamp(0, resolution - 1).long()
+        labels = np.zeros(resolution * resolution, dtype=bool)
+        labels[(pixels[:, 1] * resolution + pixels[:, 0]).numpy()] = True
+        scores = heatmap.reshape(-1).numpy()
+        order = np.argsort(scores, kind="stable")
+        sorted_scores = scores[order]
+        starts = np.r_[0, np.flatnonzero(np.diff(sorted_scores)) + 1]
+        ends = np.r_[starts[1:], len(scores)]
+        ranks = np.empty(len(scores), dtype=np.float64)
+        ranks[order] = np.repeat((starts + ends - 1) / 2 + 1, ends - starts)
+        positive_count = labels.sum()
+        if positive_count == 0 or positive_count == len(scores):
+            raise ValueError("AUC needs both positive and negative pixels")
+        values.append(
+            float(
+                (ranks[labels].sum() - positive_count * (positive_count + 1) / 2)
+                / (positive_count * (len(scores) - positive_count))
+            )
+        )
+    return float(np.mean(values))
