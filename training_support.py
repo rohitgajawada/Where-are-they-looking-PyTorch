@@ -33,7 +33,7 @@ def adjust_learning_rate(options: Options, optimizer: Optimizer, epoch: int) -> 
     options.lr = learning_rate
 
     for parameter_group in optimizer.param_groups:
-        parameter_group["lr"] = learning_rate
+        parameter_group["lr"] = learning_rate * parameter_group.get("lr_scale", 1.0)
         parameter_group["weight_decay"] = weight_decay
 
 

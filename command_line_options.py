@@ -26,7 +26,7 @@ def optionargparser() -> argparse.ArgumentParser:
     parser.add_argument("--data_dir", default="../", type=str, help="chosen data directory")
     parser.add_argument(
         "--placesmodelpath",
-        default="./whole_alexnet_places365.pth",
+        default="pretrained/places205_features.pt",
         type=str,
         help="chosen data directory",
     )
@@ -45,7 +45,9 @@ def optionargparser() -> argparse.ArgumentParser:
         type=int,
         help="input batch size for testing (default: 1000)",
     )
-    parser.add_argument("--printfreq", default=50, type=int, help="print frequency (default: 10)")
+    parser.add_argument(
+        "--printfreq", default=50, type=int, help="print frequency (default: 10)"
+    )
     parser.add_argument(
         "--learningratescheduler",
         default="decayschedular",
@@ -61,7 +63,7 @@ def optionargparser() -> argparse.ArgumentParser:
         help="decays by a power of decay_var in these epochs",
     )
     parser.add_argument(
-        "--decaylevel", default=1.15, type=int, help="decays by a power of decaylevel"
+        "--decaylevel", default=1.15, type=float, help="decays by a power of decaylevel"
     )
     parser.add_argument("--criterion", default="crossentropy", help="Criterion")
     parser.add_argument(
@@ -77,7 +79,10 @@ def optionargparser() -> argparse.ArgumentParser:
     parser.add_argument("--minlr", default=0.0001, type=float, help="initial learning rate")
 
     parser.add_argument(
-        "--nesterov", default=True, action=argparse.BooleanOptionalAction, help="nesterov momentum"
+        "--nesterov",
+        default=True,
+        action=argparse.BooleanOptionalAction,
+        help="nesterov momentum",
     )
     parser.add_argument("--momentum", default=0.9, type=float, help="momentum (Default: 0.9)")
     parser.add_argument(
@@ -139,7 +144,22 @@ def optionargparser() -> argparse.ArgumentParser:
         action="store_true",
         help="Allow pickle loading of a trusted legacy Places module",
     )
-    parser.add_argument("--face-model", default="s3fd_convert.pth")
+    parser.add_argument("--face-model", default="pretrained/s3fd/s3fd_convert.pth")
     parser.add_argument("--input-dir", default="imgs/test")
     parser.add_argument("--output-dir", default="model_outputs")
+    parser.add_argument("--architecture", choices=["paper", "legacy"], default="paper")
+    parser.add_argument("--log-dir", default=None, help="TensorBoard run directory under runs/")
+    parser.add_argument("--log-interval", type=int, default=20)
+    parser.add_argument("--validation-fraction", type=float, default=0.05)
+    parser.add_argument(
+        "--validation-split",
+        choices=["development", "test"],
+        default="development",
+        help="development holds out training images; test uses all training data and evaluates corrected test2 each epoch",
+    )
+    parser.add_argument("--vertical-flip", action=argparse.BooleanOptionalAction, default=False)
+    parser.add_argument("--random-crop", action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument("--backbone", choices=["caffe", "torchvision"], default="caffe")
+    parser.add_argument("--imagenet-model", default="pretrained/imagenet_caffe_features.pt")
+    parser.add_argument("--pretrained-lr-scale", type=float, default=0.1)
     return parser

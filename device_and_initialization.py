@@ -74,7 +74,11 @@ def load_places_features(options: Options) -> nn.Sequential:
 
     Legacy pickled modules execute Python during loading and require explicit trust.
     """
-    # Preserve the original feature geometry and parameter names.
+    if getattr(options, "backbone", "torchvision") == "caffe":
+        from models.caffe_alexnet_backbone import CaffeAlexNetFeatures
+
+        return CaffeAlexNetFeatures(options, scene=True)
+    # Preserve the torchvision variant for controlled comparisons.
     scene_backbone = alexnet(weights=None).features[:-2]
     if getattr(options, "random_init", False):
         return scene_backbone

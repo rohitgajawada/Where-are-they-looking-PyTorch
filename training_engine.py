@@ -1,30 +1,62 @@
-"""Run gaze-model training epochs and evaluate decoded fixation predictions.
+"""Train and validate gaze models with comparable TensorBoard scalar metrics.
 
-Trainer moves collated scene/head images and eye grids to the model device,
-averages NLL across the five shifted-grid classification heads, backpropagates,
-and updates the optimizer. It records sample-weighted loss and timing through
-a TensorBoard-compatible scalar writer. Batch size one is supported.
-
-Validator runs without gradients, finds each heatmap's global maximum, and
-reports normalized distance to the mean human fixation and to the closest human
-fixation. It returns the mean-location distance used for checkpoint selection.
-Model construction, dataset loading, CLI parsing, and the outer epoch loop live
-in separate modules; importing this engine does not start training.
+Both loops report sample-weighted five-head NLL, grid accuracy, and normalized
+mean/minimum fixation distance. Training charts update during the epoch; epoch
+charts allow direct comparison with validation under the same metric definitions.
+Training distances describe augmented training examples when augmentation is on.
+Validation runs in evaluation mode with gradients disabled. Gradient norms and
+per-head accuracy expose optimization failures before an epoch completes.
 """
 
 from __future__ import annotations
+
+import time
+import torch
+from torch.optim import Optimizer
+
 from type_definitions import GazeLoader, Options, ScalarWriter
 from models.gaze_following_network import Net
-from torch.optim import Optimizer
-import torch
 from training_support import AverageMeter
-import time
+from shifted_grids import GRID_NAMES, decode_grids
 import gaze_metrics
-import sys
+
+
+def batch_statistics(
+    outputs: list[torch.Tensor],
+    targets: torch.Tensor,
+    annotations: torch.Tensor,
+    loss_function: torch.nn.Module,
+) -> tuple[torch.Tensor, dict[str, float]]:
+    """Compute differentiable NLL and detached per-batch accuracy and gaze distances."""
+    labels = targets.reshape(-1, 5, 25).argmax(-1)
+    head_losses = torch.stack(
+        [loss_function(output, labels[:, index]) for index, output in enumerate(outputs)]
+    )
+    accuracies = torch.stack(
+        [
+            (output.argmax(-1) == labels[:, index]).float().mean()
+            for index, output in enumerate(outputs)
+        ]
+    )
+    with torch.no_grad():
+        peaks = decode_grids([output.detach() for output in outputs]).flatten(1).argmax(1)
+        distances, minimum_distances = gaze_metrics._distances(
+            peaks, annotations, labels.shape[0]
+        )
+    statistics = {
+        "loss": head_losses.mean().item(),
+        "grid_accuracy": accuracies.mean().item(),
+        "mean_distance": distances.mean().item(),
+        "minimum_distance": minimum_distances.mean().item(),
+    }
+    for index, name in enumerate(GRID_NAMES):
+        statistics[f"head_loss/{name}"] = head_losses[index].item()
+        statistics[f"head_accuracy/{name}"] = accuracies[index].item()
+    return head_losses.mean(), statistics
 
 
 class Trainer:
-    """Optimize the gaze model while tracking sample-weighted loss and timing."""
+    """Optimize the model and stream training metrics and gradient diagnostics."""
 
     def __init__(
         self,
@@ -34,105 +66,111 @@ class Trainer:
         options: Options,
         scalar_writer: ScalarWriter,
     ) -> None:
-        """Bind the model, optimizer, loss, scalar writer, device, and epoch meters."""
+        """Bind training objects and initialize the compatibility loss meter."""
         self.model = model
         self.device = next(model.parameters()).device
         self.loss_function = loss_function
         self.optimizer = optimizer
-        self.batch_time_meter = AverageMeter()
-        self.data_time_meter = AverageMeter()
-        self.loss_meter = AverageMeter()
         self.scalar_writer = scalar_writer
+        self.loss_meter = AverageMeter()
+        self.branch_activations: dict[str, torch.Tensor] = {}
+        self.model.saliency_branch.register_forward_hook(self.capture_scene_activation)
+        self.model.gaze_branch.register_forward_hook(self.capture_gaze_activation)
+
+    def capture_scene_activation(
+        self, module: torch.nn.Module, inputs: tuple[torch.Tensor, ...], output: torch.Tensor
+    ) -> None:
+        """Keep the latest detached scene map for inexpensive activity diagnostics."""
+        self.branch_activations["scene"] = output.detach()
+
+    def capture_gaze_activation(
+        self, module: torch.nn.Module, inputs: tuple[torch.Tensor, ...], output: torch.Tensor
+    ) -> None:
+        """Keep the latest detached gaze mask for saturation diagnostics."""
+        self.branch_activations["gaze"] = output.detach()
 
     def train(self, train_loader: GazeLoader, epoch: int, options: Options) -> None:
-        """Train one epoch by averaging NLL across five shifted-grid heads.
-
-        Batches contain scene images, head crops, eye grids, five one-hot targets,
-        eye coordinates, sample indices, head-local eyes, and padded gaze labels.
-        This method updates model weights and logs the sample-weighted training loss.
-        """
-        self.data_time_meter.reset()
-        self.batch_time_meter.reset()
+        """Train one epoch with finite checks and matching batch/epoch TensorBoard metrics."""
         self.model.train()
         self.loss_meter.reset()
-
-        previous_batch_end_time = time.time()
-        for batch_index, batch in enumerate(train_loader, 0):
-
-            self.optimizer.zero_grad()
-
-            (
-                scene_images,
-                head_images,
-                eye_position_grids,
-                shifted_grid_targets,
-                eye_positions,
-                sample_indices,
-                head_eye_positions,
-                gaze_annotations,
-            ) = batch
-            scene_images = scene_images.to(self.device, non_blocking=True)
-            head_images = head_images.to(self.device, non_blocking=True)
-            eye_position_grids = eye_position_grids.to(self.device, non_blocking=True)
-            shifted_grid_targets = shifted_grid_targets.to(self.device, non_blocking=True).reshape(
-                scene_images.size(0), 5, 25
-            )
-
-            self.data_time_meter.update(time.time() - previous_batch_end_time)
-
-            grid_log_probabilities = self.model(scene_images, head_images, eye_position_grids)
-            total_loss = self.loss_function(
-                grid_log_probabilities[0], shifted_grid_targets[:, 0, :].max(1)[1]
-            )
-            for grid_index in range(1, len(grid_log_probabilities)):
-                total_loss += self.loss_function(
-                    grid_log_probabilities[grid_index],
-                    shifted_grid_targets[:, grid_index, :].max(1)[1],
+        meters: dict[str, AverageMeter] = {}
+        started = time.monotonic()
+        log_interval = max(1, getattr(options, "log_interval", 20))
+        for batch_index, batch in enumerate(train_loader):
+            scenes, heads, eye_grids, targets = [
+                tensor.to(self.device, non_blocking=True) for tensor in batch[:4]
+            ]
+            self.optimizer.zero_grad(set_to_none=True)
+            outputs = self.model(scenes, heads, eye_grids)
+            loss, statistics = batch_statistics(outputs, targets, batch[7], self.loss_function)
+            if not torch.isfinite(loss):
+                raise FloatingPointError(
+                    f"Non-finite training loss at epoch {epoch}, batch {batch_index}"
                 )
-
-            total_loss = total_loss / (len(grid_log_probabilities) * 1.0)
-
-            total_loss.backward()
+            loss.backward()
+            gradient_norm = torch.nn.utils.clip_grad_norm_(
+                self.model.parameters(), float("inf"), error_if_nonfinite=True
+            )
             self.optimizer.step()
-
-            batch_size = scene_images.size(0)
-            self.loss_meter.update(total_loss.item(), batch_size)
-            self.batch_time_meter.update(time.time() - previous_batch_end_time)
-            previous_batch_end_time = time.time()
-
+            batch_size = scenes.shape[0]
+            self.loss_meter.update(statistics["loss"], batch_size)
+            for metric, value in statistics.items():
+                meters.setdefault(metric, AverageMeter()).update(value, batch_size)
+            global_step = epoch * len(train_loader) + batch_index
+            if batch_index % log_interval == 0 or batch_index + 1 == len(train_loader):
+                for metric, value in statistics.items():
+                    self.scalar_writer.add_scalar(f"train_batch/{metric}", value, global_step)
+                self.scalar_writer.add_scalar(
+                    "optimization/gradient_norm", float(gradient_norm), global_step
+                )
+                for group_index, group in enumerate(self.optimizer.param_groups):
+                    self.scalar_writer.add_scalar(
+                        f"optimization/learning_rate_{group_index}", group["lr"], global_step
+                    )
+                for branch_name, activation in self.branch_activations.items():
+                    self.scalar_writer.add_scalar(
+                        f"activations/{branch_name}_mean", activation.mean().item(), global_step
+                    )
+                    self.scalar_writer.add_scalar(
+                        f"activations/{branch_name}_zero_fraction",
+                        (activation == 0).float().mean().item(),
+                        global_step,
+                    )
+                    self.scalar_writer.add_scalar(
+                        f"activations/{branch_name}_saturated_fraction",
+                        ((activation < 0.01) | (activation > 0.99)).float().mean().item(),
+                        global_step,
+                    )
+                for branch_name, branch in [
+                    ("scene", self.model.saliency_branch),
+                    ("gaze", self.model.gaze_branch),
+                ]:
+                    norm = (
+                        sum(
+                            float(parameter.grad.detach().square().sum())
+                            for parameter in branch.parameters()
+                            if parameter.grad is not None
+                        )
+                        ** 0.5
+                    )
+                    self.scalar_writer.add_scalar(
+                        f"optimization/{branch_name}_gradient_norm", norm, global_step
+                    )
             if batch_index % options.printfreq == 0 and options.verbose:
                 print(
-                    "Epoch: [{0}][{1}/{2}]\t"
-                    "Time {batch_time.avg:.3f} ({batch_time.sum:.3f})\t"
-                    "Data {data_time.avg:.3f} ({data_time.sum:.3f})\t"
-                    "Loss {loss.avg:.3f}\t".format(
-                        epoch,
-                        batch_index,
-                        len(train_loader),
-                        batch_time=self.batch_time_meter,
-                        data_time=self.data_time_meter,
-                        loss=self.loss_meter,
-                    )
+                    f'Epoch {epoch + 1} [{batch_index}/{len(train_loader)}] loss={self.loss_meter.avg:.4f} accuracy={meters["grid_accuracy"].avg:.3f}',
+                    flush=True,
                 )
-
-            sys.stdout.flush()
-
-        self.scalar_writer.add_scalar("Train Loss", self.loss_meter.avg, epoch)
-        print(
-            "Train: [{0}]\t"
-            "Time {batch_time.sum:.3f}\t"
-            "Data {data_time.sum:.3f}\t"
-            "Loss {loss.avg:.3f}\t".format(
-                epoch,
-                batch_time=self.batch_time_meter,
-                data_time=self.data_time_meter,
-                loss=self.loss_meter,
-            )
+        for metric, meter in meters.items():
+            self.scalar_writer.add_scalar(f"{metric}/train", meter.avg, epoch + 1)
+        self.scalar_writer.add_scalar(
+            "runtime/train_seconds", time.monotonic() - started, epoch + 1
         )
+        print(f"Train epoch {epoch + 1}: loss={self.loss_meter.avg:.5f}", flush=True)
 
 
 class Validator:
-    """Evaluate global heatmap peaks against the human gaze annotations."""
+    """Evaluate loss, classification accuracy, and gaze distances without optimization."""
 
     def __init__(
         self,
@@ -141,100 +179,56 @@ class Validator:
         options: Options,
         scalar_writer: ScalarWriter,
     ) -> None:
-        """Bind the model, writer, device, and validation distance/timing meters."""
-
+        """Bind validation objects and initialize compatibility metric meters."""
         self.model = model
         self.device = next(model.parameters()).device
         self.loss_function = loss_function
-        self.batch_time_meter = AverageMeter()
-        self.data_time_meter = AverageMeter()
+        self.scalar_writer = scalar_writer
         self.mean_distance_meter = AverageMeter()
         self.minimum_distance_meter = AverageMeter()
-        self.scalar_writer = scalar_writer
+        self.loss_meter = AverageMeter()
 
     def validate(self, validation_loader: GazeLoader, epoch: int, options: Options) -> float:
-        """Evaluate decoded gaze predictions without gradient tracking.
-
-        Returns the sample-weighted distance to each person's mean annotation,
-        in normalized image coordinates. Also logs minimum annotation distance.
-        """
-
+        """Evaluate all validation batches and log metrics using the same names as training."""
         self.model.eval()
-        self.mean_distance_meter.reset()
-        self.minimum_distance_meter.reset()
-        self.data_time_meter.reset()
-        self.batch_time_meter.reset()
-        previous_batch_end_time = time.time()
-
+        meters: dict[str, AverageMeter] = {}
+        started = time.monotonic()
         with torch.no_grad():
-            for batch_index, batch in enumerate(validation_loader, 0):
-
-                (
-                    scene_images,
-                    head_images,
-                    eye_position_grids,
-                    shifted_grid_targets,
-                    eye_positions,
-                    sample_indices,
-                    head_eye_positions,
-                    gaze_annotations,
-                ) = batch
-                scene_images = scene_images.to(self.device, non_blocking=True)
-                head_images = head_images.to(self.device, non_blocking=True)
-                eye_position_grids = eye_position_grids.to(self.device, non_blocking=True)
-
-                self.data_time_meter.update(time.time() - previous_batch_end_time)
-                heatmaps = self.model.predict(scene_images, head_images, eye_position_grids)
-
-                predicted_flat_indices = heatmaps.flatten(1).argmax(1)
-                batch_size = scene_images.size(0)
-
-                mean_distance = gaze_metrics.euclid_dist(
-                    predicted_flat_indices.cpu(), gaze_annotations, batch_size
+            for batch_index, batch in enumerate(validation_loader):
+                scenes, heads, eye_grids, targets = [
+                    tensor.to(self.device, non_blocking=True) for tensor in batch[:4]
+                ]
+                outputs = self.model(scenes, heads, eye_grids)
+                loss, statistics = batch_statistics(
+                    outputs, targets, batch[7], self.loss_function
                 )
-                minimum_distance = gaze_metrics.euclid_mindist(
-                    predicted_flat_indices.cpu(), gaze_annotations, batch_size
+                if not torch.isfinite(loss):
+                    raise FloatingPointError("Non-finite validation loss")
+                heatmaps = decode_grids(outputs)
+                peaks = heatmaps.flatten(1).argmax(1)
+                statistics["auc_64"] = gaze_metrics.fixation_auc(heatmaps, batch[7])
+                statistics["angular_error_degrees"] = gaze_metrics.angular_error(
+                    peaks, batch[7], batch[4]
                 )
-
-                self.mean_distance_meter.update(mean_distance, batch_size)
-                self.minimum_distance_meter.update(minimum_distance, batch_size)
-                self.batch_time_meter.update(time.time() - previous_batch_end_time)
-                previous_batch_end_time = time.time()
-
+                for metric, value in statistics.items():
+                    meters.setdefault(metric, AverageMeter()).update(value, scenes.shape[0])
                 if batch_index % options.printfreq == 0 and options.verbose:
                     print(
-                        "Epoch: [{0}][{1}/{2}]\t"
-                        "Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t"
-                        "Data {data_time.val:.3f} ({data_time.avg:.3f})\t"
-                        "Dist {dist.avg:.3f}\t"
-                        "MinDist {mindist.avg:.3f}\t".format(
-                            epoch,
-                            batch_index,
-                            len(validation_loader),
-                            batch_time=self.batch_time_meter,
-                            data_time=self.data_time_meter,
-                            dist=self.mean_distance_meter,
-                            mindist=self.minimum_distance_meter,
-                        )
+                        f'Validation [{batch_index}/{len(validation_loader)}] loss={meters["loss"].avg:.4f} distance={meters["mean_distance"].avg:.4f}',
+                        flush=True,
                     )
-
-                sys.stdout.flush()
-
-            self.scalar_writer.add_scalar("Val Dist", self.mean_distance_meter.avg, epoch)
-            self.scalar_writer.add_scalar("Val Min Dist", self.minimum_distance_meter.avg, epoch)
-
-            print(
-                "Val: [{0}]\t"
-                "Time {batch_time.sum:.3f}\t"
-                "Data {data_time.sum:.3f}\t"
-                "Dist {dist.avg:.3f}\t"
-                "MinDist {mindist.avg:.3f}\t".format(
-                    epoch,
-                    batch_time=self.batch_time_meter,
-                    data_time=self.data_time_meter,
-                    dist=self.mean_distance_meter,
-                    mindist=self.minimum_distance_meter,
-                )
-            )
-
+        if not meters:
+            raise ValueError("Validation loader is empty")
+        for metric, meter in meters.items():
+            self.scalar_writer.add_scalar(f"{metric}/val", meter.avg, epoch + 1)
+        self.scalar_writer.add_scalar(
+            "runtime/val_seconds", time.monotonic() - started, epoch + 1
+        )
+        self.loss_meter = meters["loss"]
+        self.mean_distance_meter = meters["mean_distance"]
+        self.minimum_distance_meter = meters["minimum_distance"]
+        print(
+            f"Validation epoch {epoch + 1}: loss={self.loss_meter.avg:.5f} distance={self.mean_distance_meter.avg:.5f}",
+            flush=True,
+        )
         return self.mean_distance_meter.avg
