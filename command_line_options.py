@@ -151,6 +151,12 @@ def optionargparser() -> argparse.ArgumentParser:
     parser.add_argument("--log-dir", default=None, help="TensorBoard run directory under runs/")
     parser.add_argument("--log-interval", type=int, default=20)
     parser.add_argument("--validation-fraction", type=float, default=0.05)
+    parser.add_argument(
+        "--validation-split",
+        choices=["development", "test"],
+        default="development",
+        help="development holds out training images; test uses all training data and evaluates corrected test2 each epoch",
+    )
     parser.add_argument("--vertical-flip", action=argparse.BooleanOptionalAction, default=False)
     parser.add_argument("--random-crop", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--backbone", choices=["caffe", "torchvision"], default="caffe")

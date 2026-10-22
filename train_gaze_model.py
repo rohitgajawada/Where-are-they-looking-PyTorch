@@ -4,7 +4,8 @@ main parses shared CLI options, resolves the device, seeds initialization,
 checks annotation paths, builds or resumes the model and optimizer, and opens
 the GazeFollow loaders and TensorBoard writer. It runs the outer training and
 validation loop, applies the learning-rate schedule, and saves periodic/final
-checkpoints. Epoch validation uses an image-disjoint development split.
+checkpoints. Epoch validation uses either an image-disjoint development split or the
+corrected test2 split when --validation-split test is selected.
 --testOnly evaluates the official test split without starting training epochs.
 
 A complete resume checkpoint supplies both backbones and avoids unnecessary
@@ -75,8 +76,22 @@ def main() -> None:
             {
                 "train": dataset_loaders.training_indices,
                 "validation": dataset_loaders.validation_indices,
+                "validation_source": dataset_loaders.validation_source,
+                "training_annotations": str(Path(options.data_dir) / "train_annotations.mat"),
+                "validation_annotations": str(
+                    Path(options.data_dir)
+                    / (
+                        "test_annotations.mat"
+                        if dataset_loaders.validation_source == "test"
+                        else "train_annotations.mat"
+                    )
+                ),
             }
         )
+    )
+    print(
+        f"Training examples: {len(dataset_loaders.training_indices)}; validation examples: {len(dataset_loaders.validation_indices)}; validation source: {dataset_loaders.validation_source}",
+        flush=True,
     )
     with SummaryWriter(log_dir=str(run_directory), flush_secs=10) as scalar_writer:
         trainer = training_engine.Trainer(
@@ -87,7 +102,7 @@ def main() -> None:
             validator.validate(dataset_loaders.test_loader, options.start_epoch, options)
             return
         if not dataset_loaders.validation_indices:
-            raise ValueError("No validation images; choose a nonempty development split")
+            raise ValueError("No validation images in the selected validation split")
         validator.validate(dataset_loaders.validation_loader, options.start_epoch - 1, options)
         scalar_writer.flush()
         for epoch in range(options.start_epoch, options.epochs):

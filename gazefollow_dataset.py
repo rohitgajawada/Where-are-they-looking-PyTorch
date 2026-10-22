@@ -10,8 +10,9 @@ GazeFollow owns the train/test datasets and their seeded PyTorch DataLoaders.
 Scene and gaze coordinates use normalized (x,y) positions; tensor images use
 channel-first layout. Annotation storage is immutable. RGB conversion precedes
 cropping, crops are padded consistently, and the grid specification is shared
-with decoding. An image-disjoint development partition is derived from training
-images; official test data is reserved for explicit final evaluation.
+with decoding. Validation defaults to an image-disjoint partition of training images.
+With --validation-split test, all training examples are used and corrected
+test2 supplies epoch validation, including its multiple fixation annotations.
 """
 
 from __future__ import print_function, division
@@ -233,28 +234,39 @@ class GazeFollow:
         self.train_dataset: GazeDataset = GazeDataset(
             training_annotations, "train", options.data_dir, options
         )
-        development_dataset = GazeDataset(
-            training_annotations, "train", options.data_dir, options
+        self.test_dataset: GazeDataset = GazeDataset(
+            test_annotations, "test", options.data_dir, options
         )
-        development_dataset.split = "test"  # Disable all training augmentation.
-        validation_fraction = getattr(options, "validation_fraction", 0.05)
-        validation_indices = []
-        training_indices = []
-        for index, image_path in enumerate(self.train_dataset.image_paths):
-            relative_path = str(Path(image_path).relative_to(options.data_dir))
-            bucket = (
-                int(
-                    hashlib.sha256(f"{options.seed}:{relative_path}".encode()).hexdigest()[:16],
-                    16,
+        self.validation_source = getattr(options, "validation_split", "development")
+        if self.validation_source == "test":
+            training_indices = list(range(len(self.train_dataset)))
+            validation_indices = list(range(len(self.test_dataset)))
+            self.validation_dataset = self.test_dataset
+        else:
+            development_dataset = GazeDataset(
+                training_annotations, "train", options.data_dir, options
+            )
+            development_dataset.split = "test"  # Disable all training augmentation.
+            validation_fraction = getattr(options, "validation_fraction", 0.05)
+            validation_indices = []
+            training_indices = []
+            for index, image_path in enumerate(self.train_dataset.image_paths):
+                relative_path = str(Path(image_path).relative_to(options.data_dir))
+                bucket = (
+                    int(
+                        hashlib.sha256(f"{options.seed}:{relative_path}".encode()).hexdigest()[
+                            :16
+                        ],
+                        16,
+                    )
+                    / 2**64
                 )
-                / 2**64
-            )
-            (validation_indices if bucket < validation_fraction else training_indices).append(
-                index
-            )
+                (
+                    validation_indices if bucket < validation_fraction else training_indices
+                ).append(index)
+            self.validation_dataset = Subset(development_dataset, validation_indices)
         self.training_indices = training_indices
         self.validation_indices = validation_indices
-        self.validation_dataset = Subset(development_dataset, validation_indices)
         self.train_loader = torch.utils.data.DataLoader(
             Subset(self.train_dataset, training_indices),
             batch_size=options.batch_size,
@@ -263,18 +275,6 @@ class GazeFollow:
             worker_init_fn=seed_worker,
             pin_memory=str(options.device).startswith("cuda"),
         )
-        self.validation_loader = torch.utils.data.DataLoader(
-            self.validation_dataset,
-            batch_size=options.testbatchsize,
-            shuffle=False,
-            num_workers=options.workers,
-            worker_init_fn=seed_worker,
-            pin_memory=str(options.device).startswith("cuda"),
-        )
-
-        self.test_dataset: GazeDataset = GazeDataset(
-            test_annotations, "test", options.data_dir, options
-        )
         self.test_loader: torch.utils.data.DataLoader[GazeSample] = torch.utils.data.DataLoader(
             self.test_dataset,
             batch_size=options.testbatchsize,
@@ -282,4 +282,16 @@ class GazeFollow:
             num_workers=options.workers,
             worker_init_fn=seed_worker,
             pin_memory=str(options.device).startswith("cuda"),
+        )
+        self.validation_loader = (
+            self.test_loader
+            if self.validation_source == "test"
+            else torch.utils.data.DataLoader(
+                self.validation_dataset,
+                batch_size=options.testbatchsize,
+                shuffle=False,
+                num_workers=options.workers,
+                worker_init_fn=seed_worker,
+                pin_memory=str(options.device).startswith("cuda"),
+            )
         )

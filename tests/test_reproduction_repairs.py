@@ -178,3 +178,40 @@ def test_development_split_groups_people_from_same_image(tmp_path: Path) -> None
     val = {loaders.train_dataset.image_paths[index] for index in loaders.validation_indices}
     assert train and val and train.isdisjoint(val)
     assert len(loaders.training_indices) + len(loaders.validation_indices) == 128
+
+
+def test_official_validation_uses_entire_training_split_and_multiple_fixations(
+    tmp_path: Path,
+) -> None:
+    """Use every training row and preserve official test annotations for epoch validation."""
+    import scipy.io
+
+    synthetic_mat_dataset(tmp_path)
+    test_annotations = scipy.io.loadmat(tmp_path / "test_annotations.mat")
+    test_annotations["test_gaze"][0, 0] = np.array([[0.7, 0.3, 0.4, 0.8]])
+    scipy.io.savemat(
+        tmp_path / "test_annotations.mat",
+        {name: value for name, value in test_annotations.items() if not name.startswith("__")},
+    )
+    options = command_line_options.optionargparser().parse_args(
+        [
+            "--data_dir",
+            str(tmp_path),
+            "--workers",
+            "0",
+            "--no-withaug",
+            "--validation-split",
+            "test",
+            "--validation-fraction",
+            ".99",
+        ]
+    )
+    loaders = gazefollow_dataset.GazeFollow(options)
+    assert loaders.training_indices == list(range(len(loaders.train_dataset)))
+    assert loaders.validation_indices == list(range(len(loaders.test_dataset)))
+    assert loaders.validation_loader is loaders.test_loader
+    assert loaders.validation_dataset is loaders.test_dataset
+    assert loaders.validation_source == "test"
+    batch = next(iter(loaders.validation_loader))
+    np.testing.assert_allclose(batch[7][0, :4], [0.7, 0.3, 0.4, 0.8])
+    assert (batch[7][0, 4:] == -1).all()
