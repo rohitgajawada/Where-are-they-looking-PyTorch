@@ -1,107 +1,65 @@
-from __future__ import print_function
-import torch
-import torch.nn.functional as F
-from torch.autograd import Variable
-torch.backends.cudnn.bencmark = True
-import cv2
-import argparse
+"""S3FD inference with current PyTorch; no CLI parsing or model loading at import."""
+from pathlib import Path
+
 import numpy as np
-import net_s3fd
-from skimage import io, transform
-from bbox import *
-import matplotlib.pyplot as plt
-import torchvision
+import torch
+from skimage import transform
 
-def detect(net,img):
-    img = img - np.array([104,117,123])
-    img = img.transpose(2, 0, 1)
-    img = img.reshape((1,)+img.shape)
-
-    img = Variable(torch.from_numpy(img).float(),volatile=True).cuda()
-    BB,CC,HH,WW = img.size()
-    olist = net(img)
-
-    bboxlist = []
-    for i in range(len(olist)/2): olist[i*2] = F.softmax(olist[i*2])
-    for i in range(len(olist)/2):
-        ocls,oreg = olist[i*2].data.cpu(),olist[i*2+1].data.cpu()
-        FB,FC,FH,FW = ocls.size() # feature map size
-        stride = 2**(i+2)    # 4,8,16,32,64,128
-        anchor = stride*4
-        for Findex in range(FH*FW):
-            windex,hindex = Findex%FW,Findex//FW
-            axc,ayc = stride/2+windex*stride,stride/2+hindex*stride
-            score = ocls[0,1,hindex,windex]
-            loc = oreg[0,:,hindex,windex].contiguous().view(1,4)
-            if score<0.05: continue
-            priors = torch.Tensor([[axc/1.0,ayc/1.0,stride*4/1.0,stride*4/1.0]])
-            variances = [0.1,0.2]
-            box = decode(loc,priors,variances)
-            x1,y1,x2,y2 = box[0]*1.0
-
-            bboxlist.append([x1,y1,x2,y2,score])
-    bboxlist = np.array(bboxlist)
-    if 0==len(bboxlist): bboxlist=np.zeros((1, 5))
-    return bboxlist
-
-def getFaces(img):
-
-    parser = argparse.ArgumentParser(description='PyTorch face detect')
-    parser.add_argument('--net','-n', default='s3fd', type=str)
-    parser.add_argument('--model', default='../s3fd_convert.pth', type=str)
+from .net_s3fd import s3fd
+from .bbox import decode, nms
 
 
-    args = parser.parse_args()
-    net = getattr(net_s3fd,args.net)()
-    if args.model!='' :net.load_state_dict(torch.load(args.model))
-    else: print('Please set --model parameter!')
-    net.cuda()
-    net.eval()
-
-    shp = img.shape
-    bboxlist = detect(net,img)
-    keep = nms(bboxlist,0.3)
-    bboxlist = bboxlist[keep,:]
-
-    faces = torch.FloatTensor()
-    eyecoords = []
-    eye_grid = torch.FloatTensor()
+def load_detector(model_path, device):
+    net = s3fd().to(device)
+    state = torch.load(Path(model_path), map_location=device, weights_only=True)
+    net.load_state_dict(state.get('state_dict', state))
+    return net.eval()
 
 
-    for b in bboxlist:
-        x1,y1,x2,y2,s = b
-        if s<0.5: continue
+@torch.inference_mode()
+def detect(net, img):
+    """Detect boxes in a BGR image with 0..255 values."""
+    device = next(net.parameters()).device
+    image = np.asarray(img, dtype=np.float32) - np.array([104, 117, 123], dtype=np.float32)
+    image = torch.from_numpy(image.transpose(2, 0, 1).copy()).unsqueeze(0).to(device)
+    outputs = net(image)
+    boxes = []
+    for i in range(len(outputs) // 2):
+        classes = outputs[2*i].softmax(dim=1).cpu()
+        offsets = outputs[2*i+1].cpu()
+        _, _, height, width = classes.shape
+        stride = 2**(i+2)
+        for row, col in torch.nonzero(classes[0, 1] >= .05).tolist():
+            score = classes[0, 1, row, col].item()
+            anchor = torch.tensor([[stride/2 + col*stride, stride/2 + row*stride, stride*4, stride*4]])
+            box = decode(offsets[0, :, row, col].reshape(1, 4), anchor, [.1, .2])[0]
+            boxes.append([*box.tolist(), score])
+    return np.asarray(boxes, dtype=np.float32).reshape(-1, 5)
 
-        face = img[int(y1):int(y2), int(x1):int(x2)]
-        try:
-            face = np.ascontiguousarray(face)
-            face = transform.resize(face,(227, 227))
-            face = face.transpose((2, 0, 1))
-        except:
+
+def getFaces(img, net=None, model_path='s3fd_convert.pth', device='cpu'):
+    """Return normalized-range RGB face tensors, eye grids, and eye locations."""
+    if net is None:
+        net = load_detector(model_path, device)
+    boxes = detect(net, np.asarray(img)[..., ::-1])
+    if len(boxes):
+        boxes = boxes[nms(boxes, .3)]
+    height, width = img.shape[:2]
+    faces, grids, eyes = [], [], []
+    for x1, y1, x2, y2, score in boxes:
+        if score < .5:
             continue
-
-        face = torch.from_numpy(face).contiguous()
-        face = face.view(1, 3, 227, 227)
-        face = face.float()
-
-        faces = torch.cat((faces, face))
-        ey_x = (x1 + x2)/2
-        ey_y = (y1 + y2)/2
-        print(ey_x, ey_y, shp[1], shp[0])
-        print("Face: ", x1, x2, y1, y2)
-        ey_x = int(np.floor((ey_x/float(shp[1]))*13.0))
-        ey_y = int(np.floor((ey_y/float(shp[0]))*13.0))
-        if ey_x >= 12:
-            ey_x = 12
-        if ey_y >= 12:
-            ey_y = 12
-        eye = np.zeros((13,13))
-        eye[ey_y][ey_x] = 1
-        eye = torch.from_numpy(eye)
-        eye = eye.view(1, 1, 13, 13)
-        eye_grid = torch.cat((eye_grid, eye.float()))
-        ix = (x1 + x2)/(2.0 * float(shp[1]))
-        iy = (y1 + y2)/(2.0 * float(shp[0]))
-        eyecoords.append((ix, iy))
-
-    return faces, eye_grid, eyecoords
+        left, top = max(0, int(x1)), max(0, int(y1))
+        right, bottom = min(width, int(x2)), min(height, int(y2))
+        if right <= left or bottom <= top:
+            continue
+        face = transform.resize(img[top:bottom, left:right], (227, 227))
+        faces.append(torch.from_numpy(face.transpose(2, 0, 1).copy()).float())
+        ex, ey = np.clip([(x1+x2)/(2*width), (y1+y2)/(2*height)], 0, np.nextafter(1., 0))
+        grid = torch.zeros(13, 13)
+        grid[int(ey*13), int(ex*13)] = 1
+        grids.append(grid)
+        eyes.append((ex, ey))
+    if not faces:
+        return torch.empty(0, 3, 227, 227), torch.empty(0, 13, 13), []
+    return torch.stack(faces), torch.stack(grids), eyes

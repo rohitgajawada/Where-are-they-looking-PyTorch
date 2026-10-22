@@ -9,6 +9,7 @@ import sys
 class Trainer():
     def __init__(self, model, criterion, optimizer, opt, writer):
         self.model = model
+        self.device = next(model.parameters()).device
         self.criterion = criterion
         self.optimizer = optimizer
         self.batch_time = AverageMeter()
@@ -28,10 +29,10 @@ class Trainer():
             self.optimizer.zero_grad()
 
             xh, xi, xp, shifted_targets, eyes, names, eyes2, gcorrs = data
-            xh = xh.cuda()  
-            xi = xi.cuda()
-            xp = xp.cuda()
-            shifted_targets = shifted_targets.cuda().squeeze()
+            xh = xh.to(self.device, non_blocking=True)
+            xi = xi.to(self.device, non_blocking=True)
+            xp = xp.to(self.device, non_blocking=True)
+            shifted_targets = shifted_targets.to(self.device, non_blocking=True).reshape(xh.size(0), 5, 25)
 
             self.data_time.update(time.time() - end)
 
@@ -39,7 +40,7 @@ class Trainer():
             total_loss = self.criterion(outputs[0], shifted_targets[:, 0, :].max(1)[1])
             for j in range(1, len(outputs)):
                 total_loss += self.criterion(outputs[j], shifted_targets[:, j, :].max(1)[1])
-            
+
             total_loss = total_loss / (len(outputs) * 1.0)
 
             total_loss.backward()
@@ -74,6 +75,7 @@ class Validator():
     def __init__(self, model, criterion, opt, writer):
 
         self.model = model
+        self.device = next(model.parameters()).device
         self.criterion = criterion
         self.batch_time = AverageMeter()
         self.data_time = AverageMeter()
@@ -91,21 +93,21 @@ class Validator():
         end = time.time()
 
         with torch.no_grad():
-            for i, data in enumerate(valloader, 0): 
+            for i, data in enumerate(valloader, 0):
 
                 xh, xi, xp, targets, eyes, names, eyes2, ground_labels = data
-                xh = xh.cuda()
-                xi = xi.cuda()
-                xp = xp.cuda()
+                xh = xh.to(self.device, non_blocking=True)
+                xi = xi.to(self.device, non_blocking=True)
+                xp = xp.to(self.device, non_blocking=True)
 
                 self.data_time.update(time.time() - end)
                 outputs = self.model.predict(xh, xi, xp)
 
-                pred_labels = outputs.max(1)[1]
+                pred_labels = outputs.flatten(1).argmax(1)
                 inputs_size = xh.size(0)
 
-                distval = utils.euclid_dist(pred_labels.data.cpu(), ground_labels, inputs_size)
-                mindistval = utils.euclid_mindist(pred_labels.data.cpu(), ground_labels, inputs_size)
+                distval = utils.euclid_dist(pred_labels.cpu(), ground_labels, inputs_size)
+                mindistval = utils.euclid_mindist(pred_labels.cpu(), ground_labels, inputs_size)
 
                 self.dist.update(distval, inputs_size)
                 self.mindist.update(mindistval, inputs_size)

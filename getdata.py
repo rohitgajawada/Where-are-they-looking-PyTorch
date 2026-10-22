@@ -1,7 +1,8 @@
 from __future__ import print_function, division
 import os
+from pathlib import Path
+from runtime import seed_worker
 import torch
-import pandas as pd
 from skimage import io, transform
 import numpy as np
 import matplotlib.pyplot as plt
@@ -97,7 +98,7 @@ class GazeDataset(Dataset):
         for i in range(data_path.shape[0]):
             data_path[i] = data_path[i][0]
         data_path = data_path.flatten()
-        data_path = path + data_path
+        data_path = np.array([str(Path(path) / str(item)) for item in data_path], dtype=object)
 
         for i in range(data_bbox.shape[0]):
             data_bbox[i] = data_bbox[i].flatten()
@@ -153,7 +154,7 @@ class GazeDataset(Dataset):
 
         ######DO DATA AUG HERE###########
 
-        if self.type == 'train':
+        if self.type == 'train' and getattr(self.opt, 'withaug', True):
 
             composed = transforms.Compose([RandomHorizontalFlip(), RandomVerticalFlip(), RandomCrop()])
             sample = {'img': img, 'bbox': bbox, 'eyes': eyes, 'eyes_bbox': eyes_bbox, 'gaze': gaze}
@@ -234,13 +235,12 @@ class GazeFollow():
 
     def __init__(self, opt):
 
-        Train_Ann = sio.loadmat(opt.data_dir + 'train_annotations.mat')
-        Test_Ann = sio.loadmat(opt.data_dir + 'test_annotations.mat')
+        Train_Ann = sio.loadmat(Path(opt.data_dir) / 'train_annotations.mat')
+        Test_Ann = sio.loadmat(Path(opt.data_dir) / 'test_annotations.mat')
 
         self.train_gaze = GazeDataset(Train_Ann, 'train', opt.data_dir, opt)
-        self.x = self.train_gaze[1]
-        self.train_loader = torch.utils.data.DataLoader(self.train_gaze, batch_size=opt.batch_size, shuffle=True, num_workers=opt.workers)
+        self.train_loader = torch.utils.data.DataLoader(self.train_gaze, batch_size=opt.batch_size, shuffle=True, num_workers=opt.workers, worker_init_fn=seed_worker, pin_memory=str(opt.device).startswith("cuda"))
 
         self.val_gaze = GazeDataset(Test_Ann, 'test', opt.data_dir, opt)
         self.val_loader = torch.utils.data.DataLoader(self.val_gaze,
-        batch_size=opt.testbatchsize, shuffle=False, num_workers=opt.workers)
+        batch_size=opt.testbatchsize, shuffle=False, num_workers=opt.workers, worker_init_fn=seed_worker, pin_memory=str(opt.device).startswith("cuda"))

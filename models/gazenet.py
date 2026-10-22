@@ -2,14 +2,13 @@ import torch
 import torch.nn as nn
 import torchvision.models as models
 import torch.nn.functional as F
+from runtime import load_places_features
 
 class AlexSal(nn.Module):
     def __init__(self, opt):
         super(AlexSal, self).__init__()
 
-        self.features = nn.Sequential(
-            *list(torch.load(opt.placesmodelpath).features.children())[:-2]
-        )
+        self.features = load_places_features(opt)
         self.relu = nn.ReLU()
         self.sigmoid = nn.Sigmoid()
         self.conv6 = nn.Conv2d(256, 1, kernel_size=(1, 1), stride=(1, 1))
@@ -24,7 +23,7 @@ class AlexGaze(nn.Module):
     def __init__(self, opt):
         super(AlexGaze, self).__init__()
         self.features = nn.Sequential(
-            *list(models.alexnet(pretrained=True).features.children())
+            *list(models.alexnet(weights=None if getattr(opt, "random_init", False) else models.AlexNet_Weights.IMAGENET1K_V1).features.children())
         )
         self.relu = nn.ReLU()
         self.sigmoid = nn.Sigmoid()
@@ -94,8 +93,8 @@ class Net(nn.Module):
         output = outxi * outxh
         output = output.view(-1, 169)
 
-        hm = torch.zeros(output.size(0), 15, 15).cuda()
-        count_hm = torch.zeros(output.size(0), 15, 15).cuda()
+        hm = output.new_zeros((output.size(0), 15, 15))
+        count_hm = output.new_zeros((output.size(0), 15, 15))
 
         f_0_0 = self.nolog_smax(self.fc_0_0(output)).view(-1, 5, 5)
         f_1_0 = self.nolog_smax(self.fc_1_0(output)).view(-1, 5, 5)
@@ -145,7 +144,7 @@ class Net(nn.Module):
 
         hm_base = hm_base.unsqueeze(1)
 
-        hm_base = F.interpolate(input = hm_base, size = (227, 227), mode='bicubic')
+        hm_base = F.interpolate(input = hm_base, size = (227, 227), mode='bicubic', align_corners=False)
 
         hm_base = hm_base.squeeze(1)
 

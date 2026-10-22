@@ -1,137 +1,69 @@
-from __future__ import print_function
+"""Evaluate S3FD on a WIDER validation ZIP with current PyTorch.
 
-import torch
-import torch.nn as nn
-import torch.optim as optim
-import torch.nn.functional as F
-from torch.autograd import Variable
-# torch.backends.cudnn.bencmark = True
-
-import os,sys,cv2,random,datetime,math
+Run as: python -m ssd_detector.wider_eval_pytorch --help
+"""
 import argparse
-import numpy as np
-
-import scipy.io as sio
+from io import BytesIO
+from pathlib import Path
 import zipfile
-from net_s3fd import s3fd
-from bbox import *
+
+import numpy as np
+from PIL import Image
+import scipy.io
+
+from runtime import resolve_device
+from .bbox import nms
+from .tester import detect, load_detector
 
 
-def detect(net,img):
-    img = img - np.array([104,117,123])
-    img = img.transpose(2, 0, 1)
-    img = img.reshape((1,)+img.shape)
+def flip_detect(net, img):
+    boxes = detect(net, img[:, ::-1])
+    result = boxes.copy()
+    result[:, 0] = img.shape[1] - boxes[:, 2]
+    result[:, 2] = img.shape[1] - boxes[:, 0]
+    return result
 
-    img = Variable(torch.from_numpy(img).float(),volatile=True).cuda()
-    BB,CC,HH,WW = img.size()
-    olist = net(img)
 
-    bboxlist = []
-    for i in range(len(olist)/2): olist[i*2] = F.softmax(olist[i*2])
-    for i in range(len(olist)/2):
-        ocls,oreg = olist[i*2].data.cpu(),olist[i*2+1].data.cpu()
-        FB,FC,FH,FW = ocls.size() # feature map size
-        stride = 2**(i+2)    # 4,8,16,32,64,128
-        anchor = stride*4
-        for Findex in range(FH*FW):
-            windex,hindex = Findex%FW,Findex//FW
-            axc,ayc = stride/2+windex*stride,stride/2+hindex*stride
-            score = ocls[0,1,hindex,windex]
-            loc = oreg[0,:,hindex,windex].contiguous().view(1,4)
-            if score<0.05: continue
-            priors = torch.Tensor([[axc/1.0,ayc/1.0,stride*4/1.0,stride*4/1.0]])
-            variances = [0.1,0.2]
-            box = decode(loc,priors,variances)
-            x1,y1,x2,y2 = box[0]*1.0
-            # cv2.rectangle(imgshow,(int(x1),int(y1)),(int(x2),int(y2)),(0,0,255),1)
-            bboxlist.append([x1,y1,x2,y2,score])
-    bboxlist = np.array(bboxlist)
-    if 0==len(bboxlist): bboxlist=np.zeros((1, 5))
-    return bboxlist
+def scale_detect(net, img, scale=2., facesize=100):
+    height, width = img.shape[:2]
+    scaled = np.array(Image.fromarray(img).resize((max(1, round(width*scale)), max(1, round(height*scale))), Image.Resampling.BILINEAR))
+    boxes = detect(net, scaled)
+    boxes[:, :4] /= scale
+    sizes = boxes[:, 2:4] - boxes[:, :2] + 1
+    keep = sizes.min(1) < facesize if scale > 1 else sizes.max(1) > facesize
+    return boxes[keep]
 
-def flip_detect(net,img):
-    img = cv2.flip(img, 1)
-    b = detect(net,img)
 
-    bboxlist = np.zeros(b.shape)
-    bboxlist[:, 0] = img.shape[1] - b[:, 2]
-    bboxlist[:, 1] = b[:, 1]
-    bboxlist[:, 2] = img.shape[1] - b[:, 0]
-    bboxlist[:, 3] = b[:, 3]
-    bboxlist[:, 4] = b[:, 4]
-    return bboxlist
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--annotations', default='ssd_detector/eval/wider_face_val.mat')
+    parser.add_argument('--dataset', required=True, help='WIDER_val.zip')
+    parser.add_argument('--model', required=True, help='S3FD tensor state_dict')
+    parser.add_argument('--output', default='ssd_detector/eval/sfd_val_pytorch')
+    parser.add_argument('--device', default='auto')
+    args = parser.parse_args()
+    annotations = scipy.io.loadmat(args.annotations)
+    net = load_detector(args.model, resolve_device(args.device))
+    with zipfile.ZipFile(args.dataset) as archive:
+        for event, filelist in zip(annotations['event_list'], annotations['file_list']):
+            event_name = str(event[0][0])
+            directory = Path(args.output) / event_name
+            directory.mkdir(parents=True, exist_ok=True)
+            for file in filelist[0]:
+                name = str(file[0][0])
+                with Image.open(BytesIO(archive.read(f'WIDER_val/images/{event_name}/{name}.jpg'))) as image:
+                    img = np.array(image.convert('RGB'))[..., ::-1].copy()
+                boxes = [detect(net, img), flip_detect(net, img), scale_detect(net, img, .5)]
+                if img.shape[0]*img.shape[1]*4 <= 3000*3000:
+                    boxes.append(scale_detect(net, img, 2.))
+                boxes = np.concatenate(boxes)
+                boxes = boxes[nms(boxes, .3)[:750]]
+                with (directory / f'{name}.txt').open('w') as output:
+                    output.write(f'{event_name}/{name}.jpg\n{len(boxes)}\n')
+                    for x1, y1, x2, y2, score in boxes:
+                        output.write(f'{x1:.1f} {y1:.1f} {x2-x1+1:.1f} {y2-y1+1:.1f} {score:.3f}\n')
+                print(f'{event_name}/{name}: {len(boxes)} detections')
 
-def scale_detect(net,img,scale=2.0,facesize=None):
-    img = cv2.resize(img,(0,0),fx=scale,fy=scale)
-    b = detect(net,img)
 
-    bboxlist = np.zeros(b.shape)
-    bboxlist[:, 0] = b[:, 0]/scale
-    bboxlist[:, 1] = b[:, 1]/scale
-    bboxlist[:, 2] = b[:, 2]/scale
-    bboxlist[:, 3] = b[:, 3]/scale
-    bboxlist[:, 4] = b[:, 4]
-    b = bboxlist
-    if scale>1: index = np.where(np.minimum(b[:,2]-b[:,0]+1,b[:,3]-b[:,1]+1)<facesize)[0] # only detect small face
-    else: index = np.where(np.maximum(b[:,2]-b[:,0]+1,b[:,3]-b[:,1]+1)>facesize)[0] # only detect large face
-    bboxlist = b[index,:]
-    if 0==len(bboxlist): bboxlist=np.zeros((1, 5))
-    return bboxlist
-
-wider_face_mat = sio.loadmat('./eval/wider_face_val.mat')
-event_list = wider_face_mat['event_list']
-file_list = wider_face_mat['file_list']
-
-save_path = './eval/sfd_val_pytorch/'
-dataset = '../../dataset/face/WIDER/WIDER_val.zip'
-datazip = zipfile.ZipFile(dataset)
-
-net = s3fd()
-net.load_state_dict(torch.load('data/s3fd_convert.pth'))
-net.cuda()
-net.eval()
-
-# for i in range(1000):
-#     size = 1024+64*i; print(size)
-#     detect(net,np.zeros((size,size,3)))
-
-for index, event in enumerate(event_list):
-    filelist = file_list[index][0]
-    im_dir = event[0][0].encode('utf-8')
-    if not os.path.exists(save_path + im_dir): os.makedirs(save_path + im_dir)
-
-    for num, file in enumerate(filelist):
-        im_name = file[0][0].encode('utf-8')
-        zipname = '%s/%s.jpg' % (im_dir,im_name)
-        
-        data = np.frombuffer(datazip.read('WIDER_val/images/'+zipname),np.uint8)
-        img = cv2.imdecode(data,1)
-
-        imgshow = np.copy(img)
-        b1 = detect(net,img)
-        b2 = flip_detect(net,img)
-        if img.shape[0]*img.shape[1]*4>3000*3000: b3 = np.zeros((1, 5))
-        else: b3 = scale_detect(net,img,scale=2,facesize=100)
-        b4 = scale_detect(net,img,scale=0.5,facesize=100)
-        bboxlist = np.concatenate((b1,b2,b3,b4))
-
-        keep = nms(bboxlist,0.3)
-        keep = keep[0:750] # keep only max 750 boxes
-        bboxlist = bboxlist[keep,:]
-
-        # for b in bboxlist:
-        #     x1,y1,x2,y2,s = b
-        #     if s<0.5: continue
-        #     cv2.rectangle(imgshow,(int(x1),int(y1)),(int(x2),int(y2)),(0,0,255),1)
-        # cv2.imshow('',imgshow)
-        # cv2.waitKey(0)
-        # continue
-
-        f = open(save_path + im_dir + '/' + im_name + '.txt', 'w')
-        f.write('{:s}\n'.format('%s/%s.jpg' % (im_dir,im_name)))
-        f.write('{:d}\n'.format(len(bboxlist)))
-        for b in bboxlist:
-            x1,y1,x2,y2,s = b
-            f.write('{:.1f} {:.1f} {:.1f} {:.1f} {:.3f}\n'.format(x1,y1,(x2-x1+1),(y2-y1+1),s))
-        f.close()
-        print('event:%d num:%d' % (index + 1, num + 1))
+if __name__ == '__main__':
+    main()

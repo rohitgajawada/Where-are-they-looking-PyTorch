@@ -1,6 +1,5 @@
 import os
 import torch
-import pandas as pd
 from skimage import io, transform
 import numpy as np
 import matplotlib.pyplot as plt
@@ -69,7 +68,7 @@ class RandomCrop(object):
     def __init__(self):
 
         self.scale_size = (240, 240)
-        self.orig_size = (227, 227)
+        self.crop_size = (227, 227)
 
     def __call__(self, sample):
 
@@ -82,7 +81,7 @@ class RandomCrop(object):
         h, w = image.shape[:2]
 
         scale_h, scale_w = self.scale_size
-        new_h, new_w = self.orig_size
+        new_h, new_w = self.crop_size
 
         image = transform.resize(image, (scale_h, scale_w))
 

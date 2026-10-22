@@ -1,0 +1,9 @@
+# Latest stable pair verified 2026-10-21; Linux defaults to CUDA 13.0 wheels.
+torch==2.14.1
+torchvision==0.29.1
+numpy>=2.0,<3
+scipy>=1.14,<2
+scikit-image>=0.25,<1
+matplotlib>=3.9,<4
+pillow>=11,<14
+tensorboard>=2.18,<3

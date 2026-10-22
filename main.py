@@ -1,61 +1,51 @@
-import os
-import torch
-import torch.backends.cudnn as cudnn
+from pathlib import Path
+
+from torch.utils.tensorboard import SummaryWriter
+
+import getdata as ld
+import models as init
 import opts
 import train
 import utils
-import models.__init__ as init
-import getdata as ld
-import random
-from tensorboardX import SummaryWriter
+from runtime import resolve_device, seed_everything
 
-parser = opts.optionargparser()
-writer = SummaryWriter()
 
 def main():
-    global opt, best_err1
-    opt = parser.parse_args()
-    best_err1 = 1000000
+    opt = opts.optionargparser().parse_args()
+    opt.device = str(resolve_device(opt.device))
+    seed_everything(opt.seed)
     print(opt)
-
+    for split in ('train', 'test'):
+        annotation = Path(opt.data_dir) / f'{split}_annotations.mat'
+        if not annotation.is_file():
+            raise FileNotFoundError(f'GazeFollow annotation file not found: {annotation}')
+    if opt.resume != "none":
+        if not Path(opt.resume).is_file():
+            raise FileNotFoundError(f"Checkpoint not found: {opt.resume}")
+        opt.random_init = True  # The resume checkpoint supplies all model weights.
     model = init.load_model(opt)
-    model, criterion, optimizer = init.setup(model,opt)
-    print(model)
-
-    trainer = train.Trainer(model, criterion, optimizer, opt, writer)
-    validator = train.Validator(model, criterion, opt, writer)
-
-    random.seed(opt.seed)
-    torch.manual_seed(opt.seed)
-    cudnn.deterministic = True
-
-    if opt.resume:
-        if os.path.isfile(opt.resume):
-            model, optimizer, opt, best_err1 = init.resumer(opt, model, optimizer)
-        else:
-            print("=> no checkpoint found at '{}'".format(opt.resume))
-
-    cudnn.benchmark = True
-
-    dataloader = ld.GazeFollow(opt)
-
-    train_loader = dataloader.train_loader
-    val_loader = dataloader.val_loader
-
-    for epoch in range(opt.start_epoch, opt.epochs):
-        utils.adjust_learning_rate(opt, optimizer, epoch)
-        print("Starting epoch number:", epoch+1, "Learning rate:", optimizer.param_groups[0]["lr"])
-
-        if opt.testOnly == False:
-            trainer.train(train_loader, epoch, opt)
-
-        err = validator.validate(val_loader, epoch, opt)
-        best_err1 = min(err, best_err1)
-
-        if epoch % 10 == 0:
-            init.save_checkpoint(opt, model, optimizer, best_err1, epoch)
-
-        print('Best error: [{0:.3f}]\t'.format(best_err1))
+    model, criterion, optimizer = init.setup(model, opt)
+    best_err = float('inf')
+    if opt.resume != 'none':
+        if not Path(opt.resume).is_file():
+            raise FileNotFoundError(f'Checkpoint not found: {opt.resume}')
+        model, optimizer, opt, best_err = init.resumer(opt, model, optimizer)
+    data = ld.GazeFollow(opt)
+    with SummaryWriter() as writer:
+        trainer = train.Trainer(model, criterion, optimizer, opt, writer)
+        validator = train.Validator(model, criterion, opt, writer)
+        if opt.testOnly:
+            validator.validate(data.val_loader, opt.start_epoch, opt)
+            return
+        for epoch in range(opt.start_epoch, opt.epochs):
+            utils.adjust_learning_rate(opt, optimizer, epoch)
+            print(f'Starting epoch {epoch + 1}, learning rate {optimizer.param_groups[0]["lr"]}')
+            trainer.train(data.train_loader, epoch, opt)
+            error = validator.validate(data.val_loader, epoch, opt)
+            best_err = min(best_err, error)
+            if epoch % 10 == 0 or epoch == opt.epochs - 1:
+                init.save_checkpoint(opt, model, optimizer, best_err, epoch)
+            print(f'Best error: {best_err:.3f}')
 
 
 if __name__ == '__main__':

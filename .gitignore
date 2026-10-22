@@ -7,3 +7,11 @@ savedmodels/
 outputs/*
 getdata_exp.py
 customtransforms_exp.py
+.venv/
+.pytest_cache/
+*.pyc
+.cache/
+
+/data/gazefollow/
+
+/downloads/gazefollow/

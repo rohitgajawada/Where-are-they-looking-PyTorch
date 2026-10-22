@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-from torch.autograd import Variable
 import torch.nn.functional as F
 
 class L2Norm(nn.Module):
@@ -10,8 +9,7 @@ class L2Norm(nn.Module):
         self.scale = scale
         self.eps = 1e-10
         self.weight = nn.Parameter(torch.Tensor(self.n_channels))
-        self.weight.data *= 0.0
-        self.weight.data += self.scale
+        nn.init.constant_(self.weight, self.scale)
 
     def forward(self, x):
         norm = x.pow(2).sum(dim=1, keepdim=True).sqrt()+self.eps

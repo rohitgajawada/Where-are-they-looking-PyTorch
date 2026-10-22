@@ -57,71 +57,32 @@ class AverageMeter():
         self.avg = self.sum / self.count
 
 
-#Metric functions 
+# Metrics consume one flattened heatmap index per sample.
+def _distances(output, target, length):
+    output = torch.as_tensor(output).detach().cpu().reshape(-1).long()
+    target = torch.as_tensor(target).detach().cpu().float()
+    if output.numel() != length or target.shape[0] != length:
+        raise ValueError('Expected one flattened prediction per sample')
+    points = target.reshape(length, -1, 2)
+    valid = (points >= 0).all(-1) & torch.isfinite(points).all(-1)
+    if not valid.any(-1).all():
+        raise ValueError('Every sample needs at least one valid gaze annotation')
+    predicted = torch.stack((output.remainder(227), output.div(227, rounding_mode='floor')), dim=-1).float() / 227
+    clean_points = points.masked_fill(~valid.unsqueeze(-1), 0)
+    mean_target = clean_points.sum(1) / valid.sum(1, keepdim=True)
+    mean_dist = torch.linalg.vector_norm(predicted - mean_target, dim=-1)
+    all_dist = torch.linalg.vector_norm(predicted[:, None] - clean_points, dim=-1)
+    min_dist = all_dist.masked_fill(~valid, float('inf')).min(1).values
+    return mean_dist, min_dist
+
+
 def euclid_dist(output, target, l):
-    total = 0
-    fulltotal = 0
-
-    output = output.float()
-    target = target.float()
-    for i in range(l):
-
-        predy = ((output[i] / 227.0) / 227.0) 
-        predx = ((output[i] % 227.0) / 227.0) 
-
-        ct = 0
-        for j in range(100):
-            ground_x = target[i][2*j]
-            ground_y = target[i][2*j + 1]
-
-            if ground_x == -1 or ground_y == -1:
-                break
-
-            temp = np.sqrt(np.power((ground_x - predx), 2) + np.power((ground_y - predy), 2))
-            total += temp
-            ct += 1
-
-        total = total / float(ct * 1.0)
-
-        fulltotal += total
-
-    fulltotal = fulltotal / float(l * 1.0)
-
-    return fulltotal
+    return _distances(output, target, l)[0].mean().item()
 
 
 def euclid_mindist(output, target, l):
-
-    fulltotal = 0
-    output = output.float()
-    target = target.float()
-    for i in range(l):
-
-        best = 1000000000
-        
-        predy = ((output[i] / 227.0) / 227.0) 
-        predx = ((output[i] % 227.0) / 227.0) 
-
-        ct = 0
-        for j in range(100):
-            ground_x = target[i][2*j]
-            ground_y = target[i][2*j + 1]
-            if ground_x == -1 or ground_y == -1:
-                break
-
-            temp = np.sqrt(np.power((ground_x - predx), 2) + np.power((ground_y - predy), 2))
-
-            if temp < best:
-                best = temp
-            ct += 1
-
-        fulltotal += best
-
-    fulltotal = fulltotal / float(l * 1.0)
-    return fulltotal
+    return _distances(output, target, l)[1].mean().item()
 
 
 def AUCaccuracy(output, target, opt):
-    pass
-
-
+    raise NotImplementedError('Original-paper AUC protocol has not yet been implemented')

@@ -9,7 +9,7 @@ def optionargparser():
     parser.add_argument('--dataset', default='gazefollow', type=str, help='chosen dataset')
     parser.add_argument('--data_dir', default='../', type=str, help='chosen data directory')
     parser.add_argument('--placesmodelpath', default='./whole_alexnet_places365.pth', type=str, help='chosen data directory')
-    parser.add_argument('--verbose', default=False)
+    parser.add_argument('--verbose', action=argparse.BooleanOptionalAction, default=False)
     parser.add_argument('--workers', default=12, type=int, help='number of data loading workers (default: 4)')
     #default stuff
     parser.add_argument('--epochs', default=200, type=int, help='number of total epochs to run')
@@ -28,7 +28,7 @@ def optionargparser():
     parser.add_argument('--lr', type=float, help='initial learning rate')
     parser.add_argument('--minlr', default=0.0001, type=float, help='initial learning rate')
 
-    parser.add_argument('--nesterov', default=True, type=bool, help='nesterov momentum')
+    parser.add_argument('--nesterov', default=True, action=argparse.BooleanOptionalAction, help='nesterov momentum')
     parser.add_argument('--momentum', default=0.9, type=float, help='momentum (Default: 0.9)')
     parser.add_argument('--weightDecay', default=1e-6, type=float, help='weight decay (Default: 1e-4)')
 
@@ -36,12 +36,12 @@ def optionargparser():
     parser.add_argument('--inpsize', default=227, type=int, help='Input size')
 
     #default
-    parser.add_argument('--seed',  default=235, help='fixed seed for experiments')
-    parser.add_argument('--testOnly', default=False, type=bool, help='run on validation set only')
+    parser.add_argument('--seed', type=int, default=235, help='fixed seed for experiments')
+    parser.add_argument('--testOnly', default=False, action=argparse.BooleanOptionalAction, help='run on validation set only')
     parser.add_argument('--start-epoch', default=0, type=int,help='manual epoch number (useful on restarts)')
 
-    parser.add_argument('--withaug', default=True, type=bool, help='run on validation set only')
-    parser.add_argument('--shiftedgrids', default=True, type=bool, help='run on validation set only')
+    parser.add_argument('--withaug', default=True, action=argparse.BooleanOptionalAction, help='run on validation set only')
+    parser.add_argument('--shiftedgrids', default=True, action=argparse.BooleanOptionalAction, help='run on validation set only')
 
     #model stuff
     parser.add_argument('--exp', default='highcrop_Hope', type=str,
@@ -52,4 +52,10 @@ def optionargparser():
                         help='path to storing checkpoints (default: none)')
 
 
+    parser.add_argument('--device', default='auto', help='auto, cpu, cuda, or cuda:N; explicit CUDA fails if unavailable')
+    parser.add_argument('--random-init', action='store_true', help='Skip all pretrained weights; for diagnostics only')
+    parser.add_argument('--trust-legacy-checkpoint', action='store_true', help='Allow pickle loading of a trusted legacy Places module')
+    parser.add_argument('--face-model', default='s3fd_convert.pth')
+    parser.add_argument('--input-dir', default='imgs/test')
+    parser.add_argument('--output-dir', default='model_outputs')
     return parser
