@@ -1,21 +1,27 @@
-# S³FD: Single Shot Scale-invariant Face Detector
-A PyTorch Implementation of Single Shot Scale-invariant Face Detector.
+# S3FD face detector
 
-## Eval
-```
-python wider_eval_pytorch.py
+This directory contains the S3FD network and the supported PyTorch face-detection
+helpers used by the gaze demo. Each Python file begins with a detailed description.
 
-cd eval/eval_tools_old-version
-octave wider_eval_pytorch.m
-```
-## Model
-[s3fd_convert.7z](https://github.com/clcarwin/SFD_pytorch/releases/tag/v0.1)
+- `s3fd_network.py`: learned network layers and feature normalization.
+- `bounding_boxes.py`: anchor encoding/decoding, overlap, and NMS.
+- `face_detection.py`: checkpoint loading, candidate detections, and RGB face/eye inputs.
+- `evaluate_wider_faces.py`: multi-scale WIDER ZIP prediction export.
+- `eval/evaluate_wider_faces_caffe.py`: archival evaluator requiring Caffe and old paths.
 
-## Test
-```
-python test.py --model data/s3fd_convert.pth --path data/test01.jpg
-```
-![output](data/test01_output.png)
+From the repository root:
 
-# References
-[SFD](https://github.com/sfzhang15/SFD)
+```bash
+python -m ssd_detector.evaluate_wider_faces --help
+python predict_gaze_from_faces.py --device cuda --resume /path/to/gaze_checkpoint.pth.tar --face-model /path/to/s3fd_convert.pth --input-dir imgs/test --output-dir model_outputs
+```
+
+WIDER text exports can be evaluated with the bundled historical MATLAB/Octave
+evaluator under `eval/eval_tools_old-version`; its filenames and APIs are unchanged.
+The Python exporter does not itself compute average precision.
+
+The original converted detector weights are linked in the upstream
+[SFD PyTorch release](https://github.com/clcarwin/SFD_pytorch/releases/tag/v0.1).
+Weights are separate assets and have not been downloaded as part of the source rename.
+
+Original detector: [SFD](https://github.com/sfzhang15/SFD).

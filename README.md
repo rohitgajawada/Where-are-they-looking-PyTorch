@@ -30,8 +30,8 @@ Do not replace a working host driver merely because CUDA is hidden by a sandbox.
 
 ```bash
 nvidia-smi
-python smoke_test.py --device cuda --batch-size 1
-python smoke_test.py --device cuda --batch-size 2
+python check_pytorch_runtime.py --device cuda --batch-size 1
+python check_pytorch_runtime.py --device cuda --batch-size 2
 python -m pytest -q
 ```
 
@@ -49,9 +49,9 @@ Download GazeFollow's original images and `train_annotations.mat` /
 Paths no longer require a trailing slash.
 
 ```bash
-python main.py --device cuda --data_dir /path/to/gazefollow --placesmodelpath /path/to/places_state_dict.pth --no-withaug
-python main.py --device cuda --data_dir /path/to/gazefollow --resume /path/to/gaze_checkpoint.pth.tar
-python main.py --device cuda --data_dir /path/to/gazefollow --resume /path/to/gaze_checkpoint.pth.tar --testOnly
+python train_gaze_model.py --device cuda --data_dir /path/to/gazefollow --placesmodelpath /path/to/places_state_dict.pth --no-withaug
+python train_gaze_model.py --device cuda --data_dir /path/to/gazefollow --resume /path/to/gaze_checkpoint.pth.tar
+python train_gaze_model.py --device cuda --data_dir /path/to/gazefollow --resume /path/to/gaze_checkpoint.pth.tar --testOnly
 ```
 
 ImageNet initialization uses torchvision's explicit `AlexNet_Weights.IMAGENET1K_V1`
@@ -75,14 +75,14 @@ DataLoader worker seeding included. TensorBoard uses `torch.utils.tensorboard`.
 ## Inference demos
 
 ```bash
-python modeltester.py --device cuda --data_dir /path/to/gazefollow --resume /path/to/gaze_checkpoint.pth.tar --output-dir model_outputs
-python modeltester_withssd.py --device cuda --resume /path/to/gaze_checkpoint.pth.tar --face-model /path/to/s3fd_convert.pth --input-dir imgs/test --output-dir model_outputs
-python -m ssd_detector.wider_eval_pytorch --help
+python visualize_gaze_predictions.py --device cuda --data_dir /path/to/gazefollow --resume /path/to/gaze_checkpoint.pth.tar --output-dir model_outputs
+python predict_gaze_from_faces.py --device cuda --resume /path/to/gaze_checkpoint.pth.tar --face-model /path/to/s3fd_convert.pth --input-dir imgs/test --output-dir model_outputs
+python -m ssd_detector.evaluate_wider_faces --help
 ```
 
 S3FD uses current inference APIs, explicit softmax dimensions, device-aware tensors,
 and safe state-dictionary loading. The demos no longer execute inference on import.
-The historical Caffe evaluator under `ssd_detector/eval/wider_test.py` is archival
+The historical Caffe evaluator under `ssd_detector/eval/evaluate_wider_faces_caffe.py` is archival
 Caffe code, not part of this PyTorch runtime.
 
 ## Migration scope and remaining reproduction work
@@ -96,9 +96,51 @@ This is a runtime migration, not a completed scientific reproduction. The known
 annotation-mutation, crop-geometry, shifted-grid consistency, and paper-architecture
 differences remain to be fixed and measured in a separate change. Use `--no-withaug`
 for initial diagnostics. AUC remains unimplemented and raises an explicit error if
-called. No real GazeFollow training or pretrained-checkpoint accuracy has been
-verified yet; dataset and weights were not supplied. Tests use synthetic annotations
-and locally generated model weights.
+called. GazeFollow is now downloaded under `data/gazefollow`: 125,557 training examples
+and 4,782 corrected test2 examples. All annotated image paths exist, and real
+train/test batches load successfully with augmentation disabled. See
+`data/gazefollow/DATASET_SETUP.md` and `DATASET_MANIFEST.json` for provenance.
+No real-data training or pretrained-checkpoint accuracy has been verified yet;
+pretrained weights are still required. Migration regression tests use synthetic
+annotations and locally generated model weights.
+
+## Source layout
+
+Every Python source file begins with a detailed module docstring describing its
+responsibilities, inputs/outputs, side effects, and known limitations. The names
+below replace the earlier abbreviated filenames; use the updated commands above.
+
+| File | Responsibility |
+| --- | --- |
+| `train_gaze_model.py` | CLI entry point and outer training/evaluation loop. |
+| `command_line_options.py` | Shared argument parser and preserved CLI flags. |
+| `gazefollow_dataset.py` | Original MATLAB annotations, RGB scenes, head crops, and batch loaders. |
+| `gaze_augmentations.py` | Historical flips/crops and their documented pending defects. |
+| `models/gaze_following_network.py` | Scene/head branches, grid heads, and heatmap decoder. |
+| `models/training_setup.py` | Model/loss/optimizer construction and checkpoint save/resume. |
+| `models/__init__.py` | Explicit re-exports of the model setup helpers. |
+| `gaze_metrics.py` | Mean-location/minimum gaze distances and the unimplemented AUC placeholder. |
+| `training_support.py` | Learning-rate schedule and streaming statistics. |
+| `device_and_initialization.py` | Device selection, RNG seeds, and Places backbone loading. |
+| `type_definitions.py` | Shared array/sample types and narrow interface protocols. |
+| `check_pytorch_runtime.py` | Dataset-free CPU/CUDA forward/backward/checkpoint smoke test. |
+| `visualize_gaze_predictions.py` | Render predictions for annotated GazeFollow test people. |
+| `predict_gaze_from_faces.py` | Render predictions for automatically detected faces. |
+| `ssd_detector/s3fd_network.py` | S3FD face-detection architecture. |
+| `ssd_detector/face_detection.py` | Detector loading, box decoding, and face/eye input preparation. |
+| `ssd_detector/bounding_boxes.py` | Box geometry, encoders/decoders, and NMS. |
+| `ssd_detector/evaluate_wider_faces.py` | Current PyTorch WIDER prediction export CLI. |
+| `ssd_detector/eval/evaluate_wider_faces_caffe.py` | Archival Caffe evaluator with legacy dependencies. |
+| `testing_helpers/visualize_head_crop.py` | Historical manually configured crop plotter. |
+| `testing_helpers/visualize_legacy_dataset.py` | Historical plotter requiring the absent experimental loader. |
+| `tests/test_pytorch_compatibility.py` | Runtime, checkpoint, distance, detector, and CLI regression tests. |
+| `tests/test_types_and_documentation.py` | Type-name resolution and detailed documentation coverage. |
+| `clear_python_caches.sh` | Historical cache cleanup commands; run from the repository root. |
+| `REPRODUCTION_ISSUES.md` | Original debugging notes and remaining reproduction concerns. |
+
+`README.md`, `LICENSE`, `pytest.ini`, the requirements files, package initializer
+names, dataset paths, and checkpoint field/parameter names retain their conventional
+or compatibility-sensitive names. The bundled MATLAB evaluator assets are unchanged.
 
 ## Contact
 
