@@ -119,17 +119,6 @@ metrics. It supports the paper's gaze FC widths, Caffe-compatible pretrained
 backbones, AUC64, angular error, and training/validation TensorBoard diagnostics.
 Batch size one is supported; regression tests cover CPU/CUDA execution and geometry.
 
-The measured results above demonstrate successful real-data optimization.
-Exact 2015 numerical equivalence remains unverified, particularly for AUC
-rasterization, mean-image preprocessing, head crops, and activation conventions.
-The original 500-unit gaze layout remains available with `--architecture legacy`;
-new default checkpoints are not interchangeable with historical architectures.
-See [REPRODUCTION_NOTES.md](REPRODUCTION_NOTES.md) for the audit and limitations.
-
-GazeFollow is downloaded under `data/gazefollow`: 125,557 training examples and
-4,782 corrected test2 examples. See `data/gazefollow/DATASET_SETUP.md` and
-`data/gazefollow/DATASET_MANIFEST.json` for local provenance. Pretrained asset
-sources and hashes are recorded in `pretrained/manifest.json`.
 
 ## Source layout
 
