@@ -6,6 +6,35 @@ This repository contains an implementation of the "Where are they looking?" pape
 
 A deep neural network-based approach for gaze-following automated using a SSD face detector.
 
+## Reproduction results
+
+Measured on an RTX 5080 with seed 235. Higher AUC is better; lower distances,
+angular error, and NLL are better. Distances use normalized image coordinates.
+Metrics within each row come from the same epoch, without mixing independently
+selected best values. Snapshot: 2026-10-22.
+
+### Full training set, corrected test2 evaluation — epoch 8
+
+The repaired run uses all **125,557 training examples** and evaluates the **4,782
+corrected test2 examples**, with ten gaze annotations per person, after each
+epoch.
+
+| Model | Epoch | AUC ↑ | Mean distance ↓ | Minimum distance ↓ | Angular error (°) ↓ |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| [Original paper, Table 1(a)](https://people.csail.mit.edu/khosla/papers/nips2015_recasens.pdf) | — | 0.878 | 0.190 | 0.113 | 24 |
+| Repaired reproduction (`reproduction_full_train_test2`) | **8** | **0.8695** | **0.1831** | **0.1196** | **24.10** |
+
+Our AUC column uses **`auc_64`**: bilinearly resize the predicted heatmap to
+64×64, mark all annotated fixation cells positive, compute tie-correct ROC AUC
+per example, then average across examples. Exact equivalence to the original
+2015 AUC evaluator is unverified; the paper's AUC is shown for reference.
+
+Recipe: Caffe-compatible AlexNet backbones initialized from **Places205** (scene)
+and **BVLC ImageNet** (head); gaze FC widths **100/400/200/169** with final sigmoid;
+horizontal flips; Adam; initial LR **0.001** for new layers and **0.0001** for
+pretrained layers; batch size **128**. NLL averages the five
+shifted-grid classification losses.
+
 ## Installation (current PyTorch)
 
 Verified on 2026-10-21 with Python 3.12, PyTorch 2.14.1+cu130,
@@ -54,18 +83,15 @@ python train_gaze_model.py --device cuda --data_dir /path/to/gazefollow --resume
 python train_gaze_model.py --device cuda --data_dir /path/to/gazefollow --resume /path/to/gaze_checkpoint.pth.tar --testOnly
 ```
 
-ImageNet initialization uses torchvision's explicit `AlexNet_Weights.IMAGENET1K_V1`
-API. New training downloads those weights on first use. Resume/inference loads
-complete checkpoint weights without requiring Places files or a download.
-`--random-init` bypasses both pretrained backbones and is intended for diagnostics,
-not a paper reproduction.
+The default Caffe-compatible backbones use downloaded Places205 and BVLC ImageNet
+weights. Prepare them with `python prepare_pretrained_models.py`. The explicit
+`--backbone torchvision` alternative requires matching torchvision-format weights.
+Resume/inference restores both backbones from the complete gaze checkpoint;
+`--random-init` is for diagnostics only. Checkpoints use `weights_only=True` loading.
 
-Places loading accepts a tensor state dictionary, a `state_dict` wrapper, or
-`module.`-prefixed keys. Backbone parameters are checked strictly. If the historical
-Places file contains a pickled model object, load it only if trusted, by explicitly
-adding `--trust-legacy-checkpoint`; that flag enables Python pickle execution for
-that file. Prefer converting such files to tensor state dictionaries. Gaze
-checkpoints use explicit `weights_only=True` loading and `map_location`.
+Training defaults to image-disjoint development validation. To reproduce the
+full-training/test2 run above, use `--validation-split test --validation-fraction 0`.
+The shared architecture and augmentation choices remain explicit CLI options.
 
 Boolean flags now use `--withaug` / `--no-withaug`, `--nesterov` /
 `--no-nesterov`, and `--testOnly` / `--no-testOnly`; do not pass the strings
@@ -85,24 +111,25 @@ and safe state-dictionary loading. The demos no longer execute inference on impo
 The historical Caffe evaluator under `ssd_detector/eval/evaluate_wider_faces_caffe.py` is archival
 Caffe code, not part of this PyTorch runtime.
 
-## Migration scope and remaining reproduction work
+## Reproduction scope and remaining verification
 
-The original network layer sizes, parameter names, and shifted-grid behavior are
-preserved for existing gaze checkpoints. Validation now takes a global heatmap
-maximum and correctly computes distance to the mean annotation and minimum distance;
-old distance logs are therefore not directly comparable. Batch size one is supported.
+The repaired code fixes annotation mutation, crop geometry, shifted-grid
+encoding/decoding consistency, global heatmap peak extraction, and distance
+metrics. It supports the paper's gaze FC widths, Caffe-compatible pretrained
+backbones, AUC64, angular error, and training/validation TensorBoard diagnostics.
+Batch size one is supported; regression tests cover CPU/CUDA execution and geometry.
 
-This is a runtime migration, not a completed scientific reproduction. The known
-annotation-mutation, crop-geometry, shifted-grid consistency, and paper-architecture
-differences remain to be fixed and measured in a separate change. Use `--no-withaug`
-for initial diagnostics. AUC remains unimplemented and raises an explicit error if
-called. GazeFollow is now downloaded under `data/gazefollow`: 125,557 training examples
-and 4,782 corrected test2 examples. All annotated image paths exist, and real
-train/test batches load successfully with augmentation disabled. See
-`data/gazefollow/DATASET_SETUP.md` and `DATASET_MANIFEST.json` for provenance.
-No real-data training or pretrained-checkpoint accuracy has been verified yet;
-pretrained weights are still required. Migration regression tests use synthetic
-annotations and locally generated model weights.
+The measured results above demonstrate successful real-data optimization.
+Exact 2015 numerical equivalence remains unverified, particularly for AUC
+rasterization, mean-image preprocessing, head crops, and activation conventions.
+The original 500-unit gaze layout remains available with `--architecture legacy`;
+new default checkpoints are not interchangeable with historical architectures.
+See [REPRODUCTION_NOTES.md](REPRODUCTION_NOTES.md) for the audit and limitations.
+
+GazeFollow is downloaded under `data/gazefollow`: 125,557 training examples and
+4,782 corrected test2 examples. See `data/gazefollow/DATASET_SETUP.md` and
+`data/gazefollow/DATASET_MANIFEST.json` for local provenance. Pretrained asset
+sources and hashes are recorded in `pretrained/manifest.json`.
 
 ## Source layout
 
@@ -115,11 +142,14 @@ below replace the earlier abbreviated filenames; use the updated commands above.
 | `train_gaze_model.py` | CLI entry point and outer training/evaluation loop. |
 | `command_line_options.py` | Shared argument parser and preserved CLI flags. |
 | `gazefollow_dataset.py` | Original MATLAB annotations, RGB scenes, head crops, and batch loaders. |
-| `gaze_augmentations.py` | Historical flips/crops and their documented pending defects. |
+| `gaze_augmentations.py` | Annotation-safe flips and geometrically valid scene crops. |
 | `models/gaze_following_network.py` | Scene/head branches, grid heads, and heatmap decoder. |
+| `models/caffe_alexnet_backbone.py` | Caffe AlexNet grouped convolutions, LRN, and pretrained input adaptation. |
+| `shifted_grids.py` | Shared shifted-grid target encoding and heatmap decoding. |
+| `prepare_pretrained_models.py` | Download, verify, and convert pretrained model assets. |
 | `models/training_setup.py` | Model/loss/optimizer construction and checkpoint save/resume. |
 | `models/__init__.py` | Explicit re-exports of the model setup helpers. |
-| `gaze_metrics.py` | Mean-location/minimum gaze distances and the unimplemented AUC placeholder. |
+| `gaze_metrics.py` | Mean/minimum gaze distances, angular error, and explicit fixation AUC. |
 | `training_support.py` | Learning-rate schedule and streaming statistics. |
 | `device_and_initialization.py` | Device selection, RNG seeds, and Places backbone loading. |
 | `type_definitions.py` | Shared array/sample types and narrow interface protocols. |
